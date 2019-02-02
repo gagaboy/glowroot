@@ -230,7 +230,7 @@ glowroot.factory('charts', [
           min: 0,
           // 10 second yaxis max just for initial empty chart rendering
           max: 10,
-          label: 'milliseconds',
+          label: '毫秒',
           labelPadding: 7,
           tickFormatter: function (val) {
             return val.toLocaleString(undefined, {maximumSignificantDigits: 15});

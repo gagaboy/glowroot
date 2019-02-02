@@ -74,7 +74,7 @@
   <div class="card">
     <div class="list-group">
       <div gt-sidebar-item
-           gt-display="Gauges"
+           gt-display="指标项"
            gt-url="jvm/gauges{{gaugeQueryString()}}"
            gt-active="currentUrl() === 'jvm/gauges'"
            ng-if="agentRollup.permissions.jvm.gauges || (layout.central && !agentRollupId)">
@@ -92,7 +92,7 @@
            ng-if="agentRollup.permissions.jvm.heapDump && !isAgentRollup() && !layout.offlineViewer">
       </div>
       <div gt-sidebar-item
-           gt-display="Heap histogram"
+           gt-display="Heap 柱状图"
            gt-url="jvm/heap-histogram{{agentQueryString()}}"
            gt-active="currentUrl() === 'jvm/heap-histogram'"
            ng-if="agentRollup.permissions.jvm.heapHistogram && !isAgentRollup() && !layout.offlineViewer">
@@ -104,19 +104,19 @@
            ng-if="agentRollup.permissions.jvm.forceGC && !isAgentRollup() && !layout.offlineViewer">
       </div>
       <div gt-sidebar-item
-           gt-display="MBean tree"
+           gt-display="MBean 树"
            gt-url="jvm/mbean-tree{{agentQueryString()}}"
            gt-active="currentUrl() === 'jvm/mbean-tree'"
            ng-if="agentRollup.permissions.jvm.mbeanTree && !isAgentRollup() && !layout.offlineViewer">
       </div>
       <div gt-sidebar-item
-           gt-display="System properties"
+           gt-display="系统参数"
            gt-url="jvm/system-properties{{agentQueryString()}}"
            gt-active="currentUrl() === 'jvm/system-properties'"
            ng-if="agentRollup.permissions.jvm.systemProperties && !isAgentRollup() && !layout.offlineViewer">
       </div>
       <div gt-sidebar-item
-           gt-display="Environment"
+           gt-display="系统环境"
            gt-url="jvm/environment{{agentQueryString()}}"
            gt-active="currentUrl() === 'jvm/environment'"
            ng-if="agentRollup.permissions.jvm.environment && !isAgentRollup()">

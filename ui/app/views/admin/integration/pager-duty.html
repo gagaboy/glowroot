@@ -17,13 +17,13 @@
 <div class="clearfix">
   <a class="gt-config-return-link"
      href="admin/integration-list">
-    Return to list
+    返回列表
   </a>
 </div>
 <div class="card">
   <div class="card-header">
     <h2>
-      Integrations
+      集成
       <span class="d-inline-block gt-separator">
         |
       </span>
@@ -41,10 +41,10 @@
                 ng-repeat="integrationKey in config.integrationKeys">
         <legend class="gt-legend"
                 style="margin-bottom: 20px;">
-          Integration key
+          集成键
         </legend>
         <div gt-form-group
-             gt-label="Integration key"
+             gt-label="集成键"
              gt-model="integrationKey.key"
              gt-required="true"
              gt-disabled="!layout.adminEdit || !integrationKey.new"
@@ -55,13 +55,13 @@
           </div>
         </div>
         <div gt-form-group
-             gt-label="Display"
+             gt-label="显示"
              gt-model="integrationKey.display"
              gt-required="true"
              gt-disabled="!layout.adminEdit"
              gt-width="40em">
           <div class="help-block">
-            Can be any text. Only used when displaying the integration key on the alert configuration page.
+            可以是任何文字。 仅在告警配置页面上显示集成键时使用。
           </div>
         </div>
         <div class="form-group row"
@@ -70,7 +70,7 @@
             <button class="btn btn-danger float-right"
                     ng-click="removeIntegrationKey(integrationKey)"
                     ng-if="layout.adminEdit">
-              Remove this integration key
+              删除此集成键
             </button>
           </div>
         </div>
@@ -78,19 +78,19 @@
       <fieldset class="gt-fieldset"
                 ng-if="layout.adminEdit">
         <legend class="gt-legend">
-          Add {{config.integrationKeys.length ? 'another' : 'an'}} integration key
+          添加 {{config.integrationKeys.length ? '另一个' : '一个'}} 集成键
         </legend>
         <button class="btn btn-secondary"
                 ng-click="addIntegrationKey()"
                 style="margin-bottom: 23px; margin-left: 14px;">
-          Add
+          添加
         </button>
       </fieldset>
       <div class="form-group row gt-form-buttons-below-fieldset"
            ng-if="layout.adminEdit">
         <div class="offset-xl-3 col-xl-9">
           <div gt-button
-               gt-label="Save changes"
+               gt-label="保存更改"
                gt-click="save(deferred)"
                gt-validate-form="formCtrl">
           </div>

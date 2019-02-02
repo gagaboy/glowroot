@@ -297,7 +297,7 @@ glowroot.controller('ConfigInstrumentationCtrl', [
       $http.post(url + '?agent-id=' + encodeURIComponent(agentId), postData)
           .then(function (response) {
             onNewData(response.data);
-            deferred.resolve(version ? 'Saved' : 'Added');
+            deferred.resolve(version ? '保存成功' : '添加成功');
             version = response.data.config.version;
             // fix current url (with updated version) before returning to list page in case back button is used later
             if (agentId) {

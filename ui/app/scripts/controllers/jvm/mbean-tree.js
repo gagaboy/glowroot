@@ -25,7 +25,7 @@ glowroot.controller('JvmMBeanTreeCtrl', [
   'queryStrings',
   function ($scope, $location, $http, $timeout, httpErrors, queryStrings) {
 
-    $scope.$parent.heading = 'MBean tree';
+    $scope.$parent.heading = 'MBean 树';
 
     if ($scope.hideMainContent()) {
       return;
@@ -120,7 +120,7 @@ glowroot.controller('JvmMBeanTreeCtrl', [
             $('#mbeanTree').empty();
             renderNext(flattened, 0);
             if (deferred) {
-              deferred.resolve('Refreshed');
+              deferred.resolve('刷新成功');
             }
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);

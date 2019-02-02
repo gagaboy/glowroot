@@ -17,13 +17,13 @@
 <div class="clearfix">
   <a class="gt-config-return-link"
      href="admin/integration-list">
-    Return to list
+    返回列表
   </a>
 </div>
 <div class="card">
   <div class="card-header">
     <h2>
-      Integrations
+      集成
       <span class="d-inline-block gt-separator">
         |
       </span>
@@ -34,7 +34,7 @@
     <div ng-include src="'template/gt-loading-overlay.html'"></div>
     <div ng-include src="'template/gt-http-error-overlay.html'"></div>
     <div ng-if="layout.central" class="alert alert-danger" role="alert">
-      Use glowroot agent (with embedded database and UI, not pointing to central) to monitor glowroot central itself.
+      使用glowroot代理（具有嵌入式数据库和UI，而不是指向中央）来监控glowroot中心本身。
     </div>
     <div ng-form
          gt-form-autofocus-on-first-input
@@ -51,7 +51,7 @@
            ng-if="layout.adminEdit">
         <div class="offset-xl-3 col-xl-9">
           <div gt-button
-               gt-label="Save changes"
+               gt-label="保存更改"
                gt-click="save(deferred)"
                gt-validate-form="formCtrl">
           </div>

@@ -213,7 +213,7 @@ glowroot.controller('ConfigInstrumentationListCtrl', [
               var msg = 're-transformed ' + data.classes + ' class' + (data.classes > 1 ? 'es' : '');
               deferred.resolve('Success (' + msg + ')');
             } else {
-              deferred.resolve('Success (no classes needed re-transforming)');
+              deferred.resolve('成功（没有类需要重新转换）');
             }
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);

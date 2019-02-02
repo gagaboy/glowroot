@@ -16,18 +16,18 @@
 <div ng-include src="'template/gt-loading-overlay.html'"></div>
 <div ng-include src="'template/gt-http-error-overlay.html'"></div>
 <div ng-if="agentNotConnected" class="alert alert-danger" role="alert">
-  This feature is only available when the agent is running and connected
+  此特性仅在代理运行并连接的情况下有效
 </div>
 <!-- ng-show needed here instead of ng-if because thread-dump.js binds directly to #threadDump -->
 <div ng-show="loaded && !agentNotConnected">
   <div class="d-flex justify-content-between align-items-start pb-4">
     <div gt-button
-         gt-label="Refresh"
+         gt-label="刷新"
          gt-click="refresh(deferred)">
     </div>
     <button class="btn btn-secondary"
             ng-click="exportAsText()">
-      Export as text
+      导出成文本
     </button>
   </div>
   <div class="gt-thread-dump-flat-pre"

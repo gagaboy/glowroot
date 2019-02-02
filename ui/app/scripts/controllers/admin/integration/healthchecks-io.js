@@ -37,7 +37,7 @@ glowroot.controller('AdminHealthchecksIoCtrl', [
     $scope.save = function (deferred) {
       $http.post('backend/admin/healthchecks-io', $scope.config)
           .then(function (response) {
-            deferred.resolve('Saved');
+            deferred.resolve('保存成功');
             onNewData(response.data);
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);

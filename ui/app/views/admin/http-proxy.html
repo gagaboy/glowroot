@@ -16,7 +16,7 @@
 <div class="card">
   <div class="card-header">
     <h2>
-      HTTP Proxy configuration
+      HTTP代理配置
     </h2>
   </div>
   <div class="card-body">
@@ -27,16 +27,16 @@
          name="formCtrl"
          style="padding-top: 15px;">
       <div gt-form-group
-           gt-label="Host"
+           gt-label="主机"
            gt-model="config.host"
            gt-disabled="!layout.adminEdit"
            gt-width="20em">
         <div class="help-block">
-          HTTP Proxy server hostname or IP address.
+          HTTP代理服务器主机名或IP地址。
         </div>
       </div>
       <div gt-form-group
-           gt-label="Port"
+           gt-label="端口"
            gt-model="config.port"
            gt-number="true"
            gt-pattern="pattern.integer"
@@ -45,7 +45,7 @@
            gt-placeholder="80">
       </div>
       <div gt-form-group
-           gt-label="Username"
+           gt-label="用户名"
            gt-model="config.username"
            gt-disabled="!layout.adminEdit"
            gt-width="20em">
@@ -53,7 +53,7 @@
       <div class="form-group row">
         <label class="col-xl-3 gt-form-label-xl"
                for="password">
-          Password
+          密码
         </label>
         <div class="col-xl-9">
           <input type="password"
@@ -71,7 +71,7 @@
            ng-if="layout.adminEdit">
         <div class="offset-xl-3 col-xl-9">
           <div gt-button
-               gt-label="Save changes"
+               gt-label="保存更改"
                gt-click="save(deferred)"
                gt-validate-form="formCtrl">
           </div>
@@ -83,13 +83,13 @@
          ng-if="layout.adminEdit">
       <fieldset class="gt-fieldset">
         <legend class="gt-legend">
-          Test HTTP proxy
+          测试HTTP代理
         </legend>
         <div class="gt-fieldset-under-normal-form">
           <div class="form-group row">
             <label class="col-xl-3 gt-form-label-xl"
                    for="testUrl">
-              Test url
+              测试url地址
             </label>
             <div class="col-xl-9">
               <input type="text"
@@ -103,7 +103,7 @@
             <div class="offset-xl-3 col-xl-9">
               <div gt-button
                    gt-btn-class="btn-secondary"
-                   gt-label="Test"
+                   gt-label="测试"
                    gt-click="testHttpProxy(deferred)"
                    gt-validate-form="formCtrl">
               </div>

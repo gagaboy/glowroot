@@ -32,11 +32,11 @@
     <div style="display: table-cell; text-align: center; vertical-align: middle;">
       <div class="gt-chart-no-data"
            ng-hide="showOverwrittenMessage">
-        No data for this time period
+        当前时段无数据
       </div>
       <div class="gt-chart-no-data"
            ng-if="showOverwrittenMessage">
-        There was query data but it has expired
+        存在查询记录，但已过期
       </div>
     </div>
   </div>
@@ -57,8 +57,7 @@
             class="gt-query-total-column"
             ng-attr-aria-sort="{{ngAttrAriaSort('total-time')}}">
           <a ng-href="{{currentTabUrl()}}{{sortQueryString('total-time')}}" class="gt-sortable-table-header">
-            Total<br>
-            time<br>
+            总耗时<br>
             <span ng-class="sortIconClass('total-time')"
                   ng-if="sortAttribute === 'total-time'">
             </span>
@@ -69,20 +68,18 @@
             class="gt-query-count-column"
             ng-attr-aria-sort="{{ngAttrAriaSort('execution-count')}}">
           <a ng-href="{{currentTabUrl()}}{{sortQueryString('execution-count')}}" class="gt-sortable-table-header">
-            Total<br>
+            总数
             <span ng-class="sortIconClass('execution-count')"
                   ng-if="sortAttribute === 'execution-count'">
             </span>
-            count
           </a>
         </th>
         <th scope="col"
             class="gt-query-other-column"
             ng-attr-aria-sort="{{ngAttrAriaSort('time-per-execution')}}">
           <a ng-href="{{currentTabUrl()}}{{sortQueryString('time-per-execution')}}" class="gt-sortable-table-header">
-            Avg<br>
-            time<br>
-            <span ng-class="sortIconClass('time-per-execution')"
+            平均耗时
+            <br><span ng-class="sortIconClass('time-per-execution')"
                   ng-if="sortAttribute === 'time-per-execution'">
             </span>
             (ms)
@@ -92,12 +89,12 @@
             class="gt-query-other-column"
             ng-attr-aria-sort="{{ngAttrAriaSort('rows-per-execution')}}">
           <a ng-href="{{currentTabUrl()}}{{sortQueryString('rows-per-execution')}}" class="gt-sortable-table-header">
-            Avg<br>
+            平均<br>
             <span style="white-space: nowrap;">
             <span ng-class="sortIconClass('rows-per-execution')"
                   ng-if="sortAttribute === 'rows-per-execution'">
             </span>
-            rows
+            次数
               </span>
           </a>
         </th>
@@ -217,12 +214,12 @@
         </div>
         <div ng-if="queryExpired">
           <strong>
-            The full text for this query has expired
+          此查询的全文已过期
           </strong>
         </div>
         <div ng-if="queryError"
              class="gt-red">
-          An error occurred retrieving the query
+          查询检索时出错
         </div>
         <!-- display: inline-block is so that true width can be calculated and modal shrunk to fit if possible -->
         <!-- not using ng-if/hide here since need it to be visible for size calculation -->

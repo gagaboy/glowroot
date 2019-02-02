@@ -62,7 +62,7 @@ glowroot.controller('AdminJsonCtrl', [
                                      // object, since want to display json the way server formatted it
       }).then(function (response) {
         onNewData(response.data);
-        deferred.resolve('Saved');
+        deferred.resolve('保存成功');
       }, function (response) {
         httpErrors.handle(response, $scope, deferred);
       });

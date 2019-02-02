@@ -542,7 +542,7 @@ glowroot.controller('AdminRoleCtrl', [
               data.config.permissions = postData.permissions;
             }
             onNewData(data);
-            deferred.resolve($scope.name ? 'Saved' : 'Added');
+            deferred.resolve($scope.name ? '保存成功' : '添加成功');
             if (!$scope.name) {
               $scope.name = data.config.name;
               $location.search({name: $scope.name}).replace();
@@ -550,7 +550,7 @@ glowroot.controller('AdminRoleCtrl', [
           }, function (response) {
             if (response.status === 409 && response.data.message === 'name') {
               $scope.duplicateName = true;
-              deferred.reject('There is already a role with this name');
+              deferred.reject('这个用户名已经有了一个角色');
               return;
             }
             httpErrors.handle(response, $scope, deferred);
@@ -564,7 +564,7 @@ glowroot.controller('AdminRoleCtrl', [
       $http.post('backend/admin/roles/remove', postData)
           .then(function (response) {
             if (response.data.errorCannotDeleteLastRole) {
-              deferred.reject('Cannot delete last role');
+              deferred.reject('无法删除最后一个角色');
               return;
             }
             removeConfirmIfHasChangesListener();

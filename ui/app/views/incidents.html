@@ -17,7 +17,7 @@
   <div class="gt-header-lhs"
        ng-if="!layout.embeddedAgentRollup.display">
     <h1 class="gt-header-text">
-      Incidents
+      事故
     </h1>
   </div>
   <div class="gt-header-lhs"
@@ -32,14 +32,14 @@
       |
     </div>
     <h1 class="gt-header-text">
-      Incidents
+      事故
     </h1>
   </div>
 </div>
 
 <div class="card gt-incident-active">
   <div class="card-header">
-    <h2>Open</h2>
+    <h2>开启</h2>
   </div>
   <div class="card-body">
     <div ng-include src="'template/gt-loading-overlay.html'"></div>
@@ -48,10 +48,10 @@
       <table class="table"
              style="table-layout: fixed;">
         <thead>
-        <th scope="col" style="width: 105px;">Severity</th>
-        <th scope="col" style="width: 110px;">Duration</th>
-        <th scope="col" style="width: 180px;" ng-if="layout.central">Agent</th>
-        <th scope="col">Condition</th>
+        <th scope="col" style="width: 105px;">严重</th>
+        <th scope="col" style="width: 110px;">持续</th>
+        <th scope="col" style="width: 180px;" ng-if="layout.central">代理</th>
+        <th scope="col">状态</th>
         </thead>
         <tbody>
         <tr ng-repeat="incident in openIncidents"
@@ -75,8 +75,8 @@
      ng-if="loaded"
      style="margin-top: 50px;">
   <div class="card-header">
-    <h2>Resolved
-      <div style="float: right; padding-top: 10px; font-size: 24px;">(last 30 days)</div>
+    <h2>已解决
+      <div style="float: right; padding-top: 10px; font-size: 24px;">(近30天)</div>
     </h2>
   </div>
   <div class="card-body">
@@ -85,11 +85,11 @@
       <table class="table"
              style="table-layout: fixed;">
         <thead>
-        <th scope="col" style="width: 105px;">Severity</th>
-        <th scope="col" style="width: 220px;">Resolved</th>
-        <th scope="col" style="width: 110px;">Duration</th>
-        <th scope="col" style="width: 180px;" ng-if="layout.central">Agent</th>
-        <th scope="col">Condition</th>
+        <th scope="col" style="width: 105px;">严重</th>
+        <th scope="col" style="width: 220px;">已解决</th>
+        <th scope="col" style="width: 110px;">持续</th>
+        <th scope="col" style="width: 180px;" ng-if="layout.central">代理</th>
+        <th scope="col">状态</th>
         </thead>
         <tbody>
         <tr ng-repeat="incident in resolvedIncidents"

@@ -23,11 +23,11 @@
 </div>
 <fieldset class="gt-fieldset-environment">
   <legend class="gt-legend">
-    Host
+    主机
   </legend>
   <div class="row gt-jvm-general-row">
     <div class="col-md-3 text-md-right font-weight-600">
-      Host name
+      主机名
     </div>
     <div class="col-md-9">
       {{data.host.hostname}}
@@ -35,7 +35,7 @@
   </div>
   <div class="row gt-jvm-general-row">
     <div class="col-md-3 text-md-right font-weight-600">
-      Available processors
+      可用处理器
     </div>
     <div class="col-md-9">
       {{data.host.availableProcessors}}
@@ -43,7 +43,7 @@
   </div>
   <div class="row gt-jvm-general-row">
     <div class="col-md-3 text-md-right font-weight-600">
-      Total physical memory
+      物理内存
     </div>
     <div class="col-md-9">
       {{data.host.totalPhysicalMemoryBytes | gtBytes}}
@@ -51,7 +51,7 @@
   </div>
   <div class="row gt-jvm-general-row">
     <div class="col-md-3 text-md-right font-weight-600">
-      OS name
+      操作系统
     </div>
     <div class="col-md-9">
       {{data.host.osName}}
@@ -59,7 +59,7 @@
   </div>
   <div class="row gt-jvm-general-row">
     <div class="col-md-3 text-md-right font-weight-600">
-      OS version
+      系统版本
     </div>
     <div class="col-md-9">
       {{data.host.osVersion}}
@@ -67,7 +67,7 @@
   </div>
   <div class="row gt-jvm-general-row" ng-if="supportsHostCurrentTime()">
     <div class="col-md-3 text-md-right font-weight-600">
-      Current time
+      当前时间
     </div>
     <div class="col-md-9" ng-if="data.agentNotConnected || layout.offlineViewer">
       -
@@ -79,11 +79,11 @@
 </fieldset>
 <fieldset class="gt-fieldset-environment">
   <legend class="gt-legend">
-    Process
+    进程
   </legend>
   <div class="row gt-jvm-general-row">
     <div class="col-md-3 text-md-right font-weight-600">
-      Process ID
+      进程 ID
     </div>
     <div class="col-md-9">
       {{data.process.processId === undefined ? 'N/A' : data.process.processId}}
@@ -91,7 +91,7 @@
   </div>
   <div class="row gt-jvm-general-row">
     <div class="col-md-3 text-md-right font-weight-600">
-      Start time
+      开始时间
     </div>
     <div class="col-md-9">
       {{data.process.startTime | date:'medium'}}
@@ -99,7 +99,7 @@
   </div>
   <div class="row gt-jvm-general-row">
     <div class="col-md-3 text-md-right font-weight-600">
-      Uptime
+      运行时间
     </div>
     <div class="col-md-9" ng-if="data.agentNotConnected || layout.offlineViewer">
       -
@@ -115,7 +115,7 @@
   </legend>
   <div class="row gt-jvm-general-row">
     <div class="col-md-3 text-md-right font-weight-600">
-      Version
+      版本
     </div>
     <div class="col-md-9">
       {{data.java.version}}
@@ -131,7 +131,7 @@
   </div>
   <div class="row gt-jvm-general-row">
     <div class="col-md-3 text-md-right font-weight-600">
-      Args
+      参数
     </div>
     <div class="col-md-9">
       <!-- track by $index is needed since duplicates are possible in this list -->
@@ -144,11 +144,11 @@
 </fieldset>
 <fieldset class="gt-fieldset-environment">
   <legend class="gt-legend">
-    Glowroot agent
+    监控代理
   </legend>
   <div class="row gt-jvm-general-row">
     <div class="col-md-3 text-md-right font-weight-600">
-      Version
+      版本
     </div>
     <div class="col-md-9">
       {{data.java.glowrootAgentVersion}}

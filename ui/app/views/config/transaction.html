@@ -15,7 +15,7 @@
 -->
 <div class="card">
   <div class="card-header">
-    <h2>Transactions</h2>
+    <h2>事务</h2>
   </div>
   <div class="card-body">
     <div ng-hide="hideMainContent()">
@@ -26,56 +26,54 @@
             style="padding-top: 15px;"
             novalidate>
         <div gt-form-group
-             gt-label="Slow threshold"
+             gt-label="慢事务时间"
              gt-model="config.slowThresholdMillis"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!agentRollup.permissions.config.edit.transaction"
              gt-width="7em"
-             gt-addon="milliseconds">
+             gt-addon="毫秒">
           <div class="help-block">
-            Any transaction that exceeds this amount of time will be viewable immediately as an active trace and the
-            trace will be stored to disk at its completion.
+            任何超过此时间的事务都将立即作为活跃项进行跟踪，并且跟踪信息将在完成时存储到磁盘。
           </div>
         </div>
         <div gt-form-group
-             gt-label="Profiling interval"
+             gt-label="分析间隔"
              gt-model="config.profilingIntervalMillis"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!agentRollup.permissions.config.edit.transaction"
              gt-width="7em"
-             gt-addon="milliseconds">
+             gt-addon="毫秒">
           <div class="help-block">
-            The interval at which the profiler samples stack traces. Each sampling time is randomized within its given
-            interval in order to avoid periodicity bias.
+            这个时间间隔是探查器采样堆栈跟踪的间隔。在给定的时间间隔内随机时间进行采样，以避免周期性偏差。
           </div>
         </div>
         <div gt-form-group
              gt-type="checkbox"
-             gt-label="Thread stats"
-             gt-checkbox-label="Capture JVM thread stats"
+             gt-label="线程统计"
+             gt-checkbox-label="捕获JVM线程统计信息"
              gt-model="config.captureThreadStats"
              gt-disabled="!agentRollup.permissions.config.edit.transaction">
           <div class="help-block">
-            Capture CPU time, blocked time, waited time and allocated memory if available.
+            尽可能的捕获CPU时间，阻塞时间，等待时间和分配的内存。
             <span ng-if="agentRollup.permissions.jvm.capabilities">
-              See <a href="jvm/capabilities">JVM Capabilities</a>.
+              查看 <a href="jvm/capabilities">JVM 功能</a>.
             </span>
-            Capturing this data has some overhead (around 5 microseconds per transaction).
+            捕获此数据会产生一些开销（平均每个事务大约5微秒）。
           </div>
         </div>
         <div ng-if="supportsSlowThresholdOverrides()">
           <fieldset class="gt-fieldset"
                     ng-repeat="slowThresholdOverride in config.slowThresholdOverrides">
-            <legend class="gt-legend">Slow threshold override</legend>
+            <legend class="gt-legend">慢事务配置</legend>
             <div class="gt-fieldset-under-normal-form">
               <div class="form-group row">
                 <label class="col-xl-3 gt-form-label-xl"
                        for="transactionType{{$index}}">
-                  Transaction type
+                  事务类型
                 </label>
                 <div class="col-xl-9">
                   <select ng-model="slowThresholdOverride.transactionType"
@@ -91,46 +89,44 @@
                     </option>
                   </select>
                   <div class="help-block">
-                    The transaction type this override applies to.
+                    应用此事务类型进行覆盖。
                   </div>
                 </div>
               </div>
               <div gt-form-group
-                   gt-label="Transaction name"
+                   gt-label="事务名称"
                    gt-model="slowThresholdOverride.transactionName"
                    gt-disabled="!agentRollup.permissions.config.edit.transaction"
                    gt-width="40em">
                 <div class="help-block">
-                  The transaction name this override applies to. If empty, this override will apply to all transaction
-                  names.
+                  应用此事务名称进行覆盖。如果为空，则所有的事务都将应用此事务名称。
                 </div>
               </div>
               <div gt-form-group
-                   gt-label="User"
+                   gt-label="用户"
                    gt-model="slowThresholdOverride.user"
                    gt-disabled="!agentRollup.permissions.config.edit.transaction"
                    gt-width="40em"
                    ng-if="supportsSlowThreholdUserOverrides()">
                 <div class="help-block">
-                  The user this override applies to. If empty, this override will apply to all users. Case insensitive
-                  comparison is performed.
+                    应用此用户进行覆盖。如果为空，则将覆盖应用于所有的用户。处理时不区分大小写。
                 </div>
               </div>
               <div gt-form-group
-                   gt-label="Slow threshold"
+                   gt-label="慢事务时间"
                    gt-model="slowThresholdOverride.thresholdMillis"
                    gt-number="true"
                    gt-pattern="pattern.integer"
                    gt-required="loaded"
                    gt-disabled="!agentRollup.permissions.config.edit.transaction"
                    gt-width="7em"
-                   gt-addon="milliseconds">
+                   gt-addon="毫秒">
               </div>
               <div class="float-right pr-xl-4 pb-2"
                    ng-if="agentRollup.permissions.config.edit.transaction">
                 <button class="btn btn-secondary"
                         ng-click="removeSlowThresholdOverride(slowThresholdOverride)">
-                  Remove this slow threshold override
+                  删除此慢事务配置
                 </button>
               </div>
             </div>
@@ -138,12 +134,12 @@
           <fieldset class="gt-fieldset"
                     ng-if="agentRollup.permissions.config.edit.transaction">
             <legend class="gt-legend">
-              Add {{config.slowThresholdOverrides.length ? 'another' : 'a'}} slow threshold override
+              添加 {{config.slowThresholdOverrides.length ? '另一个' : '一个'}} 慢事务配置
             </legend>
             <button class="btn btn-secondary"
                     ng-click="addSlowThresholdOverride()"
                     style="margin-bottom: 23px; margin-left: 14px;">
-              Add
+              新增
             </button>
           </fieldset>
         </div>
@@ -151,7 +147,7 @@
              ng-if="agentRollup.permissions.config.edit.transaction">
           <div class="offset-xl-3 col-xl-9">
             <div gt-button
-                 gt-label="Save changes"
+                 gt-label="保存更改"
                  gt-click="save(deferred)"
                  gt-validate-form="formCtrl">
             </div>

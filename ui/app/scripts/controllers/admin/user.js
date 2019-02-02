@@ -146,7 +146,7 @@ glowroot.controller('AdminUserCtrl', [
       $http.post(url, postData)
           .then(function (response) {
             onNewData(response.data);
-            deferred.resolve($scope.username ? 'Saved' : 'Added');
+            deferred.resolve($scope.username ? '保存成功' : '添加成功');
             delete $scope.page.password;
             delete $scope.page.verifyPassword;
             if (!$scope.username) {
@@ -155,7 +155,7 @@ glowroot.controller('AdminUserCtrl', [
             }
           }, function (response) {
             if (response.status === 409 && response.data.message === 'username') {
-              deferred.reject('There is already a user with this username');
+              deferred.reject('已有用户使用此用户名');
               return;
             }
             httpErrors.handle(response, $scope, deferred);
@@ -166,7 +166,7 @@ glowroot.controller('AdminUserCtrl', [
 
     $scope.save = function (deferred) {
       if ($scope.page.password !== $scope.page.verifyPassword) {
-        deferred.reject('Passwords do not match');
+        deferred.reject('密码不匹配');
         return;
       }
       if ($scope.config.roles.length || overrideSaveWithNoRoles) {

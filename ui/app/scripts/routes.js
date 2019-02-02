@@ -143,7 +143,7 @@ glowroot.config([
       controller: 'TransactionCtrl',
       resolve: {
         headerDisplay: function () {
-          return 'Transactions';
+          return '事务';
         },
         shortName: function () {
           return 'transaction';
@@ -169,9 +169,9 @@ glowroot.config([
       resolve: {
         summarySortOrders: function () {
           return {
-            'total-time': 'By percent of total time',
-            'average-time': 'By average time',
-            'throughput': 'By throughput (per min)'
+            'total-time': '耗时百分比',
+            'average-time': '平均时间',
+            'throughput': '按吞吐量（每分钟）'
           };
         },
         summaryValueFn: [
@@ -292,7 +292,7 @@ glowroot.config([
       controller: 'TransactionCtrl',
       resolve: {
         headerDisplay: function () {
-          return 'Errors';
+          return '异常';
         },
         shortName: function () {
           return 'error';
@@ -319,8 +319,8 @@ glowroot.config([
       resolve: {
         summarySortOrders: function () {
           return {
-            'error-count': 'By error count',
-            'error-rate': 'By error rate'
+            'error-count': '按错误数',
+            'error-rate': '按错误率'
           };
         },
         summaryValueFn: function () {

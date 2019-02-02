@@ -26,32 +26,28 @@
             style="padding-top: 15px;"
             novalidate>
         <div gt-form-group
-             gt-label="Mask system properties"
+             gt-label="屏蔽系统参数"
              gt-model="page.maskSystemProperties"
              gt-disabled="!agentRollup.permissions.config.edit.jvm"
              gt-width="20em">
           <div class="help-block">
-            Comma-separated list of sensitive system properties to mask, e.g. passwords. The wildcard '*' is supported
-            anywhere in the property name.
+            以逗号分隔要屏蔽的敏感系统属性列表，例如密码。支持在属性名称中的任何位置使用通配符'*'。
           </div>
         </div>
         <div gt-form-group
-             gt-label="Mask mbean attributes"
+             gt-label="屏蔽mbean属性"
              gt-model="page.maskMBeanAttributes"
              gt-disabled="!agentRollup.permissions.config.edit.jvm"
              gt-width="20em">
           <div class="help-block">
-            Comma-separated list of sensitive mbean attributes to mask, e.g. passwords. The wildcard '*' is supported
-            anywhere in the attribute name. Matching is performed against <em>ObjectName:AttributeName</em>, so
-            masking just "password" will not match any MBean attributes, while masking "*:password" will match MBean
-            attributes of exactly password for all MBean object names.
+            以逗号分隔要屏蔽的敏感mbean属性列表，例如密码。支持在属性名称中的任何位置使用通配符'*'。匹配是针对形如<em>ObjectName：AttributeName</em>格式进行的，所以"password"将不匹配任何MBean属性进行屏蔽，而"*:password"将匹配屏蔽所有含有password的MBean的密码属性。
           </div>
         </div>
         <div class="form-group row"
              ng-if="agentRollup.permissions.config.edit.jvm">
           <div class="offset-xl-3 col-xl-9">
             <div gt-button
-                 gt-label="Save changes"
+                 gt-label="保存变更"
                  gt-click="save(deferred)"
                  gt-validate-form="formCtrl">
             </div>

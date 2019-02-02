@@ -58,7 +58,7 @@ glowroot.controller('AdminSlackCtrl', [
               deferred.reject('Duplicate webhook display found');
               return;
             }
-            deferred.resolve('Saved');
+            deferred.resolve('保存成功');
             onNewData(response.data);
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);

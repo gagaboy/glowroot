@@ -22,7 +22,7 @@
     <!-- ng-show needed here instead of ng-if because transaction.js binds directly to #agentRollupDropdown -->
     <div ng-show="layout.central">
       <select gt-selectpicker
-              gt-title="agentRollup.display || '&amp;lt;select&amp;gt;'"
+              gt-title="agentRollup.display || '&amp;lt;请选择代理&amp;gt;'"
               data-width="fit"
               data-live-search="true"
               data-style="btn-secondary"
@@ -41,7 +41,7 @@
                 class="gt-agent-rollup-dropdown-message d-none"
                 style="font-style: italic; font-size: 1rem; cursor: inherit;"
                 ng-if="agentRollups.length === 0">
-          No active agents in this time period
+          当前无活跃的代理
         </option>
         <!-- can't use gt-spinner due to selectpicker behavior -->
         <option disabled
@@ -67,7 +67,7 @@
                 data-toggle="dropdown"
                 style="padding-right: 1rem;"
                 id="gtTransactionType">
-          {{transactionType || '&lt;transaction type&gt;'}}
+          {{transactionType || '&lt;事务类型&gt;'}}
         </button>
         <div class="dropdown-menu"
              aria-labelledby="gtTransactionType">
@@ -91,7 +91,7 @@
 <div class="gt-transaction-main-column">
   <div class="card">
     <div class="card-header" style="word-break: break-all;">
-      <h2>{{transactionName ? transactionName : 'All ' + transactionType + ' Transactions'}}</h2>
+      <h2>{{transactionName ? transactionName : '所有 ' + transactionType + ' 事务'}}</h2>
     </div>
     <div class="card-body">
       <div ui-view="tabs"></div>

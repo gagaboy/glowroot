@@ -17,13 +17,13 @@
 <div class="clearfix">
   <a class="gt-config-return-link"
      href="admin/integration-list">
-    Return to list
+    返回列表
   </a>
 </div>
 <div class="card">
   <div class="card-header">
     <h2>
-      Integrations
+      集成
       <span class="d-inline-block gt-separator">
         |
       </span>
@@ -39,26 +39,26 @@
          style="padding-top: 15px;">
       <fieldset class="gt-fieldset">
         <legend class="gt-legend">
-          Connection
+          连接
         </legend>
         <div gt-form-group
-             gt-label="Host"
+             gt-label="主机"
              gt-model="config.host"
              gt-disabled="!layout.adminEdit"
              gt-width="20em">
           <div class="help-block">
-            LDAP server hostname or IP address.
+            LDAP服务器主机名或IP地址。
           </div>
         </div>
         <div gt-form-group
-             gt-label="Port"
+             gt-label="端口"
              gt-model="config.port"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-disabled="!layout.adminEdit"
              gt-width="7em">
           <div class="help-block">
-            Defaults to port 389 for non-SSL, and 636 for SSL.
+            对于非SSL，默认为端口389，对于SSL，默认为636。
           </div>
         </div>
         <div gt-form-group
@@ -69,19 +69,19 @@
              gt-disabled="!layout.adminEdit">
         </div>
         <div gt-form-group
-             gt-label="Username"
+             gt-label="用户名"
              gt-model="config.username"
              gt-required="config.host"
              gt-disabled="!layout.adminEdit"
              gt-width="20em">
           <div class="help-block">
-            Username that Glowroot uses to bind and run LDAP queries.
+            lowroot用于绑定和运行LDAP查询的用户名。
           </div>
         </div>
         <div class="form-group row">
           <label class="col-xl-3 gt-form-label-xl"
                  for="password">
-            Password
+            密码
           </label>
           <div class="col-xl-9">
             <input type="password"
@@ -98,14 +98,14 @@
               This is required.
             </div>
             <div class="help-block">
-              Password that Glowroot uses to bind and run LDAP queries.
+              Glowroot用于绑定和运行LDAP查询的密码。
             </div>
           </div>
         </div>
       </fieldset>
       <fieldset class="gt-fieldset">
         <legend class="gt-legend">
-          Structure
+          结构
         </legend>
         <div gt-form-group
              gt-label="User base DN"
@@ -114,19 +114,17 @@
              gt-disabled="!layout.adminEdit"
              gt-width="25em">
           <div class="help-block">
-            Base DN for locating users, e.g. <em>ou=Users,dc=example,dc=com</em>
+            用于定位用户的Base DN，例如<em>ou=Users,dc=example,dc=com</em>
           </div>
         </div>
         <div gt-form-group
-             gt-label="User search filter"
+             gt-label="用户搜索过滤器"
              gt-model="config.userSearchFilter"
              gt-required="config.host"
              gt-disabled="!layout.adminEdit"
              gt-width="25em">
           <div class="help-block">
-            This search filter is used to find the user based on the username they enter during login.
-            The placeholder {0} in the filter will be populated with the username.
-            For active directory this filter is likely <em>sAMAccountName={0}</em>
+            此搜索过滤器用于根据用户在登录期间输入的用户名查找用户。过滤器中的占位符{0}将填充用户名。对于活动目录，此过滤器可能是<em>sAMAccountName={0}</em>
           </div>
         </div>
         <div gt-form-group
@@ -136,19 +134,17 @@
              gt-disabled="!layout.adminEdit"
              gt-width="25em">
           <div class="help-block">
-            Base DN for locating groups, e.g. <em>ou=Groups,dc=example,dc=com</em>
+            用于定位组的Base DN, 例如 <em>ou=Groups,dc=example,dc=com</em>
           </div>
         </div>
         <div gt-form-group
-             gt-label="Group search filter"
+             gt-label="组搜索过滤器"
              gt-model="config.groupSearchFilter"
              gt-required="config.host"
              gt-disabled="!layout.adminEdit"
              gt-width="25em">
           <div class="help-block">
-            This search filter is used to find the groups that a user is a member of.
-            The placeholder {0} in the filter will be populated with the user DN.
-            For active directory this filter is likely <em>member={0}</em>
+            此搜索过滤器用于查找用户所属的组。过滤器中的占位符{0}将填充用户DN。对于活动目录，此过滤器可能是<em>member={0}</em>
           </div>
         </div>
       </fieldset>
@@ -164,13 +160,13 @@
              gt-disabled="!layout.adminEdit"
              gt-width="40em">
           <div class="help-block">
-            Full distinguished name (DN).
+            完整的专有名称（DN）。
           </div>
         </div>
         <div class="form-group row">
           <label class="col-xl-3 gt-form-label-xl"
                  for="role{{$index}}">
-            Glowroot roles
+            角色
           </label>
           <div class="col-xl-9">
             <select multiple
@@ -192,7 +188,7 @@
           <div class="offset-xl-3 col-xl-9">
             <button class="btn btn-danger float-right"
                     ng-click="removeRoleMappingBlock(roleMappingBlock)">
-              Remove this role mapping
+              删除此角色映射
             </button>
           </div>
         </div>
@@ -200,19 +196,19 @@
       <fieldset class="gt-fieldset"
                 ng-if="layout.adminEdit">
         <legend class="gt-legend">
-          Add {{page.roleMappingBlocks.length ? 'another' : 'a'}} role mapping
+          添加 {{page.roleMappingBlocks.length ? '另一个' : '一个'}} 角色映射
         </legend>
         <button class="btn btn-secondary"
                 ng-click="addRoleMappingBlock()"
                 style="margin-bottom: 23px; margin-left: 14px;">
-          Add
+          添加
         </button>
       </fieldset>
       <div class="form-group row gt-form-buttons-below-fieldset"
            ng-if="layout.adminEdit">
         <div class="offset-xl-3 col-xl-9">
           <div gt-button
-               gt-label="Save changes"
+               gt-label="保存更改"
                gt-click="save(deferred)"
                gt-validate-form="formCtrl">
           </div>
@@ -224,12 +220,12 @@
          ng-if="layout.adminEdit">
       <fieldset class="gt-fieldset">
         <legend class="gt-legend">
-          Test LDAP authentication
+          测试LDAP身份验证
         </legend>
         <div class="form-group row">
           <label class="col-xl-3 gt-form-label-xl"
                  for="authTestUsername">
-            Username
+            用户名
           </label>
           <div class="col-xl-9">
             <input type="text"
@@ -242,7 +238,7 @@
         <div class="form-group row">
           <label class="col-xl-3 gt-form-label-xl"
                  for="authTestPassword">
-            Password
+            密码
           </label>
           <div class="col-xl-9">
             <input type="password"
@@ -256,7 +252,7 @@
           <div class="offset-xl-3 col-xl-9">
             <div gt-button
                  gt-btn-class="btn-secondary"
-                 gt-label="Test"
+                 gt-label="测试"
                  gt-click="testLdap(deferred)"
                  gt-validate-form="formCtrl">
             </div>

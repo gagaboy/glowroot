@@ -25,7 +25,7 @@
          name="formCtrl"
          style="padding-top: 15px;">
       <div gt-form-group
-           gt-label="Port"
+           gt-label="端口"
            gt-model="config.port"
            gt-number="true"
            gt-pattern="pattern.integer"
@@ -39,7 +39,7 @@
                style="padding-bottom: 5px;">
             Active value is <code>{{activePort}}</code>.
           </div>
-          Port that the user interface listens on.
+          用户交互界面监听的端口。
           <span ng-if="layout.adminEdit && portReadOnly">
             The port is read-only because it has been set via the jvm arg
             <code style="white-space: nowrap;">-Dglowroot.agent.port={{config.port}}</code>.
@@ -47,7 +47,7 @@
         </div>
       </div>
       <div gt-form-group
-           gt-label="Bind address"
+           gt-label="绑定地址"
            gt-model="config.bindAddress"
            gt-required="loaded"
            gt-disabled="!layout.adminEdit"
@@ -57,11 +57,11 @@
           <div class="gt-yellow"
                ng-if="originalConfig.bindAddress !== activeBindAddress"
                style="padding-bottom: 5px;">
-            This change requires JVM restart. Active value is <code>{{activeBindAddress}}</code>.
+            此修改需要重启JVM。当前的有效值为 <code>{{activeBindAddress}}</code>.
           </div>
-          Address that the user interface listens on.
+          用户交互界面监听的地址。
           <span ng-if="originalConfig.bindAddress === '127.0.0.1'">
-            To access the UI from remote machines, change the bind address to 0.0.0.0
+            要从远程计算机访问用户界面，请将绑定地址更改为0.0.0.0
           </span>
         </div>
       </div>
@@ -76,7 +76,7 @@
           <div class="gt-yellow"
                ng-if="originalConfig.https !== activeHttps"
                style="padding-bottom: 5px;">
-            Active value is <code>{{activeHttps}}</code>.
+            当前的有效值为 <code>{{activeHttps}}</code>.
           </div>
           Serve the user interface over HTTPS. The certificate and private key to be used must be placed in
           <span ng-if="confDirs.length === 1">
@@ -113,24 +113,23 @@
         </div>
       </div>
       <div gt-form-group
-           gt-label="Session timeout"
+           gt-label="会话失效"
            gt-model="config.sessionTimeoutMinutes"
            gt-number="true"
            gt-pattern="pattern.integer"
            gt-required="loaded"
            gt-disabled="!layout.loginEnabled || !layout.adminEdit"
            gt-width="7em"
-           gt-addon="minutes">
+           gt-addon="分钟">
         <div class="help-block">
           <span ng-if="layout.adminEdit && !layout.loginEnabled">
-            The session timeout is disabled because there are no users configured.
+            由于未配置用户，会话超时已禁用。
           </span>
-          Session timeout <code>0</code> means sessions do not time out, except on jvm restart at which time all
-          sessions time out.
+          会话超时<code>0</code>表示会话不会超时，除非jvm重启，那么所有会话都会超时。
         </div>
       </div>
       <div gt-form-group
-           gt-label="Session cookie name"
+           gt-label="会话 cookie 名称"
            gt-model="config.sessionCookieName"
            gt-pattern="/^[a-zA-Z0-9_]*$/"
            gt-required="loaded"
@@ -138,7 +137,7 @@
            gt-width="20em">
         <div class="help-block">
           <span ng-if="layout.adminEdit && !layout.loginEnabled">
-            The session cookie name is disabled because there are no users configured.
+              由于未配置用户，会话cookie名称已禁用。
           </span>
         </div>
       </div>
@@ -146,7 +145,7 @@
            ng-if="layout.adminEdit">
         <div class="offset-xl-3 col-xl-9">
           <div gt-button
-               gt-label="Save changes"
+               gt-label="保存变更"
                gt-click="save(deferred)"
                gt-validate-form="formCtrl">
           </div>

@@ -17,13 +17,13 @@
 <div class="clearfix">
   <a class="gt-config-return-link"
      href="config/gauge-list{{agentQueryString()}}">
-    Return to list
+    返回列表
   </a>
 </div>
 <div class="card">
   <div class="card-header">
     <h2 ng-class="{'gt-lighten-font': !loaded && !httpError}">
-      Gauges
+      指标项
       <span class="d-inline-block gt-separator">
         |
       </span>
@@ -43,7 +43,7 @@
       <div class="form-group row">
         <label class="col-xl-3 gt-form-label-xl"
                for="mbeanObjectName{{$id}}">
-          MBean object name
+          MBean 对象名称
         </label>
         <div class="col-xl-9">
           <input type="text"
@@ -77,11 +77,7 @@
                style="padding-top: 10px;">
             There is already a gauge for this MBean
           </div>
-          <div class="help-block">
-            If the object name includes at least one occurrence of the wildcard characters asterisk (*) or question mark
-            (?), then the object name is a pattern. The asterisk matches any sequence of zero or more characters, while
-            the question mark matches any single character.
-            (see
+          <div class="help-block">如果对象名称出现一个以上包含通配符星号(*)或问号(？)，则对象名称是一种模式匹配。星号匹配零个或多个字符的任何序列，而问号匹配任何单个字符。(参见
             <a href="https://docs.oracle.com/javase/8/docs/api/javax/management/ObjectName.html">
               https://docs.oracle.com/javase/8/docs/api/javax/management/ObjectName.html</a>)
           </div>
@@ -90,7 +86,7 @@
       <fieldset class="form-group">
         <div class="row">
           <legend class="col-xl-3 gt-check-legend-xl">
-            MBean attributes
+            MBean 属性
           </legend>
           <div class="col-xl-9">
             <div gt-spinner
@@ -126,19 +122,15 @@
             </div>
             <div class="font-italic"
                  ng-if="!config.mbeanObjectName">
-              (select MBean object name first)
+              (请先选择 MBean 对象)
             </div>
             <div class="gt-red pt-0"
                  ng-if="config.mbeanObjectName && !allMBeanAttributes.length && !noMatchFoundForPattern && !noMatchFoundForNonPattern && selectedMBeanObjectName">
-              There are no number-valued attributes for this MBean
+              此 MBean 不存在数值属性
             </div>
             <div class="help-block"
                  ng-if="config.mbeanAttributes.length">
-              Marking an MBean attribute as a counter indicates that it is a monotonically increasing value (e.g. the
-              total garbage collection time since JVM startup). When an mbean attribute is marked as a counter, the
-              deltas are captured and displayed instead of the raw values (e.g. the total garbage collection time since
-              the last capture). Also, when rolling up mbean attributes that are marked as counters, the (delta) values
-              are weighted by the time between captures instead of a straight average.
+              将MBean属性标记为计数器，表示它是简单递增的值（例如，自JVM启动以来的总垃圾收集时间）。当一个mbean属性被标记为计数器时，捕获并显示增量而不是原始值（例如，自上次捕获以来的总垃圾收集时间）。此外，在汇总标记为计数器的mbean属性时，（delta）值按两次捕获之间的时间而不是直线平均值进行加权。
             </div>
           </div>
         </div>
@@ -148,14 +140,14 @@
         <div class="offset-xl-3 col-xl-9">
           <div gt-button-group>
             <div gt-button
-                 gt-label="{{config.version ? 'Save changes' : 'Add'}}"
+                 gt-label="{{config.version ? '保存变更' : '新增'}}"
                  gt-click="save(deferred)"
                  gt-validate-form="formCtrl"
                  class="d-inline-block">
             </div>
             <div gt-button
                  ng-if="config.version"
-                 gt-label="Delete"
+                 gt-label="删除"
                  gt-click="delete(deferred)"
                  gt-btn-class="btn-danger"
                  class="d-inline-block">

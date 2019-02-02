@@ -88,7 +88,7 @@ glowroot.controller('AdminLdapCtrl', [
                   + ' file before LDAP password can be saved to cassandra' + encryptionKeyMessage.extra());
               return;
             }
-            deferred.resolve('Saved');
+            deferred.resolve('保存成功');
             onNewData(response.data);
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
@@ -97,15 +97,15 @@ glowroot.controller('AdminLdapCtrl', [
 
     $scope.testLdap = function (deferred) {
       if (!$scope.page.authTestUsername) {
-        deferred.reject('Test username is required');
+        deferred.reject('测试用户名为必填项');
         return;
       }
       if (!$scope.page.authTestPassword) {
-        deferred.reject('Test password is required');
+        deferred.reject('测试密码为必填项');
         return;
       }
       if (!$scope.config.host) {
-        deferred.reject('Host is required');
+        deferred.reject('主机域名为必填项');
         return;
       }
       // copy to modify for the http post data

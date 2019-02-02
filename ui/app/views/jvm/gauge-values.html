@@ -21,13 +21,13 @@
   <div class="gt-chart-controls float-right">
     <button class="gt-chart-button"
             ng-click="zoomOut()">
-      <span title="Zoom out"
+      <span title="缩小"
             class="fas fa-search-minus">
       </span>
     </button>
     <button class="gt-chart-button"
             ng-click="refresh()">
-      <span title="Refresh"
+      <span title="刷新"
             class="fas fa-sync">
       </span>
     </button>
@@ -35,7 +35,7 @@
             uib-popover-template="'template/help/chart.html'"
             popover-placement="left"
             popover-trigger="'outsideClick'">
-      <span title="Help"
+      <span title="帮助"
             class="fas fa-question-circle">
       </span>
     </button>
@@ -54,9 +54,9 @@
        class="gt-chart-panel"
        style="display: table;">
     <div style="display: table-cell; text-align: center; vertical-align: middle;">
-      <div ng-if="allGauges.length && gaugeNames.length" class="gt-chart-no-data">No data</div>
-      <div ng-if="allGauges.length && !gaugeNames.length" class="gt-chart-no-data">Select one or more gauges below</div>
-      <div ng-if="!allGauges.length" class="gt-chart-no-data">No gauges captured in this time period</div>
+      <div ng-if="allGauges.length && gaugeNames.length" class="gt-chart-no-data">无数据</div>
+      <div ng-if="allGauges.length && !gaugeNames.length" class="gt-chart-no-data">请选择下列一个或多个指标项</div>
+      <div ng-if="!allGauges.length" class="gt-chart-no-data">当前时段未捕获任何指标数据</div>
     </div>
   </div>
 </div>
@@ -86,7 +86,7 @@
     <input type="text"
            class="form-control d-inline-block"
            ng-model="page.gaugeFilter"
-           placeholder="filter the gauge list"
+           placeholder="过滤指标项列表"
            aria-label="Gauge list filter"
            style="max-width: 500px;">
   </div>
@@ -104,12 +104,12 @@
   <div class="mt-4">
     <button class="btn btn-secondary"
             ng-click="selectAllGauges()">
-      select all {{!showingAllGauges() ? 'showing' : ''}}
+      全选 {{!showingAllGauges() ? 'showing' : ''}}
     </button>
     <button class="btn btn-secondary"
             ng-click="deselectAllGauges()"
             style="margin-left: 5px;">
-      deselect all {{!showingAllGauges() ? 'showing' : ''}}
+      全反选 {{!showingAllGauges() ? 'showing' : ''}}
     </button>
   </div>
 </div>

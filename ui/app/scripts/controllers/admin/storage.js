@@ -110,7 +110,7 @@ glowroot.controller('AdminStorageCtrl', [
       $http.post('backend/admin/storage', $scope.config)
           .then(function (response) {
             onNewData(response.data);
-            deferred.resolve('Saved');
+            deferred.resolve('保存成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });
@@ -131,7 +131,7 @@ glowroot.controller('AdminStorageCtrl', [
       $scope.showTraceCountAnalysis = false;
       $http.post('backend/admin/delete-all-stored-data', {})
           .then(function () {
-            deferred.resolve('Deleted');
+            deferred.resolve('删除成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });
@@ -142,7 +142,7 @@ glowroot.controller('AdminStorageCtrl', [
       $scope.showTraceCountAnalysis = false;
       $http.post('backend/admin/defrag-h2-data', {})
           .then(function () {
-            deferred.resolve('Defragmented');
+            deferred.resolve('数据整理成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });
@@ -153,7 +153,7 @@ glowroot.controller('AdminStorageCtrl', [
       $scope.showTraceCountAnalysis = false;
       $http.post('backend/admin/compact-h2-data', {})
           .then(function () {
-            deferred.resolve('Compacted');
+            deferred.resolve('数据优化成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });
@@ -167,7 +167,7 @@ glowroot.controller('AdminStorageCtrl', [
             $scope.h2DataFileSize = data.data.h2DataFileSize;
             $scope.analyzedH2Tables = data.data.tables;
             $scope.showH2DiskSpaceAnalysis = true;
-            deferred.resolve('Analyzed');
+            deferred.resolve('分析成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });
@@ -181,7 +181,7 @@ glowroot.controller('AdminStorageCtrl', [
             $scope.analyzedTraceOverallCounts = data.data.overallCounts;
             $scope.analyzedTraceCounts = data.data.counts;
             $scope.showTraceCountAnalysis = true;
-            deferred.resolve('Analyzed');
+            deferred.resolve('分析成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });

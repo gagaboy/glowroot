@@ -49,10 +49,10 @@ glowroot.factory('httpErrors', [
         if (deferred) {
           // all actions that need to handle HTTP Precondition Failed pass a deferred object
           if (response.status === 403) {
-            deferred.reject('You don\'t have permission for this action');
+            deferred.reject('您没有此操作的权限');
           } else if (response.status === 412) {
             // HTTP Precondition Failed
-            deferred.reject('Someone else has updated the data on this page, please reload and try again');
+            deferred.reject('其他人已更新此页面上的数据，请重新加载并重试');
           } else {
             $rootScope.httpError = getHttpErrorsObject(response);
             deferred.reject($rootScope.httpError.headline);

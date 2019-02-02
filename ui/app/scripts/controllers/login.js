@@ -26,7 +26,7 @@ glowroot.controller('LoginCtrl', [
   'httpErrors',
   function ($scope, $http, $rootScope, $location, $timeout, login, httpErrors) {
     // \u00b7 is &middot;
-    document.title = 'Login \u00b7 Glowroot';
+    document.title = '登录';
     $scope.$parent.activeNavbarItem = 'login';
 
     // initialize page binding object
@@ -43,11 +43,11 @@ glowroot.controller('LoginCtrl', [
           .then(function (response) {
             if (response.data.incorrectLogin) {
               $('#loginPassword').select();
-              deferred.reject('Password incorrect');
+              deferred.reject('密码错误');
             } else {
               $rootScope.layout = response.data;
               $rootScope.initLayout();
-              deferred.resolve('Success');
+              deferred.resolve('登录成功');
               login.returnToOriginalPath();
             }
           }, function (response) {

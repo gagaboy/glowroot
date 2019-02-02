@@ -41,15 +41,13 @@
           </div>
           <div class="help-block"
                ng-if="layout.central">
-            This is a rendering of the config.json file based on the version of the central collector, and may not match
-            the agent's config.json file exactly if there is a version mismatch between the agent and the central
-            collector (the json here is still updatable even in there is a version mismatch).
+            这是基于中央收集器版本的config.json文件的呈现，可能不匹配代理自身的config.json文件，尤其是当代理和中央收集器之间版本存在不匹配的情况（即使存在版本不匹配，json仍然可以更新）。
           </div>
         </div>
         <div class="form-group"
              ng-if="agentRollup.permissions.config.edit.all">
           <div gt-button
-               gt-label="Save changes"
+               gt-label="保存变更"
                gt-click="save(deferred)"
                gt-validate-form="formCtrl">
           </div>

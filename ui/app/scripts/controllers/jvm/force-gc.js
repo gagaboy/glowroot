@@ -22,7 +22,7 @@ glowroot.controller('JvmForceGcCtrl', [
   'httpErrors',
   function ($scope, $http, httpErrors) {
 
-    $scope.$parent.heading = 'Force GC';
+    $scope.$parent.heading = '强制 GC';
 
     if ($scope.hideMainContent()) {
       return;
@@ -31,7 +31,7 @@ glowroot.controller('JvmForceGcCtrl', [
     $scope.forceGC = function (deferred) {
       $http.post('backend/jvm/force-gc?agent-id=' + encodeURIComponent($scope.agentId))
           .then(function () {
-            deferred.resolve('Success');
+            deferred.resolve('操作成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });

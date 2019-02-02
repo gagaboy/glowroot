@@ -17,7 +17,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Glowroot</title>
+    <title>小源科技-应用性能监控</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- this base href tag is replaced with server-side dynamic base href tag plus layout json object
@@ -84,7 +84,7 @@
     <div class="container align-items-stretch">
       <div class="navbar-brand align-items-center"
            style="margin-right: 1.25rem; margin-top: -0.25rem;">
-        Glowroot
+        应用性能监控平台
       </div>
       <button class="gt-navbar-toggler d-flex d-md-none"
               type="button"
@@ -104,14 +104,14 @@
            id="navbarCollapse">
         <ul class="navbar-nav mr-auto align-items-stretch">
           <div gt-navbar-item
-               gt-display="Transactions"
+               gt-display="事务"
                gt-item-name="transaction"
                gt-url="transaction/average{{queryString(true, true)}}"
                gt-click="collapseIfNeeded()"
                ng-if="layout.showNavbarTransaction">
           </div>
           <div gt-navbar-item
-               gt-display="Errors"
+               gt-display="异常"
                gt-item-name="error"
                gt-url="error/messages{{queryString(true, true)}}"
                gt-click="collapseIfNeeded()"
@@ -125,21 +125,21 @@
                ng-if="layout.showNavbarJvm">
           </div>
           <div gt-navbar-item
-               gt-display="Synthetic"
+               gt-display="合成监控"
                gt-item-name="syntheticMonitor"
                gt-url="synthetic-monitors{{queryString(true)}}"
                gt-click="collapseIfNeeded()"
                ng-if="layout.central && layout.showNavbarSyntheticMonitor">
           </div>
           <div gt-navbar-item
-               gt-display="Incidents"
+               gt-display="事故"
                gt-item-name="incident"
                gt-url="incidents"
                gt-click="collapseIfNeeded()"
                ng-if="layout.showNavbarIncident">
           </div>
           <div gt-navbar-item
-               gt-display="Reporting"
+               gt-display="报表"
                gt-item-name="report"
                gt-url="report/ad-hoc{{reportQueryString()}}"
                gt-click="collapseIfNeeded()"
@@ -169,28 +169,28 @@
                  ng-click="collapseIfNeeded()"
                  ng-if="layout.showNavbarConfig"
                  style="padding-top: 5px; padding-bottom: 5px;">
-                Configuration
+                代理配置
               </a>
               <a class="dropdown-item"
                  href="admin/general"
                  ng-click="collapseIfNeeded()"
                  ng-if="layout.adminView"
                  style="padding-top: 5px; padding-bottom: 5px;">
-                Administration
+                系统管理
               </a>
               <a class="dropdown-item"
                  href="login"
                  ng-click="collapseIfNeeded(); goToLogin($event)"
                  ng-if="!layout.loggedIn && layout.loginEnabled"
                  style="padding-top: 5px; padding-bottom: 5px;">
-                Login
+                登录
               </a>
               <a class="dropdown-item"
                  ng-href="profile/change-password"
                  ng-click="collapseIfNeeded()"
                  ng-if="layout.loggedIn && !layout.ldap"
                  style="padding-top: 5px; padding-bottom: 5px;">
-                Change my password
+                修改密码
               </a>
             </div>
           </li>
@@ -213,7 +213,7 @@
   <div class="ng-cloak gt-button-message-success"
        ng-if="displaySignOutMessage"
        style="text-align: center; font-size: 1.25rem; font-weight: 600; height: 0;">
-    You have been signed out
+    您已经退出监控系统
   </div>
   <div class="ng-cloak gt-button-message-error"
        ng-if="navbarErrorMessage"
@@ -229,9 +229,9 @@
         ng-class="{'footer-tall': layout.central && isViewingAgent()}"
         role="contentinfo"
         id="footer">
-  <div ng-if="!layout.central">Glowroot version {{layout.glowrootVersion}}</div>
-  <div ng-if="layout.central">Central collector version {{layout.glowrootVersion}}</div>
-  <div ng-if="layout.central && isViewingAgent()">Agent version {{agentRollup.glowrootVersion}}</div>
+  <div ng-if="!layout.central">应用性能监控 版本号 {{layout.glowrootVersion}}</div>
+  <div ng-if="layout.central">监控采集中心 版本号 {{layout.glowrootVersion}}</div>
+  <div ng-if="layout.central && isViewingAgent()">监控代理 版本号 {{agentRollup.glowrootVersion}}</div>
 </footer>
 <div class="gt-monospace gt-offscreen" id="offscreenText">x</div>
 

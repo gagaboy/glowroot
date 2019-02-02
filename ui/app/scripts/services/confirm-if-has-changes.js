@@ -28,8 +28,8 @@ glowroot.factory('confirmIfHasChanges', [
           event.preventDefault();
 
           var $modal = $('#confirmationModal');
-          $modal.find('.modal-title').text('You have unsaved changes');
-          $modal.find('.modal-body p').text('Are you sure you want to navigate away from this page?');
+          $modal.find('.modal-title').text('您有未保存的更改');
+          $modal.find('.modal-body p').text('您确定要离开此页面吗？');
           modals.display('#confirmationModal', true);
 
           $('#confirmationModalButton').off('click');

@@ -35,15 +35,15 @@ glowroot.controller('ConfigAlertListCtrl', [
 
     $scope.disableForNextUnits = [
       {
-        display: 'minutes',
+        display: '分钟',
         value: 'minutes'
       },
       {
-        display: 'hours',
+        display: '小时',
         value: 'hours'
       },
       {
-        display: 'days',
+        display: '天',
         value: 'days'
       }
     ];
@@ -117,7 +117,7 @@ glowroot.controller('ConfigAlertListCtrl', [
       $http.post(url, postData)
           .then(function (response) {
             onNewData(response.data);
-            deferred.resolve('Alerting enabled');
+            deferred.resolve('开启通知');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });

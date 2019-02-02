@@ -15,7 +15,7 @@
 -->
 <div class="card">
   <div class="card-header">
-    <h2>General</h2>
+    <h2>通用</h2>
   </div>
   <div class="card-body">
     <div ng-hide="hideMainContent()">
@@ -26,22 +26,22 @@
            name="formCtrl"
            style="padding-top: 15px;">
         <div gt-form-group
-             gt-label="Agent{{ isAgentRollup() ? ' rollup' : '' }} ID"
+             gt-label="代理{{ isAgentRollup() ? ' rollup' : '' }} ID"
              gt-model="agentRollupId"
              gt-disabled="true"
              gt-width="40em">
           <div class="help-block">
-            Cannot be changed, used for storing and querying the agent{{ isAgentRollup() ? ' rollup' : '' }}'s data.
+            不能变更，用于存储和查询代理{{ isAgentRollup() ? ' rollup' : '' }} 的监控数据。
           </div>
         </div>
         <div gt-form-group
-             gt-label="Display name"
+             gt-label="显示名称"
              gt-model="config.display"
              gt-disabled="!agentRollup.permissions.config.edit.general"
              gt-width="40em"
              gt-placeholder="{{config.defaultDisplay}}">
           <div class="help-block">
-            Display name for this agent{{ isAgentRollup() ? ' rollup' : '' }}.
+            代理{{ isAgentRollup() ? ' rollup' : '' }} 的显示名称。
           </div>
         </div>
         <div class="form-group" ng-if="isAgentRollup()">
@@ -54,7 +54,7 @@
              ng-if="agentRollup.permissions.config.edit.general">
           <div class="offset-xl-3 col-xl-9">
             <div gt-button
-                 gt-label="Save changes"
+                 gt-label="保存变更"
                  gt-click="save(deferred)"
                  gt-validate-form="formCtrl"
                  class="d-inline-block">

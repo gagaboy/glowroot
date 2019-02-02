@@ -38,7 +38,7 @@
                   class="gt-agent-rollup-dropdown-message d-none"
                   style="font-style: italic; font-size: 1rem; cursor: inherit;"
                   ng-if="agentRollups.length === 0">
-            No active agents in this time period
+            当前无活跃的代理
           </option>
           <!-- can't use gt-spinner due to selectpicker behavior -->
           <option disabled
@@ -54,7 +54,7 @@
         |
       </div>
       <h1 class="gt-header-text">
-        Synthetic monitors
+        合成监控
       </h1>
     </div>
   </div>
@@ -64,7 +64,7 @@
 </div>
 <div class="card">
   <div class="card-header">
-    <h2>Synthetic monitors</h2>
+    <h2>合成监控</h2>
   </div>
   <div class="card-body">
     <div ng-hide="hideMainContent()">
@@ -73,8 +73,8 @@
       <!-- ng-show needed here instead of ng-if because synthetic-monitor.js binds directly to #chart -->
       <div ng-show="loaded">
         <div ng-show="displayNoSyntheticMonitorsConfigured" style="font-size: 1rem; margin-top: 20px;">
-          No synthetic monitors configured.
-          See <a href="config/synthetic-monitor-list{{agentQueryString()}}">Synthetic monitor configuration</a>.
+          未配置合成监控.
+          请查看  <a href="config/synthetic-monitor-list{{agentQueryString()}}">合成监控配置</a>.
         </div>
         <!-- ng-show needed here instead of ng-if because synthetic-monitor.js binds directly to #chart -->
         <div ng-hide="displayNoSyntheticMonitorsConfigured">

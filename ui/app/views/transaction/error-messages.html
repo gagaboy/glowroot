@@ -21,13 +21,13 @@
     <input class="form-control d-inline-block align-middle mr-1"
            type="text"
            ng-model="filter"
-           placeholder="filter the error messages"
+           placeholder="过滤异常信息"
            aria-label="Error message filter"
            id="filter"
            style="max-width: 25em;">
     <button class="btn btn-primary align-middle mr-1"
             ng-click="refresh()">
-      Refresh
+      刷新
     </button>
     <button class="gt-chart-button align-middle"
             uib-popover-template="'template/help/error-message-filter.html'"
@@ -87,7 +87,7 @@
            class="gt-chart-panel"
            style="display: table;">
         <div style="display: table-cell; text-align: center; vertical-align: middle;">
-          <div class="gt-chart-no-data">No data for this time period</div>
+          <div class="gt-chart-no-data">当前时段无数据</div>
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@
 -->
 <div class="card">
   <div class="card-header">
-    <h2>UI Defaults</h2>
+    <h2>默认UI</h2>
   </div>
   <div class="card-body">
     <div ng-hide="hideMainContent()">
@@ -28,7 +28,7 @@
         <div class="form-group row">
           <label class="col-xl-3 gt-form-label-xl"
                  for="defaultTransactionType">
-            Default transaction type
+            默认事务类型
           </label>
           <div class="col-xl-9">
             <select ng-model="config.defaultTransactionType"
@@ -43,29 +43,26 @@
               </option>
             </select>
             <div class="help-block">
-              The default transaction type displayed on the transactions and errors page.
+              事务和异常页面中显示的默认事务类型。
             </div>
           </div>
         </div>
         <div gt-form-group
-             gt-label="Default percentiles"
+             gt-label="默认百分比"
              gt-model="page.defaultPercentiles"
              gt-pattern="pattern.percentageList"
              gt-required="loaded"
              gt-disabled="!agentRollup.permissions.config.edit.uiDefaults"
              gt-width="20em">
           <div class="help-block">
-            The default percentiles displayed on the transaction percentiles tab.
-            <a href="http://hdrhistogram.github.io/HdrHistogram/">HdrHistogram</a> is used to bucket and store the
-            full range of values so that any percentile value can be reported with at most 1% error,
-            e.g. if the 99.9<sup>th</sup> percentile is reported as 1400 milliseconds, then that would be at most
-            14 milliseconds from the true 99.9<sup>th</sup> percentile value.
+            事务百分比页签中默认显示的百分比。
+            <a href="http://hdrhistogram.github.io/HdrHistogram/">HdrHistogram</a>用于存储所有百分比区间的数据，并可以报告任何百分位值的数据，最多1%的误差。例如，如果第<sup>99.9</sup>百分位的值为1400毫秒,那么距离真实的第<sup>99.9</sup>百分位的值最多相差14毫秒。
           </div>
         </div>
         <div class="form-group row">
           <label class="col-xl-3 gt-form-label-xl"
                  for="defaultGaugeNames">
-            Default gauges
+            默认指标项
           </label>
           <div class="col-xl-9">
             <select multiple
@@ -81,7 +78,7 @@
               </option>
             </select>
             <div class="help-block">
-              The default gauges displayed on the JVM gauges page.
+              JVM 指标项页面中默认显示的指标。
             </div>
           </div>
         </div>
@@ -89,7 +86,7 @@
              ng-if="agentRollup.permissions.config.edit.uiDefaults">
           <div class="offset-xl-3 col-xl-9">
             <div gt-button
-                 gt-label="Save changes"
+                 gt-label="保存变更"
                  gt-click="save(deferred)"
                  gt-validate-form="formCtrl">
             </div>

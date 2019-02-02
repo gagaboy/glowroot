@@ -352,38 +352,38 @@ glowroot.controller('TracesCtrl', [
 
     $scope.filterDurationComparatorOptions = [
       {
-        display: 'Greater than',
+        display: '大于',
         value: 'greater'
       },
       {
-        display: 'Less than',
+        display: '小于',
         value: 'less'
       },
       {
-        display: 'Between',
+        display: '之间',
         value: 'between'
       }
     ];
 
     $scope.filterTextComparatorOptions = [
       {
-        display: 'Begins with',
+        display: '起始于',
         value: 'begins'
       },
       {
-        display: 'Equals',
+        display: '等于',
         value: 'equals'
       },
       {
-        display: 'Ends with',
+        display: '结束于',
         value: 'ends'
       },
       {
-        display: 'Contains',
+        display: '包含',
         value: 'contains'
       },
       {
-        display: 'Does not contain',
+        display: '不包含',
         value: 'not-contains'
       }
     ];
@@ -522,7 +522,7 @@ glowroot.controller('TracesCtrl', [
           min: 0,
           // 10 second yaxis max just for initial empty chart rendering
           max: 10,
-          label: 'milliseconds',
+          label: '毫秒',
           labelPadding: 7,
           tickFormatter: function (val) {
             return val.toLocaleString(undefined, {maximumSignificantDigits: 15});

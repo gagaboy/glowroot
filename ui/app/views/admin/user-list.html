@@ -15,7 +15,7 @@
 -->
 <div class="card">
   <div class="card-header">
-    <h2>Users</h2>
+    <h2>用户</h2>
   </div>
   <div class="card-body">
     <div ng-include src="'template/gt-loading-overlay.html'"></div>
@@ -24,7 +24,7 @@
       <div ng-if="!users.length"
            style="font-style: italic;">
         <!-- this is possible if using ldap exclusively -->
-        There are no users
+        没有用户
       </div>
       <div ng-repeat="user in users"
            style="padding-bottom: 8px;">
@@ -39,7 +39,7 @@
            style="margin-top: 30px;">
         <a class="btn btn-primary"
            href="admin/user?new">
-          Add new
+          新增
         </a>
       </div>
     </div>

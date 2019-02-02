@@ -68,7 +68,7 @@ glowroot.controller('AdminSmtpCtrl', [
               return;
             }
             onNewData(response.data);
-            deferred.resolve('Saved');
+            deferred.resolve('保存成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });
@@ -76,11 +76,11 @@ glowroot.controller('AdminSmtpCtrl', [
 
     $scope.sendTestEmail = function (deferred) {
       if (!$scope.page.testEmailRecipient) {
-        deferred.reject('Test email recipient is required');
+        deferred.reject('测试接收email为必填项');
         return;
       }
       if (!$scope.config.host) {
-        deferred.reject('Host is required');
+        deferred.reject('主机域名为必填项');
         return;
       }
       var postData = angular.copy($scope.config);
@@ -90,7 +90,7 @@ glowroot.controller('AdminSmtpCtrl', [
             if (response.data.error) {
               deferred.reject(response.data.message);
             } else {
-              deferred.resolve('Sent');
+              deferred.resolve('已发送');
             }
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);

@@ -16,7 +16,7 @@
 <div class="card">
   <div class="card-header">
     <h2>
-      General
+      通用
     </h2>
   </div>
   <div class="card-body">
@@ -27,33 +27,31 @@
          name="formCtrl"
          style="padding-top: 15px;">
       <div gt-form-group
-           gt-label="Agent display name"
+           gt-label="代理显示名称"
            gt-model="config.agentDisplayName"
            gt-disabled="!layout.adminEdit"
            gt-width="40em"
            gt-placeholder="{{defaultAgentDisplayName}}"
            ng-if="!layout.central">
         <div class="help-block">
-          Display name for this agent. Glowroot displays this name prominently in the UI and in outgoing alert emails,
-          which can be helpful if you have multiple glowroot agents.
+          显示此代理的名称。 应用监控在UI和外发告警电子邮件中突出显示此名称，如果您有多个应用监控代理，这可能会有所帮助。
         </div>
       </div>
       <div gt-form-group
-           gt-label="Glowroot central display name"
+           gt-label="应用监控中心显示名称"
            gt-model="config.centralDisplayName"
            gt-disabled="!layout.adminEdit"
            gt-width="40em"
            ng-if="layout.central">
         <div class="help-block">
-          Display name for this Glowroot central installation. Glowroot central displays this in outgoing alert emails,
-          which can be helpful if you have multiple Glowroot central installations.
+          显示此应用监控中心安装的名称。 应用监控中心在外发告警电子邮件中显示此信息，如果您有多个应用监控集中安装，这可能会有所帮助。
         </div>
       </div>
       <div class="form-group row"
            ng-if="layout.adminEdit">
         <div class="offset-xl-3 col-xl-9">
           <div gt-button
-               gt-label="Save changes"
+               gt-label="保存更改"
                gt-click="save(deferred)"
                gt-validate-form="formCtrl"
                class="d-inline-block">

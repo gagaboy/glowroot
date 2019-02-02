@@ -122,9 +122,9 @@ glowroot.controller('ConfigSyntheticMonitorCtrl', [
             $scope.javaSourceCompilationErrors = [];
             onNewData(response.data);
             if (id) {
-              deferred.resolve('Saved');
+              deferred.resolve('保存成功');
             } else {
-              deferred.resolve('Added');
+              deferred.resolve('添加成功');
               id = response.data.id;
               // fix current url (with id) before returning to list page in case back button is used later
               if (agentId) {

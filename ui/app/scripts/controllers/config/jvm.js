@@ -71,7 +71,7 @@ glowroot.controller('ConfigJvmCtrl', [
       $http.post('backend/config/jvm?agent-id=' + encodeURIComponent($scope.agentId), postData)
           .then(function (response) {
             onNewData(response.data);
-            deferred.resolve('Saved');
+            deferred.resolve('保存成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });

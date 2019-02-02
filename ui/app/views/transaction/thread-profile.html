@@ -32,7 +32,7 @@
          href="transaction/thread-profile{{tabQueryString(false)}}"
          ng-click="clickActiveTopLink($event, false)"
          ng-if="hasUnfilteredMainThreadProfile">
-        Main thread profile
+        主线程分析
       </a>
       <span ng-if="!hasUnfilteredMainThreadProfile" class="gt-radio-disabled">Main thread profile</span>
     </label>
@@ -45,7 +45,7 @@
       <a class="gt-radio-link"
          href="transaction/thread-profile{{tabQueryString(true)}}"
          ng-click="clickActiveTopLink($event, true)">
-        Auxiliary thread profile
+        辅助线程分析
       </a>
     </label>
   </div>
@@ -69,11 +69,11 @@
     <div style="display: table-cell; text-align: center; vertical-align: middle;">
       <div class="gt-chart-no-data"
            ng-hide="showOverwrittenMessage">
-        No data for this time period
+        当前时段无数据
       </div>
       <div class="gt-chart-no-data"
            ng-if="showOverwrittenMessage">
-        There was thread profile data but it has expired
+        当前存在线程分析记录，但已过期
       </div>
     </div>
   </div>
@@ -83,11 +83,11 @@
       <div class="clearfix" style="padding: 10px 0;">
         <!-- margin-bottom: 15px is for smaller screens where the link is above the select -->
         <a class="float-right gt-flame-graph-link" ng-href="{{flameGraphHref()}}">
-          <em>View flame graph (experimental)</em>
+          <em>查看火焰图 (实验阶段)</em>
         </a>
 
         <div class="float-left" style="font-weight: 700;">
-          Total of {{sampleCount | number}} sampled stack traces in selected time period
+          选定的时间段内总计 {{sampleCount | number}} 个采样堆栈跟踪信息
         </div>
       </div>
       <div ng-form
@@ -100,14 +100,14 @@
                style="max-width: 25em;">
         <button class="gt-profile-text-filter-refresh btn btn-primary align-middle mr-1"
                 ng-click="refresh()">
-          Refresh
+          刷新
         </button>
         <button class="gt-chart-button align-middle"
                 uib-popover-template="'template/help/profile-filter.html'"
                 popover-placement="top"
                 popover-trigger="'outsideClick'"
                 style="font-size: 28px;">
-          <span title="Help"
+          <span title="帮助"
                 class="fas fa-question-circle">
           </span>
         </button>

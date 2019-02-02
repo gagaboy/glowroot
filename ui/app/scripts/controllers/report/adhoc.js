@@ -29,7 +29,7 @@ glowroot.controller('ReportAdhocCtrl', [
   'httpErrors',
   function ($scope, $location, $http, $filter, $timeout, locationChanges, charts, keyedColorPools, queryStrings, httpErrors) {
 
-    $scope.$parent.heading = 'Ad hoc report';
+    $scope.$parent.heading = 'Ad hoc 报表';
 
     $scope.report = {};
 
@@ -103,7 +103,7 @@ glowroot.controller('ReportAdhocCtrl', [
                 if (!$scope.allAgentRollups.length) {
                   var $button = $('button.multiselect');
                   $button.prop('disabled', true);
-                  $button.find('.multiselect-selected-text').text('No active agents in selected time period');
+                  $button.find('.multiselect-selected-text').text('选择的时段中无活跃的代理');
                 }
               });
             }, function (response) {

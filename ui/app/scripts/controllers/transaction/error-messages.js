@@ -156,14 +156,14 @@ glowroot.controller('ErrorMessagesCtrl', [
     var chartOptions = {
       yaxis: {
         max: 100,
-        label: 'error rate (%)'
+        label: '错误率 (%)'
       },
       tooltip: true,
       tooltipOpts: {
         content: function (label, xval, yval) {
           if (yval === 0 && !dataSeriesExtra[xval]) {
             // this is synthetic point for initial upslope, gap or final downslope
-            return 'No errors';
+            return '无异常';
           }
           function smartFormat(millis) {
             if (millis % 60000 === 0) {

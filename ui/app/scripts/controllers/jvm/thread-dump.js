@@ -26,7 +26,7 @@ glowroot.controller('JvmThreadDumpCtrl', [
   'httpErrors',
   function ($scope, $http, $location, $q, locationChanges, traceModal, httpErrors) {
 
-    $scope.$parent.heading = 'Thread dump';
+    $scope.$parent.heading = 'Thread Dump';
 
     if ($scope.hideMainContent()) {
       return;
@@ -87,7 +87,7 @@ glowroot.controller('JvmThreadDumpCtrl', [
             threadDumpHtml = $.trim(JST['thread-dump'](response.data));
             $('#threadDump').html('<br>' + threadDumpHtml);
             if (deferred) {
-              deferred.resolve('Refreshed');
+              deferred.resolve('刷新成功');
             }
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);

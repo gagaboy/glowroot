@@ -440,17 +440,17 @@ glowroot.run([
     $rootScope.METRICS = [
       {
         id: 'transaction',
-        display: 'Transactions',
+        display: '事务',
         heading: true,
         disabled: true
       },
       {
         id: 'transaction:average',
-        display: 'Response time (average)'
+        display: '响应时间 (平均)'
       },
       {
         id: 'transaction:x-percentile',
-        display: 'Response time (X\u1d57\u02b0 percentile)'
+        display: '响应时间 (X\u1d57\u02b0 百分比)'
       },
       // TODO
       // {
@@ -471,7 +471,7 @@ glowroot.run([
       // },
       {
         id: 'transaction:count',
-        display: 'Count'
+        display: '总数'
       },
       {
         id: '-empty1-',
@@ -480,17 +480,17 @@ glowroot.run([
       },
       {
         id: 'error',
-        display: 'Errors',
+        display: '异常',
         heading: true,
         disabled: true
       },
       {
         id: 'error:rate',
-        display: 'Error rate (%)'
+        display: '错误率 (%)'
       },
       {
         id: 'error:count',
-        display: 'Count'
+        display: '错误数'
       },
       {
         id: '-empty2-',
@@ -499,7 +499,7 @@ glowroot.run([
       },
       {
         id: 'gauge',
-        display: 'JVM Gauges',
+        display: 'JVM 指标项',
         heading: true,
         disabled: true
       }

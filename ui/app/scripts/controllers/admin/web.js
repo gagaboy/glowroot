@@ -52,7 +52,7 @@ glowroot.controller('AdminWebCtrl', [
             .then(function (response) {
               var data = response.data;
               onNewData(data);
-              deferred.resolve('Saved');
+              deferred.resolve('保存成功');
             }, function (response) {
               httpErrors.handle(response, $scope, deferred);
             });
@@ -73,13 +73,13 @@ glowroot.controller('AdminWebCtrl', [
                 return;
               }
               if (data.portChangeFailed) {
-                deferred.reject('Save succeeded, but switching over to the new port failed');
+                deferred.reject('保存成功，但切换到新端口失败');
                 return;
               }
               onNewData(data);
               if (!changingPort && !changingHttps) {
                 // normal path
-                deferred.resolve('Saved');
+                deferred.resolve('保存成功');
                 return;
               }
               var text;
@@ -96,7 +96,7 @@ glowroot.controller('AdminWebCtrl', [
                     + ' intermediary proxy?');
                 return;
               }
-              deferred.resolve('Saved, redirecting to new ' + text + ' ...');
+              deferred.resolve('保存成功, 重定向到新的 ' + text + ' ...');
               $timeout(function () {
                 var newProtocol = data.activeHttps ? 'https' : 'http';
                 var newUrl = newProtocol + '://' + $location.host();

@@ -17,13 +17,13 @@
 <div class="clearfix">
   <a class="gt-config-return-link"
      href="admin/role-list">
-    Return to list
+    返回列表
   </a>
 </div>
 <div class="card">
   <div class="card-header">
     <h2 ng-class="{'gt-lighten-font': !loaded && !httpError}">
-      Roles
+      角色
       <span class="d-inline-block gt-separator">
         |
       </span>
@@ -49,7 +49,7 @@
                 ng-if="!layout.central">
         <div class="form-group row">
           <legend class="col-xl-3 gt-check-legend-xl">
-            Permissions
+          权限
           </legend>
           <div class="col-xl-9">
             <label class="custom-control custom-checkbox">
@@ -58,7 +58,7 @@
                      ng-model="page.permissions.transaction._"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Transactions
+                事务
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -70,10 +70,10 @@
                      ng-disabled="page.permissions.transaction._ || !layout.adminEdit"
                      ng-required="transactionOverviewRequired(page.permissions)">
               <div class="custom-control-label">
-                Overview
+                概览
                 <span ng-if="transactionOverviewRequired(page.permissions) && !page.permissions.transaction.overview"
                       class="gt-red font-italic">
-                  -- required for other transaction permissions
+                -- 必要的其他事务权限
                 </span>
               </div>
             </label>
@@ -85,7 +85,7 @@
                      ng-model="page.permissions.transaction.traces"
                      ng-disabled="page.permissions.transaction._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Traces
+                跟踪
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -96,7 +96,7 @@
                      ng-model="page.permissions.transaction.queries"
                      ng-disabled="page.permissions.transaction._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Queries
+                查询
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -107,7 +107,7 @@
                      ng-model="page.permissions.transaction.serviceCalls"
                      ng-disabled="page.permissions.transaction._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Service calls
+                服务调用
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -118,7 +118,7 @@
                      ng-model="page.permissions.transaction.threadProfile"
                      ng-disabled="page.permissions.transaction._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Thread profile
+                线程分析
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -127,7 +127,7 @@
                      ng-model="page.permissions.error._"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Errors
+                异常
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -139,10 +139,10 @@
                      ng-disabled="page.permissions.error._ || !layout.adminEdit"
                      ng-required="page.permissions.error.traces">
               <div class="custom-control-label">
-                Overview
+                概览
                 <span ng-if="page.permissions.error.traces && !page.permissions.error.overview"
                       class="gt-red font-italic">
-                  -- required for other error permissions
+                  -- 必要的其他事务权限
                 </span>
               </div>
             </label>
@@ -154,7 +154,7 @@
                      ng-model="page.permissions.error.traces"
                      ng-disabled="page.permissions.error._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Traces
+                跟踪
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -174,7 +174,7 @@
                      ng-model="page.permissions.jvm.gauges"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Gauges
+                指标项
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -185,7 +185,7 @@
                      ng-model="page.permissions.jvm.threadDump"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Thread dump
+                Thread Dump
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -196,7 +196,7 @@
                      ng-model="page.permissions.jvm.heapDump"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Heap dump
+                Heap Dump
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -207,7 +207,7 @@
                      ng-model="page.permissions.jvm.heapHistogram"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Heap histogram
+                Heap 柱状图
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -218,7 +218,7 @@
                      ng-model="page.permissions.jvm.forceGC"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Force GC
+                强制 GC
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -229,7 +229,7 @@
                      ng-model="page.permissions.jvm.mbeanTree"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                MBean tree
+                MBean 树
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -240,7 +240,7 @@
                      ng-model="page.permissions.jvm.systemProperties"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                System properties
+                系统参数
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -251,7 +251,7 @@
                      ng-model="page.permissions.jvm.environment"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Environment
+                系统环境
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -260,7 +260,7 @@
                      ng-model="page.permissions.incident"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Incidents
+                事故
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -269,7 +269,7 @@
                      ng-model="page.permissions.config._"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Configuration
+                配置
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -281,10 +281,10 @@
                      ng-disabled="page.permissions.config._ || !layout.adminEdit"
                      ng-required="viewConfigRequired(page.permissions)">
               <div class="custom-control-label">
-                View (Transactions, Gauges, Alerts, UI, Plugins, Instrumentation, Advanced)
+                查看（事务，测量项，告警，UI，插件，仪表，高级）
                 <span ng-if="!page.permissions.config.view && viewConfigRequired(page.permissions)"
                       class="gt-red font-italic">
-                  -- required for edit permission
+                  -- 必须编辑权限
                 </span>
               </div>
             </label>
@@ -296,7 +296,7 @@
                      ng-model="page.permissions.config.edit._"
                      ng-disabled="page.permissions.config._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Edit
+                编辑
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -307,7 +307,7 @@
                      ng-model="page.permissions.config.edit.transaction"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Transactions
+                事务
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -318,7 +318,7 @@
                      ng-model="page.permissions.config.edit.gauges"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Gauges
+                指标项
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -340,7 +340,7 @@
                      ng-model="page.permissions.config.edit.alerts"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Alerts
+                告警
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -351,7 +351,7 @@
                      ng-model="page.permissions.config.edit.uiDefaults"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                UI Defaults
+                默认UI
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -362,7 +362,7 @@
                      ng-model="page.permissions.config.edit.plugins"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Plugins
+                插件
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -373,7 +373,7 @@
                      ng-model="page.permissions.config.edit.instrumentation"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Instrumentation
+                仪表
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -384,7 +384,7 @@
                      ng-model="page.permissions.config.edit.advanced"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Advanced
+                高级
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -393,7 +393,7 @@
                      ng-model="page.permissions.admin._"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Administration (Users, Roles, Web, Storage, SMTP, HTTP proxy, Integrations)
+                系统管理 (用户, 角色, Web, 存储, SMTP, HTTP代理, 集成)
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -405,9 +405,9 @@
                      ng-disabled="page.permissions.admin._ || !layout.adminEdit"
                      ng-required="page.permissions.admin.edit">
               <div class="custom-control-label">
-                View
+                查看
                 <span ng-if="!page.permissions.admin.view && page.permissions.admin.edit" class="gt-red font-italic">
-                  -- required for edit permission
+                  -- 必须编辑权限
                 </span>
               </div>
             </label>
@@ -419,7 +419,7 @@
                      ng-model="page.permissions.admin.edit"
                      ng-disabled="page.permissions.admin._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Edit
+                编辑
               </div>
             </label>
           </div>
@@ -427,9 +427,9 @@
       </fieldset>
       <fieldset class="gt-fieldset"
                 ng-if="layout.central">
-        <legend class="gt-legend">Role name</legend>
+        <legend class="gt-legend">角色名称</legend>
         <div gt-form-group
-             gt-label="Name"
+             gt-label="名称"
              gt-model="config.name"
              gt-width="40em"
              gt-required="loaded"
@@ -438,10 +438,10 @@
       </fieldset>
       <fieldset class="gt-fieldset"
                 ng-if="layout.central">
-        <legend class="gt-legend">All agents</legend>
+        <legend class="gt-legend">所有代理</legend>
         <div class="form-group row">
           <legend class="col-xl-3 gt-check-legend-xl">
-            Permissions
+            权限
           </legend>
           <div class="col-xl-9">
             <label class="custom-control custom-checkbox">
@@ -450,7 +450,7 @@
                      ng-model="page.permissions.transaction._"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Transactions
+                事务
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -462,10 +462,10 @@
                      ng-disabled="page.permissions.transaction._ || !layout.adminEdit"
                      ng-required="transactionOverviewRequired(page.permissions)">
               <div class="custom-control-label">
-                Overview
+                概览
                 <span ng-if="transactionOverviewRequired(page.permissions) && !page.permissions.transaction.overview"
                       class="gt-red font-italic">
-                  -- required for other transaction permissions
+                  -- 必须其他事务的权限
                 </span>
               </div>
             </label>
@@ -477,7 +477,7 @@
                      ng-model="page.permissions.transaction.traces"
                      ng-disabled="page.permissions.transaction._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Traces
+                跟踪
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -488,7 +488,7 @@
                      ng-model="page.permissions.transaction.queries"
                      ng-disabled="page.permissions.transaction._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Queries
+                查询
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -499,7 +499,7 @@
                      ng-model="page.permissions.transaction.serviceCalls"
                      ng-disabled="page.permissions.transaction._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Service calls
+                服务调用
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -510,7 +510,7 @@
                      ng-model="page.permissions.transaction.threadProfile"
                      ng-disabled="page.permissions.transaction._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Thread profile
+                线程分析
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -519,7 +519,7 @@
                      ng-model="page.permissions.error._"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Errors
+                异常
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -531,10 +531,10 @@
                      ng-disabled="page.permissions.error._ || !layout.adminEdit"
                      ng-required="page.permissions.error.traces">
               <div class="custom-control-label">
-                Overview
+                概览
                 <span ng-if="page.permissions.error.traces && !page.permissions.error.overview"
                       class="gt-red font-italic">
-                  -- required for other error permissions
+                  -- 必须的其他事务权限
                 </span>
               </div>
             </label>
@@ -546,7 +546,7 @@
                      ng-model="page.permissions.error.traces"
                      ng-disabled="page.permissions.error._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Traces
+                跟踪
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -566,7 +566,7 @@
                      ng-model="page.permissions.jvm.gauges"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Gauges
+                指标项
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -577,7 +577,7 @@
                      ng-model="page.permissions.jvm.threadDump"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Thread dump
+                Thread Dump
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -588,7 +588,7 @@
                      ng-model="page.permissions.jvm.heapDump"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Heap dump
+                Heap Dump
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -599,7 +599,7 @@
                      ng-model="page.permissions.jvm.heapHistogram"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Heap histogram
+                Heap 柱状图
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -610,7 +610,7 @@
                      ng-model="page.permissions.jvm.forceGC"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Force GC
+                强制 GC
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -621,7 +621,7 @@
                      ng-model="page.permissions.jvm.mbeanTree"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                MBean tree
+                MBean 树
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -632,7 +632,7 @@
                      ng-model="page.permissions.jvm.systemProperties"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                System properties
+                系统参数
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -643,7 +643,7 @@
                      ng-model="page.permissions.jvm.environment"
                      ng-disabled="page.permissions.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Environment
+                系统环境
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -652,7 +652,7 @@
                      ng-model="page.permissions.syntheticMonitor"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Synthetic monitors
+                合成监控
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -661,7 +661,7 @@
                      ng-model="page.permissions.incident"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Incidents
+                事故
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -670,7 +670,7 @@
                      ng-model="page.permissions.config._"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Configuration
+                代理配置
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -682,11 +682,10 @@
                      ng-disabled="page.permissions.config._ || !layout.adminEdit"
                      ng-required="viewConfigRequired(page.permissions)">
               <div class="custom-control-label">
-                View (General, Slow traces, Thread profile, Gauges, System properties, Synthetic monitors, Alerts, UI
-                Defaults, Plugins, Instrumentation, Advanced)
+                查看（事务，指标项，告警，UI，插件，仪表，高级）
                 <span ng-if="!page.permissions.config.view && viewConfigRequired(page.permissions)"
                       class="gt-red font-italic">
-                  -- required for edit permission
+                  -- 必须的编辑权限
                 </span>
               </div>
             </label>
@@ -698,7 +697,7 @@
                      ng-model="page.permissions.config.edit._"
                      ng-disabled="page.permissions.config._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Edit
+                编辑
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -709,7 +708,7 @@
                      ng-model="page.permissions.config.edit.general"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                General
+                通用
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -720,7 +719,7 @@
                      ng-model="page.permissions.config.edit.transaction"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Transactions
+                事务
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -731,7 +730,7 @@
                      ng-model="page.permissions.config.edit.gauges"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Gauges
+                指标项
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -753,7 +752,7 @@
                      ng-model="page.permissions.config.edit.syntheticMonitors"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Synthetic monitors
+                合成监控
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -764,7 +763,7 @@
                      ng-model="page.permissions.config.edit.alerts"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Alerts
+                告警
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -775,7 +774,7 @@
                      ng-model="page.permissions.config.edit.uiDefaults"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                UI Defaults
+                默认UI
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -786,7 +785,7 @@
                      ng-model="page.permissions.config.edit.plugins"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Plugins
+                插件
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -797,7 +796,7 @@
                      ng-model="page.permissions.config.edit.instrumentation"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Instrumentation
+                仪表
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -808,7 +807,7 @@
                      ng-model="page.permissions.config.edit.advanced"
                      ng-disabled="page.permissions.config._ || page.permissions.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Advanced
+                高级
               </div>
             </label>
           </div>
@@ -816,10 +815,10 @@
       </fieldset>
       <fieldset class="gt-fieldset"
                 ng-if="layout.central">
-        <legend class="gt-legend">Server administration</legend>
+        <legend class="gt-legend">服务器管理</legend>
         <div class="form-group row">
           <legend class="col-xl-3 gt-check-legend-xl">
-            Permissions
+            权限
           </legend>
           <div class="col-xl-9">
             <label class="custom-control custom-checkbox">
@@ -828,7 +827,7 @@
                      ng-model="page.permissions.admin._"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Administration (Users, Roles, Web, Storage, SMTP, HTTP proxy, Integrations)
+                系统管理（用户，角色，Web，存储，SMTP，HTTP代理，集成）
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -840,9 +839,9 @@
                      ng-disabled="page.permissions.admin._ || !layout.adminEdit"
                      ng-required="page.permissions.admin.edit">
               <div class="custom-control-label">
-                View
+                查看
                 <span ng-if="!page.permissions.admin.view && page.permissions.admin.edit" class="gt-red font-italic">
-                  -- required for edit permission
+                  -- 必须的编辑权限
                 </span>
               </div>
             </label>
@@ -854,7 +853,7 @@
                      ng-model="page.permissions.admin.edit"
                      ng-disabled="page.permissions.admin._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Edit
+                编辑
               </div>
             </label>
           </div>
@@ -862,10 +861,10 @@
       </fieldset>
       <fieldset class="gt-fieldset"
                 ng-repeat="permissionBlock in page.permissionBlocks">
-        <legend class="gt-legend">Agent specific permission block</legend>
+        <legend class="gt-legend">指定代理权限</legend>
         <div class="form-group row">
           <label class="col-xl-3 gt-form-label-xl">
-            Agents
+            代理
           </label>
           <div class="col-xl-9">
             <select gt-multiselect
@@ -875,20 +874,20 @@
                     ng-disabled="!layout.adminEdit"
                     class="d-none"
                     style="min-width: 200px; max-width: 650px;"
-                    gt-none-selected-text="Select agents...">
+                    gt-none-selected-text="选择代理...">
               <option ng-repeat="agentRollup in permissionBlock.allActiveAgentRollupsPlus track by agentRollup.id"
                       ng-value="agentRollup.id" data-val="{{agentRollup}}">
                 {{agentRollup.indentedDisplay}}
               </option>
             </select>
             <div ng-if="rollupsExist" class="pt-1" style="font-style: italic;">
-              Note that permissions on rollups are inherited by their children.
+              注意：汇总的权限由其子项继承。
             </div>
           </div>
         </div>
         <div class="form-group row">
           <legend class="col-xl-3 gt-check-legend-xl">
-            Permissions
+            权限
           </legend>
           <div class="col-xl-9">
             <label class="custom-control custom-checkbox">
@@ -897,7 +896,7 @@
                      ng-model="permissionBlock.transaction._"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Transactions
+                事务
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -909,10 +908,10 @@
                      ng-disabled="permissionBlock.transaction._ || !layout.adminEdit"
                      ng-required="transactionOverviewRequired(permissionBlock)">
               <div class="custom-control-label">
-                Overview
+                概览
                 <span ng-if="transactionOverviewRequired(permissionBlock) && !permissionBlock.transaction.overview"
                       class="gt-red font-italic">
-                  -- required for other transaction permissions
+                  -- 必须的其他事务权限
                 </span>
               </div>
             </label>
@@ -924,7 +923,7 @@
                      ng-model="permissionBlock.transaction.traces"
                      ng-disabled="permissionBlock.transaction._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Traces
+                跟踪
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -935,7 +934,7 @@
                      ng-model="permissionBlock.transaction.queries"
                      ng-disabled="permissionBlock.transaction._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Queries
+                查询
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -946,7 +945,7 @@
                      ng-model="permissionBlock.transaction.serviceCalls"
                      ng-disabled="permissionBlock.transaction._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Service calls
+                服务调用
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -957,7 +956,7 @@
                      ng-model="permissionBlock.transaction.threadProfile"
                      ng-disabled="permissionBlock.transaction._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Thread profile
+                  线程分析
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -966,7 +965,7 @@
                      ng-model="permissionBlock.error._"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Errors
+                异常
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -978,10 +977,10 @@
                      ng-disabled="permissionBlock.error._ || !layout.adminEdit"
                      ng-required="permissionBlock.error.traces">
               <div class="custom-control-label">
-                Overview
+                概览
                 <span ng-if="permissionBlock.error.traces && !permissionBlock.error.overview"
                       class="gt-red font-italic">
-                  -- required for other error permissions
+                  -- 必须的其他异常权限
                 </span>
               </div>
             </label>
@@ -993,7 +992,7 @@
                      ng-model="permissionBlock.error.traces"
                      ng-disabled="permissionBlock.error._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Traces
+                跟踪
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -1013,7 +1012,7 @@
                      ng-model="permissionBlock.jvm.gauges"
                      ng-disabled="permissionBlock.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Gauges
+                指标项
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1024,7 +1023,7 @@
                      ng-model="permissionBlock.jvm.threadDump"
                      ng-disabled="permissionBlock.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Thread dump
+                Thread Dump
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1035,7 +1034,7 @@
                      ng-model="permissionBlock.jvm.heapDump"
                      ng-disabled="permissionBlock.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Heap dump
+                Heap Dump
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1046,7 +1045,7 @@
                      ng-model="permissionBlock.jvm.heapHistogram"
                      ng-disabled="permissionBlock.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Heap histogram
+                Heap 柱状图
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1057,7 +1056,7 @@
                      ng-model="permissionBlock.jvm.forceGC"
                      ng-disabled="permissionBlock.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Force GC
+                强制 GC
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1068,7 +1067,7 @@
                      ng-model="permissionBlock.jvm.mbeanTree"
                      ng-disabled="permissionBlock.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                MBean tree
+                MBean 树
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1079,7 +1078,7 @@
                      ng-model="permissionBlock.jvm.systemProperties"
                      ng-disabled="permissionBlock.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                System properties
+                系统参数
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1090,7 +1089,7 @@
                      ng-model="permissionBlock.jvm.environment"
                      ng-disabled="permissionBlock.jvm._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Environment
+                系统环境
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -1099,7 +1098,7 @@
                      ng-model="permissionBlock.syntheticMonitor"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Synthetic monitors
+                合成监控
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -1108,7 +1107,7 @@
                      ng-model="permissionBlock.incident"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Incidents
+                事故
               </div>
             </label>
             <label class="custom-control custom-checkbox">
@@ -1117,7 +1116,7 @@
                      ng-model="permissionBlock.config._"
                      ng-disabled="!layout.adminEdit">
               <div class="custom-control-label">
-                Configuration
+                代理配置
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1129,11 +1128,10 @@
                      ng-disabled="permissionBlock.config._ || !layout.adminEdit"
                      ng-required="viewConfigRequired(permissionBlock)">
               <div class="custom-control-label">
-                View (General, Slow traces, Thread profile, Gauges, System properties, Synthetic monitors, Alerts, UI
-                Defaults, Plugins, Instrumentation, Advanced)
+                查看（常规，慢跟踪，线程分析，指标项，系统参数，合成监控，告警，默认UI，插件，仪表，高级）
                 <span ng-if="!permissionBlock.config.view && viewConfigRequired(permissionBlock)"
                       class="gt-red font-italic">
-                  -- required for edit permission
+                  -- 必须的编辑权限
                 </span>
               </div>
             </label>
@@ -1145,7 +1143,7 @@
                      ng-model="permissionBlock.config.edit._"
                      ng-disabled="permissionBlock.config._ || !layout.adminEdit">
               <div class="custom-control-label">
-              Edit
+              编辑
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1156,7 +1154,7 @@
                      ng-model="permissionBlock.config.edit.general"
                      ng-disabled="permissionBlock.config._ || permissionBlock.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                General
+                通用
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1167,7 +1165,7 @@
                      ng-model="permissionBlock.config.edit.transaction"
                      ng-disabled="permissionBlock.config._ || permissionBlock.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Transactions
+                事务
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1178,7 +1176,7 @@
                      ng-model="permissionBlock.config.edit.gauges"
                      ng-disabled="permissionBlock.config._ || permissionBlock.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Gauges
+                指标项
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1200,7 +1198,7 @@
                      ng-model="permissionBlock.config.edit.syntheticMonitors"
                      ng-disabled="permissionBlock.config._ || permissionBlock.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Synthetic monitors
+                合成监控
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1211,7 +1209,7 @@
                      ng-model="permissionBlock.config.edit.alerts"
                      ng-disabled="permissionBlock.config._ || permissionBlock.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Alerts
+                告警
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1222,7 +1220,7 @@
                      ng-model="permissionBlock.config.edit.uiDefaults"
                      ng-disabled="permissionBlock.config._ || permissionBlock.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                UI Defaults
+                默认UI
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1233,7 +1231,7 @@
                      ng-model="permissionBlock.config.edit.plugins"
                      ng-disabled="permissionBlock.config._ || permissionBlock.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Plugins
+                插件
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1244,7 +1242,7 @@
                      ng-model="permissionBlock.config.edit.instrumentation"
                      ng-disabled="permissionBlock.config._ || permissionBlock.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Instrumentation
+                仪表
               </div>
             </label>
             <label class="custom-control custom-checkbox"
@@ -1255,14 +1253,14 @@
                      ng-model="permissionBlock.config.edit.advanced"
                      ng-disabled="permissionBlock.config._ || permissionBlock.config.edit._ || !layout.adminEdit">
               <div class="custom-control-label">
-                Advanced
+                高级
               </div>
             </label>
             <button class="btn btn-secondary"
                     ng-click="removePermissionBlock(permissionBlock)"
                     ng-if="layout.adminEdit"
                     style="float: right; margin-top: 18px;">
-              Remove this agent specific permission block
+              删除此代理权限
             </button>
           </div>
         </div>
@@ -1270,16 +1268,16 @@
       <fieldset class="gt-fieldset"
                 ng-if="layout.central && layout.adminEdit">
         <legend class="gt-legend">
-          Add {{page.permissionBlocks.length ? 'another' : 'an'}} agent specific permission block
+          添加 {{page.permissionBlocks.length ? '另一个' : '一个'}} 指定的代理权限
         </legend>
         <div style="margin-bottom: 23px; margin-left: 14px;">
           <div ng-if="!allActiveAgentRollups.length" style="font-style: italic;">
-            There are no agents active in the past 7 days
+            过去7天内没有活跃的代理
           </div>
           <button class="btn btn-secondary"
                   ng-click="addPermissionBlock()"
                   ng-if="allActiveAgentRollups.length">
-            Add
+            添加
           </button>
         </div>
       </fieldset>
@@ -1289,14 +1287,14 @@
         <div class="offset-xl-3 col-xl-9">
           <div gt-button-group>
             <div gt-button
-                 gt-label="{{config.version ? 'Save changes' : 'Add'}}"
+                 gt-label="{{config.version ? '保存更改' : '添加'}}"
                  gt-click="save(deferred)"
                  gt-validate-form="formCtrl"
                  class="d-inline-block">
             </div>
             <div gt-button
                  ng-if="config.version"
-                 gt-label="Delete"
+                 gt-label="删除"
                  gt-click="delete(deferred)"
                  gt-btn-class="btn-danger"
                  class="d-inline-block">

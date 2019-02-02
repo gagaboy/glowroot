@@ -25,7 +25,7 @@ glowroot.controller('JvmHeapHistogramCtrl', [
   'httpErrors',
   function ($scope, $http, $location, locationChanges, queryStrings, httpErrors) {
 
-    $scope.$parent.heading = 'Heap histogram';
+    $scope.$parent.heading = 'Heap 柱状图';
 
     $scope.page = {};
 
@@ -97,6 +97,12 @@ glowroot.controller('JvmHeapHistogramCtrl', [
 
     $scope.sortQueryString = function (attributeName) {
       var query = {};
+      var agentId = $location.search()['agent-id'];
+      if (agentId) {
+        query['agent-id'] = agentId;
+      } else {
+        query['agent-rollup-id'] = $location.search()['agent-rollup-id'];
+      }
       if ($scope.page.filterComparator !== 'contains') {
         query['filter-comparator'] = $scope.page.filterComparator;
       }
@@ -209,15 +215,15 @@ glowroot.controller('JvmHeapHistogramCtrl', [
 
     $scope.filterComparatorOptions = [
       {
-        display: 'Contains',
+        display: '包含',
         value: 'contains'
       },
       {
-        display: 'Begins with',
+        display: '起始于',
         value: 'begins'
       },
       {
-        display: 'Ends with',
+        display: '结束于',
         value: 'ends'
       }
     ];

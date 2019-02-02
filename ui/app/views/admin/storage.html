@@ -16,7 +16,7 @@
 <!-- id is used for auto focus, see storage.js -->
 <div class="card" id="storageConfigCard">
   <div class="card-header">
-    <h2>Storage</h2>
+    <h2>存储</h2>
   </div>
   <div class="card-body">
     <div ng-include src="'template/gt-loading-overlay.html'"></div>
@@ -31,88 +31,82 @@
           data.h2.db
         </legend>
         <div gt-form-group
-             gt-label="Response time and JVM gauge data (1&nbsp;minute&nbsp;aggregates)"
+             gt-label="响应时间和JVM指标数据 (1&nbsp;分钟&nbsp;聚合)"
              gt-model="page.rollupExpirationDays[0]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            The data that is displayed under the transaction response time tab and on the JVM gauge screen is collected
-            continuously and stored at 1 minute intervals. This setting defines how long to retain these 1 minute
-            aggregates. (this setting also applies to the 5 second gauge data)
+            在事务响应时间选项卡下和JVM指标屏幕上显示的数据将被连续收集并以1分钟的间隔存储。 此设置定义保留这些1分钟聚合的时间。 （此设置也适用于5秒计量数据）
           </div>
         </div>
         <div gt-form-group
-             gt-label="Response time and JVM gauge data (5&nbsp;minute&nbsp;aggregates)"
+             gt-label="响应时间和JVM指标仪表数据 (5&nbsp;分钟&nbsp;聚合)"
              gt-model="page.rollupExpirationDays[1]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Response time and JVM gauge data is rolled up at 5 minute intervals.
-            This setting defines how long to retain these 5 minute aggregates.
+            响应时间和JVM指标数据每隔5分钟汇总一次。此设置定义这些5分钟聚合数据的保存时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="Response time and JVM gauge data (30&nbsp;minute&nbsp;aggregates)"
+             gt-label="响应时间和JVM指标数据 (30&nbsp;分钟&nbsp;聚合)"
              gt-model="page.rollupExpirationDays[2]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Response time and JVM gauge data is rolled up again at 30 minute intervals.
-            This setting defines how long to retain these 30 minute aggregates.
+            响应时间和JVM指标数据每隔30分钟再次汇总。此设置定义保留这30分钟聚合的时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="Response time and JVM gauge data (4&nbsp;hour&nbsp;aggregates)"
+             gt-label="响应时间和JVM指标数据 (4&nbsp;小时&nbsp;聚合)"
              gt-model="page.rollupExpirationDays[3]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Response time and JVM gauge data is rolled up again at 4 hour intervals.
-            This setting defines how long to retain these 4 hour aggregates.
+            响应时间和JVM指标数据每隔4小时再次汇总。此设置定义保留这4小时聚合的时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="Trace data"
+             gt-label="跟踪数据"
              gt-model="page.traceExpirationDays"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            This setting defines how long to retain the trace points and trace header data that is displayed under the
-            transaction traces tab.
+            此设置定义保留事务跟踪选项卡下显示的跟踪点和跟踪标头数据的时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="Full query text"
+             gt-label="完整查询文本"
              gt-model="page.fullQueryTextExpirationDays"
              gt-number="true"
              gt-pattern="pattern.integer"
@@ -123,8 +117,7 @@
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            This setting defines how long to retain the full query text that is displayed under the transaction queries
-            tab. The truncated query text and query stats are retained according to *.capped.db settings below.
+            此设置定义保留事务查询选项卡下显示的完整查询文本的时间。 根据以下* .capped.db设置保留截断的查询文本和查询统计信息。
           </div>
         </div>
       </fieldset>
@@ -134,7 +127,7 @@
           *.capped.db
         </legend>
         <div gt-form-group
-             gt-label="Query, service call and profile data (1&nbsp;minute&nbsp;aggregates)"
+             gt-label="查询，服务调用和分析数据 (1&nbsp;分钟&nbsp;聚合)"
              gt-model="config.rollupCappedDatabaseSizesMb[0]"
              gt-number="true"
              gt-pattern="pattern.integer"
@@ -146,13 +139,11 @@
              gt-col-class2="col-xl-8"
              class="gt-rollup-capped-database-size">
           <div class="help-block">
-            The data that is displayed under the transaction queries, service calls and continuous profiling tabs is
-            collected continuously and stored at 1 minute intervals. This setting defines how long to retain these 1
-            minute aggregates.
+            在事务查询，服务调用和连续分析选项卡下显示的数据被连续收集并以1分钟的间隔存储。 此设置定义保留这些1分钟聚合的时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="Query, service call and profile data (5&nbsp;minute&nbsp;aggregates)"
+             gt-label="查询，服务调用和分析数据 (5&nbsp;分钟&nbsp;聚合)"
              gt-model="config.rollupCappedDatabaseSizesMb[1]"
              gt-number="true"
              gt-pattern="pattern.integer"
@@ -163,12 +154,11 @@
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Query, service call and continuous profiling data is rolled up at 5 minute intervals.
-            This setting defines the size of the capped data file used to store these 5 minute aggregates.
+            查询，服务调用和连续分析数据以5分钟的间隔汇总。此设置定义用于存储这5分钟聚合的上限数据文件的大小。
           </div>
         </div>
         <div gt-form-group
-             gt-label="Query, service call and profile data (30&nbsp;minute&nbsp;aggregates)"
+             gt-label="查询，服务调用和分析数据 (30&nbsp;分钟&nbsp;聚合)"
              gt-model="config.rollupCappedDatabaseSizesMb[2]"
              gt-number="true"
              gt-pattern="pattern.integer"
@@ -179,12 +169,11 @@
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Query, service call and continuous profiling data is rolled up again at 30 minute intervals.
-            This setting defines the size of the capped data file used to store these 30 minute aggregates.
+            查询，服务调用和连续分析数据以30分钟的间隔再次汇总。此设置定义用于存储这30分钟聚合的上限数据文件的大小。
           </div>
         </div>
         <div gt-form-group
-             gt-label="Query, service call and profile data (4&nbsp;hour&nbsp;aggregates)"
+             gt-label="查询，服务调用和分析数据 (4&nbsp;小时&nbsp;聚合)"
              gt-model="config.rollupCappedDatabaseSizesMb[3]"
              gt-number="true"
              gt-pattern="pattern.integer"
@@ -195,12 +184,11 @@
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Query, service call and continuous profiling data is rolled up again at 4 hour intervals.
-            This setting defines the size of the capped data file used to store these 4 hour aggregates.
+            查询，服务调用和连续分析数据每隔4小时再次汇总。此设置定义用于存储这些4小时聚合的上限数据文件的大小。
           </div>
         </div>
         <div gt-form-group
-             gt-label="Trace detail data"
+             gt-label="跟踪详细数据"
              gt-model="config.traceCappedDatabaseSizeMb"
              gt-number="true"
              gt-pattern="pattern.integer"
@@ -212,243 +200,226 @@
              gt-col-class2="col-xl-8"
              class="gt-trace-capped-database-size">
           <div class="help-block">
-            This setting defines the size of the capped data file used to store the trace detail data
-            (trace entries, trace query stats and trace profiles).
+            此设置定义用于存储跟踪详细信息数据（跟踪条目，跟踪查询统计信息和跟踪配置文件）的上限数据文件的大小。
           </div>
         </div>
       </fieldset>
       <fieldset class="gt-fieldset"
                 ng-if="layout.central">
         <legend class="gt-legend">
-          Response time and JVM gauge data
+          响应时间和JVM指标数据
         </legend>
         <div gt-form-group
-             gt-label="1&nbsp;minute&nbsp;aggregates"
+             gt-label="1&nbsp;分钟&nbsp;聚合"
              gt-model="page.rollupExpirationDays[0]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            The data that is displayed under the transaction response time tab and on the JVM gauge screen is collected
-            continuously by the agents and sent to the central collector (and stored) at 1 minute intervals.
-            This setting defines how long to retain these 1 minute aggregates.
-            (this setting also applies to the 5 second gauge data)
+            在事务响应时间选项卡下和JVM指标屏幕上显示的数据由代理程序连续收集，并以1分钟的间隔发送到中央收集器（并存储）。此设置定义保留这些1分钟聚合的时间。 （此设置也适用于5秒计量数据）
           </div>
         </div>
         <div gt-form-group
-             gt-label="5&nbsp;minute&nbsp;aggregates"
+             gt-label="5&nbsp;分钟&nbsp;聚合"
              gt-model="page.rollupExpirationDays[1]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Response time and JVM gauge data is rolled up at 5 minute intervals.
-            This setting defines how long to retain these 5 minute aggregates.
+            响应时间和JVM指标数据每隔5分钟汇总一次。此设置定义保留这5分钟聚合的时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="30&nbsp;minute&nbsp;aggregates"
+             gt-label="30&nbsp;分钟&nbsp;聚合"
              gt-model="page.rollupExpirationDays[2]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Response time and JVM gauge data is rolled up again at 30 minute intervals.
-            This setting defines how long to retain these 30 minute aggregates.
+            响应时间和JVM指标数据每隔30分钟再次汇总。此设置定义保留这30分钟聚合的时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="4&nbsp;hour&nbsp;aggregates"
+             gt-label="4&nbsp;小时&nbsp;聚合"
              gt-model="page.rollupExpirationDays[3]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Response time and JVM gauge data is rolled up again at 4 hour intervals.
-            This setting defines how long to retain these 4 hour aggregates.
+            响应时间和JVM指标数据每隔4小时再次汇总。此设置定义保留这4小时聚合的时间。
           </div>
         </div>
       </fieldset>
       <fieldset class="gt-fieldset"
                 ng-if="layout.central">
         <legend class="gt-legend">
-          Query and service call data
+          查询和服务调用数据
         </legend>
         <div gt-form-group
-             gt-label="1&nbsp;minute&nbsp;aggregates"
+             gt-label="1&nbsp;分钟&nbsp;聚合"
              gt-model="page.queryAndServiceCallRollupExpirationDays[0]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            The data that is displayed under the transaction queries and service calls tabs is collected continuously by
-            the agents and sent to the central collector (and stored) at 1 minute intervals.
-            This setting defines how long to retain these 1 minute aggregates.
+            代理连续收集事务查询和服务调用选项卡下显示的数据，并以1分钟的间隔发送到中央收集器（并存储）。此设置定义保留这些1分钟聚合的时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="5&nbsp;minute&nbsp;aggregates"
+             gt-label="5&nbsp;分钟&nbsp;聚合"
              gt-model="page.queryAndServiceCallRollupExpirationDays[1]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Query and service call data is rolled up at 5 minute intervals.
-            This setting defines how long to retain these 5 minute aggregates.
+            查询和服务呼叫数据每隔5分钟汇总一次。此设置定义保留这5分钟聚合的时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="30&nbsp;minute&nbsp;aggregates"
+             gt-label="30&nbsp;分钟&nbsp;聚合"
              gt-model="page.queryAndServiceCallRollupExpirationDays[2]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Query and service call data is rolled up again at 30 minute intervals.
-            This setting defines how long to retain these 30 minute aggregates.
+            查询和服务呼叫数据每隔30分钟再次汇总。此设置定义保留这30分钟聚合的时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="4&nbsp;hour&nbsp;aggregates"
+             gt-label="4&nbsp;小时&nbsp;聚合"
              gt-model="page.queryAndServiceCallRollupExpirationDays[3]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Query and service call data is rolled up again at 4 hour intervals.
-            This setting defines how long to retain these 4 hour aggregates.
+            查询和服务呼叫数据每隔4小时再次汇总。此设置定义保留这4小时聚合的时间。
           </div>
         </div>
       </fieldset>
       <fieldset class="gt-fieldset"
                 ng-if="layout.central">
         <legend class="gt-legend">
-          Profile data
+          分析数据
         </legend>
         <div gt-form-group
-             gt-label="1&nbsp;minute&nbsp;aggregates"
+             gt-label="1&nbsp;分钟&nbsp;聚合"
              gt-model="page.profileRollupExpirationDays[0]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            The data that is displayed under the transaction continuous profiling tab is collected continuously by the
-            agents and sent to the central collector (and stored) at 1 minute intervals.
-            This setting defines how long to retain these 1 minute aggregates.
+            在事务连续性能分析选项卡下显示的数据由代理连续收集并以1分钟的间隔发送到中央收集器（并存储）。此设置定义保留这些1分钟聚合的时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="5&nbsp;minute&nbsp;aggregates"
+             gt-label="5&nbsp;分钟&nbsp;聚合"
              gt-model="page.profileRollupExpirationDays[1]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Profile data is rolled up at 5 minute intervals.
-            This setting defines how long to retain these 5 minute aggregates.
+            配置文件数据每隔5分钟汇总一次。此设置定义保留这5分钟聚合的时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="30&nbsp;minute&nbsp;aggregates"
+             gt-label="30&nbsp;分钟&nbsp;聚合"
              gt-model="page.profileRollupExpirationDays[2]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Profile data is rolled up again at 30 minute intervals.
-            This setting defines how long to retain these 30 minute aggregates.
+            每隔30分钟再次汇总配置文件数据。此设置定义保留这些30分钟聚合的时间。
           </div>
         </div>
         <div gt-form-group
-             gt-label="4&nbsp;hour&nbsp;aggregates"
+             gt-label="4&nbsp;小时&nbsp;聚合"
              gt-model="page.profileRollupExpirationDays[3]"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            Profile data is rolled up again at 4 hour intervals.
-            This setting defines how long to retain these 4 hour aggregates.
+            每隔4小时再次汇总配置文件数据。此设置定义保留这些4小时聚合的时间。
           </div>
         </div>
       </fieldset>
       <fieldset class="gt-fieldset"
                 ng-if="layout.central">
         <legend class="gt-legend">
-          Trace data
+          跟踪数据
         </legend>
         <div gt-form-group
-             gt-label="Trace data"
+             gt-label="跟踪数据"
              gt-model="page.traceExpirationDays"
              gt-number="true"
              gt-pattern="pattern.integer"
              gt-required="loaded"
              gt-disabled="!layout.adminEdit"
              gt-width="7em"
-             gt-addon="days"
+             gt-addon="天"
              gt-col-class1="col-xl-4"
              gt-col-class2="col-xl-8">
           <div class="help-block">
-            This setting defines how long to retain trace data. This includes individual traces and error message data.
+            此设置定义保留跟踪数据的时间。 这包括单个跟踪和错误消息数据。
           </div>
         </div>
       </fieldset>
@@ -457,95 +428,95 @@
         <div class="offset-xl-4 col-xl-8">
           <div gt-button-group>
             <div gt-button
-                 gt-label="Save changes"
+                 gt-label="保存更改"
                  gt-click="save(deferred)"
                  gt-validate-form="formCtrl"
                  ng-if="layout.adminEdit"
                  class="d-inline-block">
             </div>
             <div gt-button
-                 gt-label="Update TWCS window sizes"
+                 gt-label="更新TWCS窗口大小"
                  gt-click="updateCassandraTwcsWindowSizes(deferred)"
                  gt-btn-class="btn-secondary"
                  gt-dont-validate-form="true"
-                 gt-confirm-header="Update TWCS window sizes?"
-                 gt-confirm-body="This could trigger a lot of window major compactions."
+                 gt-confirm-header="更新TWCS窗口大小？"
+                 gt-confirm-body="这可能会触发很多窗口主要的压缩。"
                  ng-if="layout.adminEdit && layout.central"
                  class="d-inline-block">
             </div>
             <div gt-button
-                 gt-label="Defrag H2 data"
+                 gt-label="整理H2数据"
                  gt-click="defragH2Data(deferred)"
                  gt-btn-class="btn-secondary"
                  gt-dont-validate-form="true"
-                 gt-confirm-header="Defrag H2 data?"
-                 gt-confirm-body="This could take several minutes depending on the H2 data file size, during which time Glowroot will not capture any new data."
+                 gt-confirm-header="整理H2数据"
+                 gt-confirm-body="这可能需要几分钟，具体取决于H2数据文件大小，在此期间监控平台将不会捕获任何新数据。"
                  ng-if="layout.adminEdit && !layout.central"
                  class="d-inline-block">
             </div>
             <div gt-button
-                 gt-label="Compact H2 data"
+                 gt-label="压缩H2数据"
                  gt-click="compactH2Data(deferred)"
                  gt-btn-class="btn-secondary"
                  gt-dont-validate-form="true"
-                 gt-confirm-header="Compact H2 data?"
-                 gt-confirm-body="This could take several minutes depending on the H2 data file size, during which time Glowroot will not capture any new data."
+                 gt-confirm-header="压缩H2数据？"
+                 gt-confirm-body="这可能需要几分钟，具体取决于H2数据文件大小，在此期间监控平台将不会捕获任何新数据。"
                  ng-if="layout.adminEdit && !layout.central"
                  class="d-inline-block">
             </div>
             <div gt-button
-                 gt-label="Analyze H2 disk space"
+                 gt-label="分析H2磁盘空间"
                  gt-click="analyzeH2DiskSpace(deferred)"
                  gt-btn-class="btn-secondary"
                  gt-dont-validate-form="true"
-                 gt-confirm-header="Analyze H2 disk space?"
-                 gt-confirm-body="This could take several minutes depending on the H2 data file size, during which time Glowroot data capture will be impacted."
+                 gt-confirm-header="分析H2磁盘空间？"
+                 gt-confirm-body="这可能需要几分钟，具体取决于H2数据文件大小，在此期间监控平台数据捕获将受到影响。"
                  ng-if="layout.adminEdit && !layout.central"
                  class="d-inline-block">
             </div>
             <div gt-button
-                 gt-label="Analyze trace counts"
+                 gt-label="分析跟踪总数"
                  gt-click="analyzeTraceCounts(deferred)"
                  gt-btn-class="btn-secondary"
                  gt-dont-validate-form="true"
-                 gt-confirm-header="Analyze trace counts?"
-                 gt-confirm-body="This could take several minutes depending on the number of traces, during which time Glowroot data capture will be impacted."
+                 gt-confirm-header="分析跟踪总数？"
+                 gt-confirm-body="这可能需要几分钟，具体取决于跟踪的数量，在此期间监控平台数据捕获将受到影响。"
                  ng-if="layout.adminEdit && !layout.central"
                  class="d-inline-block">
             </div>
             <div gt-button
-                 gt-label="Delete all data"
+                 gt-label="删除所有数据"
                  gt-click="deleteAllStoredData(deferred)"
                  gt-btn-class="btn-danger"
                  gt-dont-validate-form="true"
-                 gt-confirm-header="Delete all data?"
-                 gt-confirm-body="This will delete all captured data, including aggregated transaction data, traces and gauge data."
+                 gt-confirm-header="删除所有数据？"
+                 gt-confirm-body="这将删除所有捕获的数据，包括聚合的事务数据，跟踪和计量数据。"
                  ng-if="layout.adminEdit && !layout.central"
                  class="d-inline-block">
             </div>
             <div gt-button
-                 gt-label="Defrag H2 data"
+                 gt-label="整理H2数据"
                  gt-click="defragH2Data(deferred)"
                  gt-btn-class="btn-secondary"
                  ng-if="layout.offlineViewer"
                  class="d-inline-block">
             </div>
             <div gt-button
-                 gt-label="Compact H2 data"
+                 gt-label="压缩H2数据"
                  gt-click="compactH2Data(deferred)"
                  gt-btn-class="btn-secondary"
                  ng-if="layout.offlineViewer"
                  class="d-inline-block">
             </div>
             <div gt-button
-                 gt-label="Analyze H2 disk space"
+                 gt-label="分析H2磁盘空间"
                  gt-click="analyzeH2DiskSpace(deferred)"
                  gt-btn-class="btn-secondary"
                  ng-if="layout.offlineViewer"
                  class="d-inline-block">
             </div>
             <div gt-button
-                 gt-label="Analyze trace counts"
+                 gt-label="分析跟踪计数"
                  gt-click="analyzeTraceCounts(deferred)"
                  gt-btn-class="btn-secondary"
                  ng-if="layout.offlineViewer"
@@ -553,34 +524,30 @@
             </div>
           </div>
           <div class="help-block" ng-if="layout.central">
-            Updated expiration settings only apply to data collected from this point forward. Existing data is still
-            tagged with the expiration settings in effect at the time the data was captured since using
-            <a href="https://docs.datastax.com/en/cql/3.1/cql/cql_using/use_expire_c.html">Cassandra TTL</a>
-            to implement expiration.
+            更新的到期设置仅适用于从此时收集的数据。 由于使用<a href="https://docs.datastax.com/en/cql/3.1/cql/cql_using/use_expire_c.html">Cassandra TTL</a>实现过期，因此在捕获数据时，现有数据仍使用有效的过期设置进行标记。
           </div>
           <div class="help-block" ng-if="layout.central">
             <a href="http://cassandra.apache.org/doc/latest/operating/compaction.html#time-window-compactionstrategy">
-              Cassandra TWCS</a> window sizes are calculated using the TTL for the table divided by 24, so that the
-            table will have approximately 24 windows.
+              Cassandra TWCS</a> 窗口大小是使用表格的TTL除以24计算的，因此该表格将有大约24个窗口。
           </div>
         </div>
       </div>
       <div ng-if="showH2DiskSpaceAnalysis">
         <div style="margin-top: 40px;">
-          <span style="font-weight: bold; margin-left: 8px;">H2 data file size:</span> {{h2DataFileSize | gtBytes}}
+          <span style="font-weight: bold; margin-left: 8px;">H2数据文件大小:</span> {{h2DataFileSize | gtBytes}}
         </div>
         <table class="table"
                style="table-layout: fixed; margin-top: 30px;">
           <thead>
           <tr>
             <th style="width: 50%;">
-              Table name
+              表名
             </th>
             <th style="width: 25%;">
-              Total bytes
+              总字节数
             </th>
             <th style="width: 25%;">
-              Row count
+              行数
             </th>
           </tr>
           </thead>
@@ -605,17 +572,17 @@
                ng-if="analyzedTraceOverallCounts.length > 1">
           <thead>
           <tr style="padding-top: 10px;">
-            <th colspan="3" style="font-size: 18px; font-weight: 600; text-align: center;">By transaction type</th>
+            <th colspan="3" style="font-size: 18px; font-weight: 600; text-align: center;">按事务类型</th>
           </tr>
           <tr>
             <th>
-              Transaction type
+              事务类型
             </th>
             <th>
-              Traces captured
+              捕获的跟踪
             </th>
             <th>
-              Traces captured because they were flagged as errors
+              捕获的跟踪是因为它们被标记为错误
             </th>
           </tr>
           </thead>
@@ -637,20 +604,20 @@
                style="table-layout: fixed; margin-top: 40px;">
           <thead>
           <tr ng-if="analyzedTraceOverallCounts.length > 1">
-            <th colspan="4" style="font-size: 18px; font-weight: 600; text-align: center;">By transaction name</th>
+            <th colspan="4" style="font-size: 18px; font-weight: 600; text-align: center;">按事务名称</th>
           </tr>
           <tr>
             <th style="width: 20%;">
-              Transaction type
+              事务类型
             </th>
             <th style="width: 40%;">
-              Transaction name
+              事务名称
             </th>
             <th style="width: 20%;">
-              Traces captured
+              捕获的跟踪
             </th>
             <th style="width: 20%;">
-              Traces captured because they were flagged as errors
+              捕获的跟踪是因为它们被标记为错误
             </th>
           </tr>
           </thead>

@@ -24,7 +24,7 @@ glowroot.controller('IncidentsCtrl', [
   'httpErrors',
   function ($scope, $http, $timeout, queryStrings, httpErrors) {
     // \u00b7 is &middot;
-    document.title = 'Incidents \u00b7 Glowroot';
+    document.title = '故障';
     $scope.$parent.activeNavbarItem = 'incident';
 
     function setHref(incident, resolved) {

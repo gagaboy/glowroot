@@ -24,7 +24,7 @@ glowroot.controller('JvmGaugeValuesCtrl', [
   'charts',
   function ($scope, $location, $filter, locationChanges, charts) {
 
-    $scope.$parent.heading = 'Gauges';
+    $scope.$parent.heading = '指标项';
 
     if ($scope.hideMainContent()) {
       // this is needed to prevent nested controller chart-range.js from throwing errors

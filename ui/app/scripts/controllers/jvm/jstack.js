@@ -51,7 +51,7 @@ glowroot.controller('JvmJstackCtrl', [
             jstack = data.jstack;
             $('#jstack').html('<br>' + jstack);
             if (deferred) {
-              deferred.resolve('Refreshed');
+              deferred.resolve('刷新成功');
             }
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);

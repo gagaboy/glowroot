@@ -69,7 +69,7 @@ glowroot.controller('TransactionThroughputCtrl', [
         stack: false
       },
       yaxis: {
-        label: 'transactions per minute'
+        label: '平均每分钟事务数'
       },
       tooltipOpts: {
         content: function (label, xval, yval) {
@@ -98,7 +98,7 @@ glowroot.controller('TransactionThroughputCtrl', [
           html += '</div>';
           html += '<div>';
           html += $filter('gtMillis')(transactionsPerMin);
-          html += ' transactions per minute';
+          html += ' 平均每分钟事务数';
           html += '</div>';
           html += '</div>';
           return html;

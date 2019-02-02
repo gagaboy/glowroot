@@ -15,7 +15,7 @@
 -->
 <div class="card">
   <div class="card-header">
-    <h2>Instrumentation</h2>
+    <h2>仪表</h2>
   </div>
   <div class="card-body">
     <div ng-hide="hideMainContent()">
@@ -24,7 +24,7 @@
       <div style="margin: 15px;">
         <div ng-if="!configs.length"
              style="font-style: italic;">
-          There is no configured instrumentation
+          无已配置的仪表
         </div>
         <div ng-repeat="config in configs"
              class="gt-second-line-indent"
@@ -51,25 +51,25 @@
           <div gt-button-group>
             <a class="btn btn-primary gt-button-spacing"
                href="config/instrumentation{{newQueryString()}}">
-              Add new
+              新增
             </a>
             <button ng-click="displayImportModal()"
                     class="btn btn-secondary gt-button-spacing">
-              Import
+              导入
             </button>
             <button ng-click="displayExportModal()"
                     ng-if="configs.length"
                     class="btn btn-secondary gt-button-spacing">
-              Export all
+              全部导出
             </button>
             <button ng-click="displayDeleteAllConfirmationModal()"
                     ng-if="configs.length"
                     class="btn btn-danger gt-button-spacing">
-              Delete all
+              全部删除
             </button>
             <div gt-button
                  gt-btn-class="btn-secondary"
-                 gt-label="Apply changes without restart"
+                 gt-label="应用变更，无需重启"
                  gt-click="retransformClasses(deferred)"
                  gt-confirm-header="Apply changes without restart?"
                  gt-confirm-body="Warning: This has chance of crashing the JVM (especially on older JVMs)."
@@ -90,7 +90,7 @@
        role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">Import instrumentation</h3>
+        <h3 class="modal-title">导入仪表</h3>
         <button type="button"
                 class="close"
                 data-dismiss="modal"
@@ -101,7 +101,7 @@
       <div class="modal-body" style="padding-top: 20px; padding-bottom: 20px;">
         <div ng-include src="'template/gt-http-error-overlay.html'"></div>
         <div class="form-group" style="margin-bottom: 0;">
-          <label for="jsonToImport" class="col-form-label">JSON definition</label>
+          <label for="jsonToImport" class="col-form-label">JSON 定义</label>
           <textarea class="form-control"
                     ng-model="jsonToImport"
                     id="jsonToImport"
@@ -124,8 +124,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" ng-click="importFromJson()">Import</button>
-        <button class="btn btn-primary" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-secondary" ng-click="importFromJson()">导入</button>
+        <button class="btn btn-primary" data-dismiss="modal">返回</button>
       </div>
     </div>
   </div>
@@ -139,7 +139,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title">
-          Instrumentation JSON
+          仪表 JSON
           <span class="fas fa-clipboard gt-clip"
                 style="font-size: 14px; vertical-align: 5px; position: inherit; margin-left: 5px;"></span>
         </h3>
@@ -165,7 +165,7 @@
        style="max-width: 500px;">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">Delete all</h3>
+        <h3 class="modal-title">全部删除</h3>
         <button type="button"
                 class="close"
                 data-dismiss="modal"
@@ -174,7 +174,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>Are you sure you want to delete all configured instrumentation?</p>
+        <p>您是否确认删除所有已配置的仪表?</p>
         <div style="min-height: 60px;">
           <div class="d-inline-block">
             <div gt-spinner
@@ -186,8 +186,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-danger" ng-click="deleteAll()">Yes</button>
-        <button class="btn btn-primary" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" ng-click="deleteAll()">确定</button>
+        <button class="btn btn-primary" data-dismiss="modal">返回</button>
       </div>
     </div>
   </div>

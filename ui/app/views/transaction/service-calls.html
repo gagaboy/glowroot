@@ -32,11 +32,11 @@
     <div style="display: table-cell; text-align: center; vertical-align: middle;">
       <div class="gt-chart-no-data"
            ng-hide="showOverwrittenMessage">
-        No data for this time period
+        当前时段无数据
       </div>
       <div class="gt-chart-no-data"
            ng-if="showOverwrittenMessage">
-        There was service call data but it has expired
+        存在服务调用记录，但已过期
       </div>
     </div>
   </div>
@@ -58,8 +58,7 @@
             ng-attr-aria-sort="{{ngAttrAriaSort('total-time')}}"
             class="gt-query-total-column">
           <a ng-href="{{currentTabUrl()}}{{sortQueryString('total-time')}}" class="gt-sortable-table-header">
-            Total<br>
-            time<br>
+            总耗时<br>
             <span ng-class="sortIconClass('total-time')"
                   ng-if="sortAttribute === 'total-time'">
             </span>
@@ -70,19 +69,17 @@
             ng-attr-aria-sort="{{ngAttrAriaSort('execution-count')}}"
             class="gt-query-count-column">
           <a ng-href="{{currentTabUrl()}}{{sortQueryString('execution-count')}}" class="gt-sortable-table-header">
-            Total<br>
+            总数
             <span ng-class="sortIconClass('execution-count')"
                   ng-if="sortAttribute === 'execution-count'">
             </span>
-            count
           </a>
         </th>
         <th scope="col"
             ng-attr-aria-sort="{{ngAttrAriaSort('time-per-execution')}}"
             class="gt-query-other-column">
           <a ng-href="{{currentTabUrl()}}{{sortQueryString('time-per-execution')}}" class="gt-sortable-table-header">
-            Avg<br>
-            time<br>
+            平均耗时<br>
             <span ng-class="sortIconClass('time-per-execution')"
                   ng-if="sortAttribute === 'time-per-execution'">
             </span>

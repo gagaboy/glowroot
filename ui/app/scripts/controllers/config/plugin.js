@@ -93,7 +93,7 @@ glowroot.controller('ConfigPluginCtrl', [
               return;
             }
             onNewData(response.data);
-            deferred.resolve('Saved');
+            deferred.resolve('保存成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });

@@ -15,7 +15,7 @@
 -->
 <div class="card">
   <div class="card-header">
-    <h2>Alerts</h2>
+    <h2>告警</h2>
   </div>
   <div class="card-body">
     <div ng-hide="hideMainContent()">
@@ -25,12 +25,12 @@
            class="alert alert-danger"
            role="alert"
            style="margin: 0 15px 30px;">
-        Alerting is disabled for the next {{disabledForNextMillis | gtDuration}}.
+        告警功能被禁用，剩余时间 {{disabledForNextMillis | gtDuration}}。
       </div>
       <div style="margin: 15px;">
         <div ng-if="!alerts.length"
              style="font-style: italic;">
-          There are no configured alerts
+          无已配置的告警
         </div>
         <div ng-repeat="alert in alerts"
              class="gt-second-line-indent"
@@ -46,16 +46,16 @@
           <div gt-button-group>
             <a class="btn btn-primary gt-button-spacing"
                href="config/alert{{newQueryString()}}">
-              Add new
+              新增
             </a>
             <button ng-click="displayDisableAlertingModal()"
                     ng-if="!disabledForNextMillis && !layout.offlineViewer"
                     class="btn btn-secondary gt-button-spacing">
-              Temporarily disable alerting
+              暂时禁用告警
             </button>
             <div gt-button
                  gt-btn-class="btn-secondary"
-                 gt-label="Re-enable alerting"
+                 gt-label="重新启用告警"
                  gt-click="reEnableAlerting(deferred)"
                  ng-if="disabledForNextMillis && !layout.offlineViewer"
                  class="d-inline-block">
@@ -63,7 +63,7 @@
             <button ng-click="changeAlertingDisabledTimeModal()"
                     ng-if="disabledForNextMillis && !layout.offlineViewer"
                     class="btn btn-secondary gt-button-spacing">
-              Change alerting disabled time
+              变更告警失效时间
             </button>
           </div>
         </div>
@@ -78,15 +78,15 @@
       <div ng-form
            gt-form-with-primary-button>
         <div class="modal-header">
-          <h3 ng-if="changeAlertingDisabledTime">Change alerting disabled time</h3>
-          <h3 ng-if="!changeAlertingDisabledTime">Temporarily disable alerting</h3>
+          <h3 ng-if="changeAlertingDisabledTime">变更告警失效时间</h3>
+          <h3 ng-if="!changeAlertingDisabledTime">暂时禁用告警</h3>
         </div>
         <div class="modal-body">
           <div class="container">
             <div class="form-group">
               <label class="col-form-label pb-3"
                      for="forNext">
-                How long do you want alerting to be disabled
+                您想禁用告警功能多久时间
                 {{changeAlertingDisabledTime ? '(starting from now)' : ''}}?
               </label>
               <div class="input-group">
@@ -104,7 +104,7 @@
                 </div>
               </div>
               <div class="help-block pt-3">
-                NOTE: you can re-enable manually at any time.
+                注意: 您可以在任何时候手动重新启用。
               </div>
             </div>
             <div style="min-height: 60px;">
@@ -120,12 +120,12 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" ng-click="disableAlerting()" ng-if="changeAlertingDisabledTime">
-            Change alerting disabled time
+            变更告警失效时间
           </button>
           <button class="btn btn-primary" ng-click="disableAlerting()" ng-if="!changeAlertingDisabledTime">
-            Temporarily disable alerting
+            暂时禁用告警
           </button>
-          <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-secondary" data-dismiss="modal">返回</button>
         </div>
       </div>
     </div>

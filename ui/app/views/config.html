@@ -17,7 +17,7 @@
   <div class="gt-header-lhs"
        ng-if="!layout.central && !layout.embeddedAgentRollup.display">
     <h1 class="gt-header-text">
-      Configuration
+     代理配置
     </h1>
   </div>
   <!-- ng-show needed here instead of ng-if because config.js binds directly to #agentRollupDropdown -->
@@ -46,7 +46,7 @@
                 class="gt-agent-rollup-dropdown-message d-none"
                 style="font-style: italic; font-size: 1rem; cursor: inherit;"
                 ng-if="agentRollups.length === 0">
-          No active agents in the past 7 days
+          过去的7天无活跃的代理
         </option>
         <!-- can't use gt-spinner due to selectpicker behavior -->
         <option disabled
@@ -66,7 +66,7 @@
       |
     </div>
     <h1 class="gt-header-text">
-      Configuration
+     代理配置
     </h1>
   </div>
 </div>
@@ -74,19 +74,19 @@
   <div class="card">
     <div class="list-group">
       <div gt-sidebar-item
-           gt-display="General"
+           gt-display="通用"
            gt-url="config/general{{agentQueryString()}}"
            gt-active="currentUrl() === 'config/general'"
            ng-if="layout.central">
       </div>
       <div gt-sidebar-item
-           gt-display="Transactions"
+           gt-display="事务"
            gt-url="config/transaction{{agentQueryString()}}"
            gt-active="currentUrl() === 'config/transaction'"
            ng-if="!isAgentRollup()">
       </div>
       <div gt-sidebar-item
-           gt-display="Gauges"
+           gt-display="指标项"
            gt-url="config/gauge-list{{agentQueryString()}}"
            gt-active="currentUrl() === 'config/gauge-list'"
            gt-sub-active="currentUrl() === 'config/gauge'"
@@ -99,39 +99,39 @@
            ng-if="!isAgentRollup()">
       </div>
       <div gt-sidebar-item
-           gt-display="Synthetic monitors"
+           gt-display="合成监控"
            gt-url="config/synthetic-monitor-list{{agentQueryString()}}"
            gt-active="currentUrl() === 'config/synthetic-monitor-list'"
            gt-sub-active="currentUrl() === 'config/synthetic-monitor'"
            ng-if="layout.central">
       </div>
       <div gt-sidebar-item
-           gt-display="Alerts"
+           gt-display="告警"
            gt-url="config/alert-list{{agentQueryString()}}"
            gt-active="currentUrl() === 'config/alert-list'"
            gt-sub-active="currentUrl() === 'config/alert'">
       </div>
       <div gt-sidebar-item
-           gt-display="UI Defaults"
+           gt-display="默认UI"
            gt-url="config/ui-defaults{{agentQueryString()}}"
            gt-active="currentUrl() === 'config/ui-defaults'">
       </div>
       <div gt-sidebar-item
-           gt-display="Plugins"
+           gt-display="插件"
            gt-url="config/plugin-list{{agentQueryString()}}"
            gt-active="currentUrl() === 'config/plugin-list'"
            gt-sub-active="currentUrl() === 'config/plugin'"
            ng-if="!isAgentRollup()">
       </div>
       <div gt-sidebar-item
-           gt-display="Instrumentation"
+           gt-display="仪表"
            gt-url="config/instrumentation-list{{agentQueryString()}}"
            gt-active="currentUrl() === 'config/instrumentation-list'"
            gt-sub-active="currentUrl() === 'config/instrumentation'"
            ng-if="!isAgentRollup()">
       </div>
       <div gt-sidebar-item
-           gt-display="Advanced"
+           gt-display="高级"
            gt-url="config/advanced{{agentQueryString()}}"
            gt-active="currentUrl() === 'config/advanced'">
       </div>

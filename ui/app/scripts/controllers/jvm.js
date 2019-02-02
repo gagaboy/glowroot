@@ -24,7 +24,7 @@ glowroot.controller('JvmCtrl', [
   'queryStrings',
   function ($scope, $location, $http, $timeout, queryStrings) {
     // \u00b7 is &middot;
-    document.title = 'JVM \u00b7 Glowroot';
+    document.title = 'JVM';
     $scope.$parent.activeNavbarItem = 'jvm';
 
     $scope.range = {};
@@ -76,13 +76,13 @@ glowroot.controller('JvmCtrl', [
         if (path === 'jvm/gauges' && $scope.agentRollupId) {
           from = $scope.range.chartFrom;
           to = $scope.range.chartTo;
-          message = 'No active agents in this time period';
+          message = '当前无活跃的代理';
         } else {
           var now = new Date().getTime();
           from = now - 7 * 24 * 60 * 60 * 1000;
           // looking to the future just to be safe
           to = now + 7 * 24 * 60 * 60 * 1000;
-          message = 'No active agents in the past 7 days';
+          message = '过去的7天无活跃的代理';
         }
         $scope.refreshAgentRollups(from, to, $scope, message);
       };

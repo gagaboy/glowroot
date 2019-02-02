@@ -22,7 +22,7 @@ glowroot.controller('JvmHeapDumpCtrl', [
   'httpErrors',
   function ($scope, $http, httpErrors) {
 
-    $scope.$parent.heading = 'Heap dump';
+    $scope.$parent.heading = 'Heap Dump';
 
     if ($scope.hideMainContent()) {
       return;
@@ -43,10 +43,10 @@ glowroot.controller('JvmHeapDumpCtrl', [
             if (data.error) {
               deferred.reject(data.error);
             } else if (data.directoryDoesNotExist) {
-              deferred.reject('Directory does not exist');
+              deferred.reject('目录不存在');
             } else {
               $scope.availableDiskSpaceBytes = data;
-              deferred.resolve('See disk space below');
+              deferred.resolve('请参阅下面的磁盘空间');
             }
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
@@ -65,9 +65,9 @@ glowroot.controller('JvmHeapDumpCtrl', [
             if (data.error) {
               deferred.reject(data.error);
             } else if (data.directoryDoesNotExist) {
-              deferred.reject('Directory does not exist');
+              deferred.reject('目录不存在');
             } else {
-              deferred.resolve('Heap dump created');
+              deferred.resolve('堆转储已创建');
               $scope.heapDumpResponse = data;
             }
           }, function (response) {

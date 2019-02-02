@@ -21,7 +21,7 @@
        ng-click="clickTab('messages', $event)"
        ng-keydown="keydownTab(null, 'tab_traces', $event)"
        id="tab_messages">
-      Error messages
+       异常信息
     </a>
   </li>
   <li class="nav-item" role="presentation">
@@ -32,7 +32,7 @@
        ng-keydown="keydownTab('tab_messages', null, $event)"
        ng-if="agentRollup.permissions.error.traces"
        id="tab_traces">
-      Error traces ({{traceCountDisplay()}})
+       异常跟踪 ({{traceCountDisplay()}})
     </a>
   </li>
 </ul>

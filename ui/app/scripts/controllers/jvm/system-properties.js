@@ -22,7 +22,7 @@ glowroot.controller('JvmSystemPropertiesCtrl', [
   'httpErrors',
   function ($scope, $http, httpErrors) {
 
-    $scope.$parent.heading = 'System properties';
+    $scope.$parent.heading = '系统参数';
 
     if ($scope.hideMainContent()) {
       return;

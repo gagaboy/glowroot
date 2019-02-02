@@ -55,14 +55,14 @@ glowroot.controller('AdminPagerDutyCtrl', [
       $http.post('backend/admin/pager-duty', postData)
           .then(function (response) {
             if (response.data.duplicateIntegrationKey) {
-              deferred.reject('Duplicate integration key found');
+              deferred.reject('找到重复的集成密钥');
               return;
             }
             if (response.data.duplicateIntegrationKeyDisplay) {
-              deferred.reject('Duplicate integration key display found');
+              deferred.reject('找到重复的集成键显示');
               return;
             }
-            deferred.resolve('Saved');
+            deferred.resolve('保存成功');
             onNewData(response.data);
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);

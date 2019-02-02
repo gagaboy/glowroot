@@ -16,7 +16,7 @@
 <div ng-include src="'template/gt-loading-overlay.html'"></div>
 <div ng-include src="'template/gt-http-error-overlay.html'"></div>
 <div ng-if="agentNotConnected" class="alert alert-danger" role="alert">
-  This feature is only available when the agent is running and connected
+  此特性仅在代理运行并连接的情况下有效
 </div>
 <!-- intentionally not using gt-form-with-primary-button to prevent accidental heap dumps -->
 <div ng-form
@@ -26,7 +26,7 @@
      style="margin-top: 10px;">
   <div class="form-group row">
     <label class="col-form-label col-md-2 text-right" for="directory">
-      Directory
+      目录地址
     </label>
     <!-- col-md-9 instead of col-md-10 in order to leave a bit of padding to the right -->
     <div class="col-md-9">
@@ -53,7 +53,7 @@
              class="d-inline-block">
         </div>
         <div gt-button
-             gt-label="Check disk space"
+             gt-label="检查磁盘空间"
              gt-click="checkDiskSpace(deferred)"
              gt-btn-class="btn-secondary"
              class="d-inline-block">
@@ -68,7 +68,7 @@
       <div class="well">
         <table class="gt-heap-dump-response">
           <tr>
-            <td>Free disk space</td>
+            <td>空闲磁盘空间</td>
             <td><strong>{{availableDiskSpaceBytes | gtBytes}}</strong></td>
           </tr>
         </table>

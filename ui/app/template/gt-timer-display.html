@@ -5,8 +5,8 @@
     <thead>
     <tr>
       <td class="gt-breakdown-header gt-bold" style="text-align: left;">{{heading}}</td>
-      <td class="gt-breakdown-header" style="font-weight: 600;">total&nbsp;(ms)</td>
-      <td class="gt-breakdown-header" style="font-weight: 600;">count</td>
+      <td class="gt-breakdown-header" style="font-weight: 600;">合计&nbsp;(ms)</td>
+      <td class="gt-breakdown-header" style="font-weight: 600;">总数</td>
     </tr>
     </thead>
     <tbody>
@@ -28,20 +28,20 @@
             <button class="gt-flat-btn gt-link-color"
                     ng-click="clickShowMore()"
                     ng-if="ftShowMore">
-              show more
+              展示更多
             </button>
             <span ng-if="ftShowMoreAndLess">/</span>
             <button class="gt-flat-btn gt-link-color"
                     ng-click="clickShowLessFT()"
                     ng-if="showLess">
-              show less
+              收起
             </button>
             <span ng-if="ftShowMore">
             /
             <button class="gt-flat-btn gt-link-color"
                     ng-click="clickShowAll()"
                     ng-if="ftShowMore">
-              show all
+              展示全部
             </button>
             </span>
           </div>
@@ -54,7 +54,7 @@
           ng-hide="showTreeView"
           ng-click="showTreeView = true"
           style="vertical-align: top; margin-top: -1px;">
-    switch to tree view
+    切换到树视图
   </button>
   <table class="gt-timers-table d-inline-block"
          ng-if="showTreeView"
@@ -62,8 +62,8 @@
     <thead>
     <tr>
       <td class="gt-breakdown-header gt-bold" style="text-align: left;">{{heading}}</td>
-      <td class="gt-breakdown-header" style="font-weight: 600;">total&nbsp;(ms)</td>
-      <td class="gt-breakdown-header" style="font-weight: 600;">count</td>
+      <td class="gt-breakdown-header" style="font-weight: 600;">合计&nbsp;(ms)</td>
+      <td class="gt-breakdown-header" style="font-weight: 600;">总数</td>
     </tr>
     </thead>
     <tbody>
@@ -87,20 +87,20 @@
             <button class="gt-flat-btn gt-link-color"
                     ng-click="clickShowMore()"
                     ng-if="ttShowMore">
-              show more
+              展示更多
             </button>
             <span ng-if="ttShowMoreAndLess">/</span>
             <button class="gt-flat-btn gt-link-color"
                     ng-click="clickShowLessTT()"
                     ng-if="showLess">
-              show less
+              收起
             </button>
             <span ng-if="ttShowMore">
             /
             <button class="gt-flat-btn gt-link-color"
                     ng-click="clickShowAll()"
                     ng-if="ttShowMore">
-              show all
+              展示全部
             </button>
             </span>
           </div>
@@ -114,6 +114,6 @@
           ng-if="showTreeView"
           ng-click="$parent.showTreeView = false"
           style="vertical-align: top; margin-top: -1px;">
-    switch to flattened view
+    切换到扁平视图
   </button>
 </div>

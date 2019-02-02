@@ -17,13 +17,13 @@
 <div class="clearfix">
   <a class="gt-config-return-link"
      href="config/alert-list{{agentQueryString()}}">
-    Return to list
+    返回列表
   </a>
 </div>
 <div class="card">
   <div class="card-header">
     <h2 ng-class="{'gt-lighten-font': !loaded && !httpError}">
-      Alerts
+      告警
       <span class="d-inline-block gt-separator">
         |
       </span>
@@ -39,12 +39,12 @@
           novalidate>
       <fieldset class="gt-fieldset">
         <legend class="gt-legend">
-          Condition
+          条件
         </legend>
         <div class="form-group row"
              ng-if="layout.central">
           <div class="col-xl-3 gt-form-label-xl">
-            Based on
+            基于
           </div>
           <div class="col-xl-9">
             <div class="form-check">
@@ -54,7 +54,7 @@
                        ng-model="config.condition.conditionType"
                        ng-disabled="!agentRollup.permissions.config.edit.alerts"
                        value="metric">
-                Metric
+                度量标准
               </label>
             </div>
             <div class="form-check">
@@ -64,7 +64,7 @@
                        ng-model="config.condition.conditionType"
                        ng-disabled="!agentRollup.permissions.config.edit.alerts"
                        value="synthetic-monitor">
-                Synthetic monitor
+                合成监控
               </label>
             </div>
             <div class="form-check">
@@ -74,7 +74,7 @@
                        ng-model="config.condition.conditionType"
                        ng-disabled="!agentRollup.permissions.config.edit.alerts"
                        value="heartbeat">
-                Heartbeat
+                心跳
               </label>
             </div>
           </div>
@@ -83,7 +83,7 @@
           <div class="form-group row">
             <label class="col-xl-3 gt-form-label-xl"
                    for="conditionMetric">
-              Metric
+              度量标准
             </label>
             <div class="col-xl-9">
               <select ng-model="config.condition.metric"
@@ -102,7 +102,7 @@
                 </option>
               </select>
               <div class="help-block">
-                The metric that this alert monitors.
+                告警监控的度量标准。
               </div>
             </div>
           </div>
@@ -110,7 +110,7 @@
                ng-if="showTransactionTypeAndName()">
             <label class="col-xl-3 gt-form-label-xl"
                    for="transactionType">
-              Transaction type
+              事务类型
             </label>
             <div class="col-xl-9">
               <select ng-model="config.condition.transactionType"
@@ -127,42 +127,42 @@
                 <option ng-value="config.condition.transactionType"
                         disabled
                         ng-if="config.condition.transactionType && transactionTypes().indexOf(config.condition.transactionType) === -1">
-                  {{config.condition.transactionType}} (not available)
+                  {{config.condition.transactionType}} (不可用)
                 </option>
               </select>
               <div class="help-block">
-                The transaction type that this alert monitors.
+                告警监控的事务类型。
               </div>
             </div>
           </div>
           <div gt-form-group
-               gt-label="Transaction name"
+               gt-label="事务名称"
                gt-model="config.condition.transactionName"
                gt-disabled="!agentRollup.permissions.config.edit.alerts"
                gt-width="30em"
                ng-if="showTransactionTypeAndName()">
             <div class="help-block">
-              (Optional) The transaction name that this alert monitors.
+              (可选的) 告警监控的事务名称。
             </div>
           </div>
           <div gt-form-group
-               gt-label="Percentile"
+               gt-label="百分比"
                gt-model="config.condition.percentile"
                gt-number="true"
                gt-pattern="pattern.percentage"
                gt-required="loaded"
                gt-disabled="!agentRollup.permissions.config.edit.alerts"
                gt-width="7em"
-               gt-addon="percentile"
+               gt-addon="百分比"
                ng-if="config.condition.metric === 'transaction:x-percentile'">
             <div class="help-block">
-              The transaction response time percentile to use for alerting.
+              告警监控的事务响应时间的百分比。
             </div>
           </div>
           <div class="form-group row">
             <label class="col-xl-3 gt-form-label-xl"
                    for="conditionThreshold">
-              Threshold
+              阈值
             </label>
             <div class="col-xl-9">
               <div ng-class="{'input-group' : unit}">
@@ -182,10 +182,10 @@
                 <!-- need to place validation blocks before dropdown and use order-1 to shift them due to
                      https://github.com/twbs/bootstrap/issues/25110 -->
                 <div class="gt-invalid-required-feedback order-1">
-                  This is required.
+                  必填项。
                 </div>
                 <div class="gt-invalid-other-feedback order-1">
-                  This is invalid.
+                  无效值。
                 </div>
                 <div gt-input-group-dropdown
                      gt-model="page.conditionThresholdByteUnit"
@@ -195,37 +195,35 @@
                 </div>
               </div>
               <div class="help-block">
-                If the {{phraseForValue()}} over the given time period is greater than or equal to this threshold, then
-                alert will be triggered.
+                如果给定时段内 {{phraseForValue()}} 大于或等于此阈值, 那么告警将会触发。
               </div>
             </div>
           </div>
           <div gt-form-group
                gt-type="checkbox"
-               gt-label="Lower bound threshold?"
-               gt-checkbox-label="Lower bound threshold"
+               gt-label="阈值下限?"
+               gt-checkbox-label="启用阈值下限"
                gt-model="config.condition.lowerBoundThreshold"
                gt-disabled="!agentRollup.permissions.config.edit.alerts">
             <div class="help-block">
-              Alert if the {{phraseForValue()}} is less than or equal to the threshold, instead of alerting if the
-              {{phraseForValue()}} is greater than or equal to the threshold.
+              如果 {{phraseForValue()}} 小于或等于阈值则发出告警，而不是 {{phraseForValue()}} 大于或等于阈值时发出告警。
             </div>
           </div>
           <div gt-form-group
-               gt-label="Time period"
+               gt-label="时间段"
                gt-model="page.timePeriodMinutes"
                gt-number="true"
                gt-pattern="pattern.integer"
                gt-required="loaded"
                gt-disabled="!agentRollup.permissions.config.edit.alerts"
                gt-width="7em"
-               gt-addon="minutes">
+               gt-addon="分钟">
             <div class="help-block">
-              The time period over which the {{phraseForValue()}} is calculated.
+              计算 {{phraseForValue()}} 的时间段。
             </div>
           </div>
           <div gt-form-group
-               gt-label="Minimum transaction count"
+               gt-label="最小事务数"
                gt-model="config.condition.minTransactionCount"
                gt-number="true"
                gt-pattern="pattern.integer"
@@ -234,24 +232,22 @@
                gt-width="7em"
                ng-if="showMinTransactionCount()">
             <div class="help-block">
-              Time periods with very few transactions have much less meaningful metrics, so this can be used to
-              suppress alerts from being generated unless the time period has a minimum transaction count.
+              很少事务的时段缺少有意义的度量，因此这可以用来约束告警的生成，除非该时段达到最小事务数。
             </div>
           </div>
         </div>
         <div ng-if="config.condition.conditionType === 'heartbeat'">
           <div gt-form-group
-               gt-label="Time period"
+               gt-label="时间段"
                gt-model="config.condition.timePeriodSeconds"
                gt-number="true"
                gt-pattern="pattern.integer"
                gt-required="loaded"
                gt-disabled="!agentRollup.permissions.config.edit.alerts"
                gt-width="7em"
-               gt-addon="seconds">
+               gt-addon="秒">
             <div class="help-block">
-              The time period after which the alert is triggered if no heartbeat has been received from the agent.
-              Heartbeats are normally received every 5 seconds.
+              从未接收到代理的心跳，到触发告警的时间段。心跳通常每5秒钟接收一次。
             </div>
           </div>
         </div>
@@ -259,7 +255,7 @@
           <div class="form-group row">
             <label class="col-xl-3 gt-form-label-xl"
                    for="syntheticMonitorId">
-              Synthetic monitor
+              合成监控
             </label>
             <div class="col-xl-9">
               <select ng-model="config.condition.syntheticMonitorId"
@@ -272,7 +268,7 @@
                 <option value="__________"
                         disabled
                         ng-if="!syntheticMonitors.length">
-                  (there are no synthetic monitors available)
+                  (无可用合成监控)
                 </option>
                 <option ng-repeat="syntheticMonitor in syntheticMonitors"
                         ng-value="syntheticMonitor.id">
@@ -280,25 +276,25 @@
                 </option>
               </select>
               <div class="help-block">
-                The synthetic monitor that this alert is based on.
+                告警监视的合成监控。
               </div>
             </div>
           </div>
           <div gt-form-group
-               gt-label="Duration threshold"
+               gt-label="持续时间阈值"
                gt-model="config.condition.thresholdMillis"
                gt-number="true"
                gt-pattern="pattern.integer"
                gt-required="loaded"
                gt-disabled="!agentRollup.permissions.config.edit.alerts"
                gt-width="7em"
-               gt-addon="milliseconds">
+               gt-addon="毫秒">
             <div class="help-block">
-              If the synthetic monitor duration is greater than or equal to this, then it is considered a failure.
+              如果合成监控的持续时间大于或等于此阈值，则认为其是失败的。
             </div>
           </div>
           <div gt-form-group
-               gt-label="Consecutive count"
+               gt-label="连续统计"
                gt-model="config.condition.consecutiveCount"
                gt-number="true"
                gt-pattern="pattern.positiveInteger"
@@ -306,20 +302,19 @@
                gt-disabled="!agentRollup.permissions.config.edit.alerts"
                gt-width="7em">
             <div class="help-block">
-              If the synthetic monitor fails this number of times in a row (by either exceeding the duration threshold
-              or returning an error), then the alert will be triggered.
+              如果合成监控连续失败了上面的次数(不管是超出持续时间阈值还是返回错误)，则将触发告警。
             </div>
           </div>
         </div>
       </fieldset>
       <fieldset class="gt-fieldset">
         <legend class="gt-legend">
-          Severity
+          严重程度
         </legend>
         <div class="form-group row">
           <label class="col-xl-3 gt-form-label-xl"
                  for="severity">
-            Severity
+            严重程度
           </label>
           <div class="col-xl-9">
             <select ng-model="config.severity"
@@ -330,38 +325,38 @@
                     ng-disabled="!agentRollup.permissions.config.edit.alerts"
                     style="width: auto;">
               <option value="" ng-if="!config.severity"></option>
-              <option value="critical">Critical</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
+              <option value="critical">临界</option>
+              <option value="high">高</option>
+              <option value="medium">中</option>
+              <option value="low">低</option>
             </select>
           </div>
         </div>
       </fieldset>
       <fieldset class="gt-fieldset">
         <legend class="gt-legend">
-          Email notification
+          通知邮箱
         </legend>
         <div gt-form-group
              gt-type="textarea"
-             gt-label="Email addresses"
+             gt-label="Email 地址"
              gt-model="page.emailAddresses"
              gt-disabled="!agentRollup.permissions.config.edit.alerts"
              gt-width="30em">
           <div class="help-block">
-            Comma separated list of email addresses.
+            用逗号来分隔电子邮件地址的列表。
           </div>
         </div>
       </fieldset>
       <fieldset class="gt-fieldset"
                 ng-if="pagerDutyIntegrationKeys.length">
         <legend class="gt-legend">
-          PagerDuty notification
+            PagerDuty notification
         </legend>
         <div class="form-group row">
           <label class="col-xl-3 gt-form-label-xl"
                  for="pagerDutyIntegrationKey">
-            Integration key
+            集成密钥
           </label>
           <div class="col-xl-9">
             <select ng-model="config.pagerDutyNotification.pagerDutyIntegrationKey"
@@ -432,7 +427,7 @@
         <div class="offset-xl-3 col-xl-9">
           <div gt-button-group>
             <div gt-button
-                 gt-label="{{config.version ? 'Save changes' : 'Add'}}"
+                 gt-label="{{config.version ? '保存变更' : '添加'}}"
                  gt-click="save(deferred)"
                  gt-validate-form="formCtrl"
                  class="d-inline-block">

@@ -44,7 +44,7 @@ glowroot.controller('ConfigGeneralCtrl', [
       $http.post('backend/config/general?agent-rollup-id=' + encodeURIComponent($scope.agentRollupId), postData)
           .then(function (response) {
             onNewData(response.data);
-            deferred.resolve('Saved');
+            deferred.resolve('保存成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });

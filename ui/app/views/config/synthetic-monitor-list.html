@@ -15,7 +15,7 @@
 -->
 <div class="card">
   <div class="card-header">
-    <h2>Synthetic monitors</h2>
+    <h2>合成监控</h2>
   </div>
   <div class="card-body">
     <div ng-hide="hideMainContent()">
@@ -24,7 +24,7 @@
       <div style="margin: 15px;">
         <div ng-if="!configs.length"
              style="font-style: italic;">
-          There are no configured synthetic monitors
+          未配置任何合成监控
         </div>
         <div ng-repeat="config in configs"
              class="gt-second-line-indent"
@@ -39,7 +39,7 @@
              style="margin-top: 30px;">
           <a class="btn btn-primary"
              href="config/synthetic-monitor{{newQueryString()}}">
-            Add new
+            添加新的合成监控
           </a>
         </div>
       </div>

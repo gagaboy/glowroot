@@ -205,19 +205,19 @@ glowroot.controller('ConfigGaugeCtrl', [
 
     $scope.save = function (deferred) {
       if (!$scope.config.mbeanAttributes.length) {
-        deferred.reject('At least one MBean attribute must be selected');
+        deferred.reject('必须至少选择一个MBean的属性');
         return;
       }
       if ($scope.noMatchFoundForPattern) {
-        deferred.reject('Cannot save because MBean is unmatched');
+        deferred.reject('MBean不匹配，无法保存');
         return;
       }
       if ($scope.noMatchFoundForNonPattern) {
-        deferred.reject('Cannot save because MBean is unavailable');
+        deferred.reject('MBean不匹配，无法保存');
         return;
       }
       if ($scope.duplicateMBean) {
-        deferred.reject('Cannot save because MBean is a duplicate of another gauge');
+        deferred.reject('MBean是另一个指标的副本，无法保存');
         return;
       }
       var postData = angular.copy($scope.config);
@@ -231,7 +231,7 @@ glowroot.controller('ConfigGaugeCtrl', [
       $http.post(url + '?agent-id=' + encodeURIComponent(agentId), postData)
           .then(function (response) {
             onNewData(response.data);
-            deferred.resolve(version ? 'Saved' : 'Added');
+            deferred.resolve(version ? '保存成功' : '添加成功');
             version = response.data.config.version;
             // fix current url (with updated version) before returning to list page in case back button is used later
             if (agentId) {
@@ -242,7 +242,7 @@ glowroot.controller('ConfigGaugeCtrl', [
           }, function (response) {
             if (response.status === 409 && response.data.message === 'mbeanObjectName') {
               $scope.duplicateMBean = true;
-              deferred.reject('There is already a gauge for this MBean');
+              deferred.reject('已存在这个MBean的指标副本');
               return;
             }
             httpErrors.handle(response, $scope, deferred);

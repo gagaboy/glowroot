@@ -22,7 +22,7 @@ glowroot.controller('JvmEnvironmentCtrl', [
   'httpErrors',
   function ($scope, $http, httpErrors) {
 
-    $scope.$parent.heading = 'Environment';
+    $scope.$parent.heading = '运行环境';
 
     if ($scope.hideMainContent()) {
       return;

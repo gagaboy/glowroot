@@ -17,13 +17,13 @@
 <div class="clearfix">
   <a class="gt-config-return-link"
      href="config/plugin-list{{agentQueryString()}}">
-    Return to list
+    返回列表
   </a>
 </div>
 <div class="card">
   <div class="card-header">
     <h2 ng-class="{'gt-lighten-font': !loaded && !httpError}">
-      Plugins
+      插件
       <span class="d-inline-block gt-separator">
         |
       </span>
@@ -106,7 +106,7 @@
            ng-if="agentRollup.permissions.config.edit.plugins">
         <div class="offset-xl-3 col-xl-9">
           <div gt-button
-               gt-label="Save changes"
+               gt-label="保存变更"
                gt-click="save(deferred)"
                gt-validate-form="formCtrl">
           </div>

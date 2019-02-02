@@ -43,7 +43,7 @@ glowroot.controller('AdminGeneralCtrl', [
       $http.post('backend/admin/general', $scope.config)
           .then(function (response) {
             onNewData(response.data);
-            deferred.resolve('Saved');
+            deferred.resolve('保存成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });

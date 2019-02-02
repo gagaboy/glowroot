@@ -60,7 +60,7 @@ glowroot.controller('AdminHttpProxyCtrl', [
               return;
             }
             onNewData(response.data);
-            deferred.resolve('Saved');
+            deferred.resolve('保存成功');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });
@@ -68,11 +68,11 @@ glowroot.controller('AdminHttpProxyCtrl', [
 
     $scope.testHttpProxy = function (deferred) {
       if (!$scope.page.testUrl) {
-        deferred.reject('Test URL is required');
+        deferred.reject('测试URL为必填项');
         return;
       }
       if (!$scope.config.host) {
-        deferred.reject('Host is required');
+        deferred.reject('主机域名为必填项');
         return;
       }
       delete $scope.testHttpProxyResponse;
@@ -83,7 +83,7 @@ glowroot.controller('AdminHttpProxyCtrl', [
             if (response.data.error) {
               deferred.reject(response.data.message);
             } else {
-              deferred.resolve('Success');
+              deferred.resolve('测试成功');
               $scope.testHttpProxyResponse = response.data.content;
             }
           }, function (response) {

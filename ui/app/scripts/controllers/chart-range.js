@@ -33,38 +33,38 @@ glowroot.controller('ChartRangeCtrl', [
       var dateDate = new Date(date);
       dateDate.setHours(0, 0, 0, 0);
       if (dateDate.getTime() === today.getTime()) {
-        return 'Today';
+        return '今天';
       }
       if (dateDate.getTime() === today.getTime() - 24 * 60 * 60 * 1000) {
-        return 'Yesterday';
+        return '昨天';
       }
       return moment(date).format('l');
     }
 
     $scope.lastDisplay = function (last) {
       if (last === 60 * 60 * 1000) {
-        return 'Last 60 minutes'; // instead of Last 1 hour
+        return '过去60分钟'; // instead of Last 1 hour
       }
       if (last === 24 * 60 * 60 * 1000) {
-        return 'Last 24 hours'; // instead of Last 1 day
+        return '过去24小时'; // instead of Last 1 day
       }
 
-      var display = 'Last';
+      var display = '过去';
 
       function append(num, label) {
         if (num) {
           display += ' ' + num + ' ' + label;
           if (num !== 1) {
-            display += 's';
+            display += '';
           }
         }
       }
 
       var duration = moment.duration(last);
-      append(Math.floor(duration.asDays()), 'day');
-      append(duration.hours(), 'hour');
-      append(duration.minutes(), 'minute');
-      append(duration.seconds(), 'second');
+      append(Math.floor(duration.asDays()), '天');
+      append(duration.hours(), '小时');
+      append(duration.minutes(), '分钟');
+      append(duration.seconds(), '秒');
       return display;
     };
 

@@ -17,7 +17,7 @@
   <div class="gt-header-lhs"
        ng-if="!layout.embeddedAgentRollup.display">
     <h1 class="gt-header-text">
-      Administration
+      系统管理
     </h1>
   </div>
   <div class="gt-header-lhs"
@@ -32,7 +32,7 @@
       |
     </div>
     <h1 class="gt-header-text">
-      Administration
+      系统管理
     </h1>
   </div>
 </div>
@@ -40,17 +40,17 @@
   <div class="card">
     <div class="list-group">
       <div gt-sidebar-item
-           gt-display="General"
+           gt-display="通用"
            gt-url="admin/general">
       </div>
       <div gt-sidebar-item
-           gt-display="Users"
+           gt-display="用户"
            gt-url="admin/user-list"
            gt-active="currentUrl() === 'admin/user-list'"
            gt-sub-active="currentUrl() === 'admin/user'">
       </div>
       <div gt-sidebar-item
-           gt-display="Roles"
+           gt-display="角色"
            gt-url="admin/role-list"
            gt-active="currentUrl() === 'admin/role-list'"
            gt-sub-active="currentUrl() === 'admin/role'">
@@ -60,7 +60,7 @@
            gt-url="admin/web">
       </div>
       <div gt-sidebar-item
-           gt-display="Storage"
+           gt-display="存储"
            gt-url="admin/storage">
       </div>
       <div gt-sidebar-item
@@ -68,11 +68,11 @@
            gt-url="admin/smtp">
       </div>
       <div gt-sidebar-item
-           gt-display="HTTP proxy"
+           gt-display="HTTP 代理"
            gt-url="admin/http-proxy">
       </div>
       <div gt-sidebar-item
-           gt-display="Integrations"
+           gt-display="集成"
            gt-url="admin/integration-list"
            gt-active="currentUrl() === 'admin/integration-list'"
            gt-sub-active="currentUrl().lastIndexOf('admin/integration/', 0) === 0">

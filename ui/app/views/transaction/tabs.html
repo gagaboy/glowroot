@@ -21,7 +21,7 @@
        ng-click="clickTab('time', $event)"
        ng-keydown="keydownTab(null, 'tab_traces', $event)"
        id="tab_time">
-      Response time
+      响应时间
     </a>
   </li>
   <li class="nav-item" role="presentation">
@@ -32,7 +32,7 @@
        ng-keydown="keydownTab('tab_time', 'tab_queries', $event)"
        ng-if="agentRollup.permissions.transaction.traces"
        id="tab_traces">
-      {{transactionType === 'Startup' ? 'Traces' : 'Slow traces'}} ({{traceCountDisplay()}})
+      {{transactionType === 'Startup' ? '跟踪' : '慢事务跟踪'}} ({{traceCountDisplay()}})
     </a>
   </li>
   <li class="nav-item" role="presentation">
@@ -43,7 +43,7 @@
        ng-keydown="keydownTab('tab_traces', 'tab_service_calls', $event)"
        ng-if="agentRollup.permissions.transaction.queries"
        id="tab_queries">
-      Queries
+      查询
     </a>
   </li>
   <li class="nav-item" role="presentation">
@@ -54,7 +54,7 @@
        ng-keydown="keydownTab('tab_queries', 'tab_thread_profile', $event)"
        ng-if="agentRollup.permissions.transaction.serviceCalls"
        id="tab_service_calls">
-      Service calls
+      服务调用
     </a>
   </li>
   <li class="nav-item" role="presentation">
@@ -65,7 +65,7 @@
        ng-keydown="keydownTab('tab_service_calls', null, $event)"
        ng-if="agentRollup.permissions.transaction.threadProfile"
        id="tab_thread_profile">
-      Thread profile
+       线程分析
     </a>
   </li>
 </ul>

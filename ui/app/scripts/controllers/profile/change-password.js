@@ -36,7 +36,7 @@ glowroot.controller('ProfileChangePasswordCtrl', [
 
     $scope.changePassword = function (deferred) {
       if ($scope.page.newPassword !== $scope.page.verifyNewPassword) {
-        deferred.reject('Passwords do not match');
+        deferred.reject('密码不匹配');
         return;
       }
       var postData = {
@@ -46,11 +46,11 @@ glowroot.controller('ProfileChangePasswordCtrl', [
       $http.post('backend/change-password', postData)
           .then(function (response) {
             if (response.data.currentPasswordIncorrect) {
-              deferred.reject('Current password is incorrect');
+              deferred.reject('当前密码不正确');
               return;
             }
             $scope.page = {};
-            deferred.resolve('Password has been changed');
+            deferred.resolve('密码已被更改');
           }, function (response) {
             httpErrors.handle(response, $scope, deferred);
           });

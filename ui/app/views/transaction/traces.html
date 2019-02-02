@@ -18,13 +18,13 @@
 <div class="gt-chart-controls float-right">
   <button class="gt-chart-button"
           ng-click="zoomOut()">
-        <span title="Zoom out"
+        <span title="缩小"
               class="fas fa-search-minus">
         </span>
   </button>
   <button class="gt-chart-button"
           ng-click="refresh()">
-        <span title="Refresh"
+        <span title="刷新"
               class="fas fa-sync">
         </span>
   </button>
@@ -32,7 +32,7 @@
           uib-popover-template="'template/help/traces-chart.html'"
           popover-placement="left"
           popover-trigger="'outsideClick'">
-        <span title="Help"
+        <span title="帮助"
               class="fas fa-question-circle">
         </span>
   </button>
@@ -58,11 +58,11 @@
     <div style="display: table-cell; text-align: center; vertical-align: middle;">
       <div class="gt-chart-no-data"
            ng-hide="showExpiredMessage">
-        No data
+        无数据
       </div>
       <div class="gt-chart-no-data"
            ng-if="showExpiredMessage">
-        *There were traces but they have expired
+        *存在跟踪记录，但已过期
       </div>
     </div>
   </div>
@@ -71,7 +71,7 @@
      ng-if="chartLimitExceeded">
   <div class="offset-xl-4 col-xl-8 mt-4">
     <div class="gt-chart-warning">
-      Specified limit exceeded, only displaying slowest {{chartLimit}} matching traces
+      超出指定的范围限制, 仅显示匹配的最慢 {{chartLimit}} 个跟踪记录
     </div>
   </div>
 </div>
@@ -81,7 +81,7 @@
   <div class="form-group row">
     <label class="col-xl-4 gt-form-label-xl"
            for="{{filterDurationComparator !== 'less' ? 'filterDurationMillisLow' : 'filterDurationMillisHigh'}}">
-      Response time
+      响应时间
     </label>
     <div class="col-xl-8">
       <!-- input-group needs to be in a sub-div so it doesn't try to fill the entire width,
@@ -105,7 +105,7 @@
         <span ng-if="filterDurationComparator === 'between'"
               class="input-group-append"
               style="border-left-width: 0; border-right-width: 0;">
-                <span class="input-group-text border-right-0">and</span>
+                <span class="input-group-text border-right-0">并且</span>
               </span>
         <input type="text"
                ng-model="filter.durationMillisHigh"
@@ -115,10 +115,10 @@
                id="filterDurationMillisHigh"
                name="filterDurationMillisHigh">
         <div class="input-group-append">
-          <span class="input-group-text">milliseconds</span>
+          <span class="input-group-text">毫秒</span>
         </div>
         <div class="gt-invalid-other-feedback">
-          This is invalid.
+          此为无效值.
         </div>
       </div>
     </div>
@@ -126,7 +126,7 @@
   <div class="form-group row">
     <label class="col-xl-4 gt-form-label-xl"
            for="searchHeadline">
-      Headline/URL
+      标题/URL
     </label>
     <div class="col-xl-8">
       <div class="input-group"
@@ -148,7 +148,7 @@
        ng-if="showErrorMessageFilter">
     <label class="col-xl-4 gt-form-label-xl"
            for="searchErrorMessage">
-      Error
+      异常
     </label>
     <div class="col-xl-8">
       <div class="input-group"
@@ -169,7 +169,7 @@
   <div class="form-group row">
     <label class="col-xl-4 gt-form-label-xl"
            for="searchUser">
-      User
+      用户
     </label>
     <div class="col-xl-8">
       <div class="input-group"
@@ -208,7 +208,7 @@
   <div class="form-group row" ng-if="traceAttributeNames.length">
     <label class="col-xl-4 gt-form-label-xl"
            for="searchAttributeValue">
-      Attribute value
+      属性值
     </label>
     <div class="col-xl-8">
       <div class="input-group"
@@ -229,7 +229,7 @@
   <div class="form-group row">
     <label class="col-xl-4 gt-form-label-xl"
            for="searchLimit">
-      Result limit
+      记录数
     </label>
     <div class="col-xl-8">
       <select ng-model="filter.limit"
@@ -244,14 +244,14 @@
     <div class="offset-xl-4 col-xl-8">
       <div gt-button-group>
         <div gt-button
-             gt-label="Refresh"
+             gt-label="刷新"
              gt-click="refresh(deferred)"
              gt-validate-form="formCtrl"
              class="d-inline-block">
         </div>
         <button class="btn btn-secondary gt-button-spacing"
                 ng-click="clearCriteria()">
-          Clear criteria
+          清空条件
         </button>
       </div>
     </div>
