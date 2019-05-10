@@ -191,7 +191,7 @@ HandlebarsRendering = (function () {
         flattenedTimer = {
           name: timer.name,
           totalNanos: timer.totalNanos,
-          count: timer.count,
+          count: timer.extended ? 0 : timer.count,
           active: timer.active,
           id: nextId++
         };
@@ -202,7 +202,9 @@ HandlebarsRendering = (function () {
         // (this is possible when they are separated by another timer)
         flattenedTimer.totalNanos += timer.totalNanos;
         flattenedTimer.active = flattenedTimer.active || timer.active;
-        flattenedTimer.count += timer.count;
+        if (!timer.extended) {
+          flattenedTimer.count += timer.count;
+        }
       }
       if (timer.childTimers) {
         $.each(timer.childTimers, function (index, nestedTimer) {
@@ -555,7 +557,7 @@ HandlebarsRendering = (function () {
   });
 
   Handlebars.registerHelper('firstLocationStackTraceElementHtml', function (stackTraceElements) {
-     return escapeHtml(stackTraceElements[0]);
+    return escapeHtml(stackTraceElements[0]);
   });
 
   var mousedownPageX, mousedownPageY;
@@ -626,22 +628,16 @@ HandlebarsRendering = (function () {
         }
         $.get(url)
             .done(function (data) {
-              if (data.overwritten) {
-                $selector.append('<div style="padding: 1em;">The trace entries have expired</div>');
-              } else if (data.expired) {
-                $selector.append('<div style="padding: 1em;">This trace has expired</div>');
-              } else {
-                // first time opening
-                initTraceEntryMessageLength();
-                mergeSharedQueryTextsIntoEntries(data.entries, data.sharedQueryTexts);
-                var last = data.entries[data.entries.length - 1];
-                // updating traceDurationNanos is needed for live traces
-                traceDurationNanos = Math.max(traceDurationNanos, last.startOffsetNanos + last.durationNanos);
-                flattenedTraceEntries = flattenTraceEntries(data.entries);
-                // un-hide before building in case there are lots of trace entries, at least can see first few quickly
-                $selector.removeClass('d-none');
-                renderNextEntries(flattenedTraceEntries, 0);
-              }
+              // first time opening
+              initTraceEntryMessageLength();
+              mergeSharedQueryTextsIntoEntries(data.entries, data.sharedQueryTexts);
+              var last = data.entries[data.entries.length - 1];
+              // updating traceDurationNanos is needed for live traces
+              traceDurationNanos = Math.max(traceDurationNanos, last.startOffsetNanos + last.durationNanos);
+              flattenedTraceEntries = flattenTraceEntries(data.entries);
+              // un-hide before building in case there are lots of trace entries, at least can see first few quickly
+              $selector.removeClass('d-none');
+              renderNextEntries(flattenedTraceEntries, 0);
             })
             .fail(function (jqXHR) {
               if (jqXHR.status === 401) {
@@ -727,19 +723,13 @@ HandlebarsRendering = (function () {
         }
         $.get(url)
             .done(function (data) {
-              if (data.overwritten) {
-                $selector.append('<div style="padding: 1em;">The trace query stats have expired</div>');
-              } else if (data.expired) {
-                $selector.append('<div style="padding: 1em;">This trace has expired</div>');
-              } else {
-                // first time opening
-                initQueryTextLength();
-                prepareQueries(data.queries, data.sharedQueryTexts);
-                queries = data.queries;
-                // un-hide before building in case there are lots of trace entries, at least can see first few quickly
-                $selector.removeClass('d-none');
-                renderNextQueries(queries, 0);
-              }
+              // first time opening
+              initQueryTextLength();
+              prepareQueries(data.queries, data.sharedQueryTexts);
+              queries = data.queries;
+              // un-hide before building in case there are lots of trace entries, at least can see first few quickly
+              $selector.removeClass('d-none');
+              renderNextQueries(queries, 0);
             })
             .fail(function (jqXHR) {
               if (jqXHR.status === 401) {
@@ -850,13 +840,7 @@ HandlebarsRendering = (function () {
         var spinner = Glowroot.showSpinner($button.parent().find('.gt-trace-detail-spinner'));
         $.get(url)
             .done(function (data) {
-              if (data.overwritten) {
-                $selector.find('.gt-profile').html('<div style="padding: 1em;">The thread profile has expired</div>');
-              } else if (data.expired) {
-                $selector.find('.gt-profile').html.append('<div style="padding: 1em;">This trace has expired</div>');
-              } else {
-                buildMergedStackTree(data, $selector);
-              }
+              buildMergedStackTree(data, $selector);
               $selector.removeClass('d-none');
             })
             .fail(function (jqXHR) {
@@ -1002,61 +986,108 @@ HandlebarsRendering = (function () {
   }
 
   function formatSql(unexpanded, expanded, queryText, prefix, suffix) {
-    var comment;
-    var sql;
-    if (queryText.lastIndexOf('/*', 0) === 0) {
-      var endOfCommentIndex = queryText.indexOf('*/') + 2;
-      comment = queryText.substring(0, endOfCommentIndex) + '\n';
-      sql = queryText.substring(endOfCommentIndex).trim();
-    } else {
-      comment = '';
-      sql = queryText;
-    }
-    var formatted = SqlPrettyPrinter.format(sql);
+    var formatted = sqlPrettyPrint(queryText);
     if (typeof formatted === 'object') {
       // intentional console logging
       console.log(formatted.message);
-      console.log(sql);
-    } else {
-      if (comment.length) {
-        var spaces = '';
-        for (var i = 0; i < formatted.length; i++) {
-          if (formatted[i] === ' ') {
-            spaces += ' ';
-          } else {
-            break;
-          }
-        }
-        formatted = spaces + comment + formatted;
-      }
-      var html;
-      if (prefix || suffix) {
-        var parameters = suffix.replace(/ => [0-9]+ rows?$/, '');
-        var rows = suffix.substring(parameters.length + 1);
-        html = prefix;
-        // simulating pre using span, because with pre tag, when selecting text and copy-pasting from firefox
-        // there are extra newlines after the pre tag
-        html += '\n\n<span class="gt-indent2 d-inline-block" style="white-space: pre-wrap;">' + escapeHtml(formatted)
-            + '</span>';
-        if (parameters) {
-          html += '\n\n<span class="gt-indent2">parameters:</span>\n\n' + '<span class="gt-indent2">  ' + parameters
-              + '</span>';
-        }
-        if (rows) {
-          html += '\n\n<span class="gt-indent2">rows:</span>\n\n' + '<span class="gt-indent2">  ' + rows + '</span>';
-        }
-      } else {
-        // simulating pre using span, because with pre tag, when selecting text and copy-pasting from firefox
-        // there are extra newlines after the pre tag
-        html = '<span class="gt-indent1 d-inline-block" style="white-space: pre-wrap;">' + escapeHtml(formatted)
-            + '</span>';
-        expanded.addClass('gt-padding-top-override');
-      }
-      expanded.css('padding-bottom', '10px');
-      var $message = expanded.find('.gt-pre-wrap');
-      $message.html(html);
-      $message.css('min-width', 0.6 * unexpanded.parent().width());
+      console.log(queryText);
+      return;
     }
+    var html;
+    if (prefix || suffix) {
+      var parameters = suffix.replace(/ => [0-9]+ rows?$/, '');
+      var rows = suffix.substring(parameters.length + 1);
+      html = prefix;
+      // simulating pre using span, because with pre tag, when selecting text and copy-pasting from firefox
+      // there are extra newlines after the pre tag
+      html += '\n\n<span class="gt-indent2 d-inline-block" style="white-space: pre-wrap;">' + escapeHtml(formatted)
+          + '</span>';
+      if (parameters) {
+        html += '\n\n<span class="gt-indent2">parameters:</span>\n\n' + '<span class="gt-indent2">  ' + parameters
+            + '</span>';
+      }
+      if (rows) {
+        html += '\n\n<span class="gt-indent2">rows:</span>\n\n' + '<span class="gt-indent2">  ' + rows + '</span>';
+      }
+    } else {
+      // simulating pre using span, because with pre tag, when selecting text and copy-pasting from firefox
+      // there are extra newlines after the pre tag
+      html = '<span class="gt-indent1 d-inline-block" style="white-space: pre-wrap;">' + escapeHtml(formatted)
+          + '</span>';
+      expanded.addClass('gt-padding-top-override');
+    }
+    expanded.css('padding-bottom', '10px');
+    var $message = expanded.find('.gt-pre-wrap');
+    $message.html(html);
+    $message.css('min-width', 0.6 * unexpanded.parent().width());
+  }
+
+  function sqlPrettyPrint(queryText) {
+    var commentRegex = /[/][*](.|\n)*?[*][/]/g;
+
+    function numNonWhitespaceChars(str) {
+      return str.replace(/\s+/g, '').length;
+    }
+
+    var numNonWhitespaceCharsBeforeComment = [];
+    var comments = [];
+    var match, matchFrom, matchTo;
+    var lastMatchTo = 0;
+    while ((match = commentRegex.exec(queryText))) {
+      matchFrom = match.index;
+      matchTo = commentRegex.lastIndex;
+      numNonWhitespaceCharsBeforeComment.push(numNonWhitespaceChars(queryText.substring(lastMatchTo, matchFrom)));
+      comments.push(queryText.substring(matchFrom, matchTo));
+      lastMatchTo = matchTo;
+    }
+
+    var formatted = SqlPrettyPrinter.format(queryText);
+    if (typeof formatted === 'object') {
+      return formatted;
+    }
+    if (!comments.length) {
+      return formatted;
+    }
+    var initialSpaces = '';
+    for (var i = 0; i < formatted.length; i++) {
+      if (formatted[i] === ' ') {
+        initialSpaces += ' ';
+      } else {
+        break;
+      }
+    }
+    var nonWhitespaceCharCount = 0;
+    var currCommentIndex = 0;
+    var nextCommentAtNonWhitespaceCharCount = numNonWhitespaceCharsBeforeComment[0];
+    i = 0;
+    while (true) {
+      if (nonWhitespaceCharCount === nextCommentAtNonWhitespaceCharCount) {
+        if (nonWhitespaceCharCount === 0) {
+          formatted = formatted.substring(0, i) + initialSpaces + comments[currCommentIndex] + '\n'
+              + formatted.substring(i);
+          i += initialSpaces.length + comments[currCommentIndex].length + 1;
+          currCommentIndex++;
+        } else {
+          // trim is to absorb whitespace that was meant for alignment which is now destroyed by the comment anyways
+          formatted = formatted.substring(0, i) + comments[currCommentIndex] + formatted.substring(i).trim();
+          i += comments[currCommentIndex].length;
+          currCommentIndex++;
+        }
+        nextCommentAtNonWhitespaceCharCount =
+            nonWhitespaceCharCount + numNonWhitespaceCharsBeforeComment[currCommentIndex];
+      }
+      if (currCommentIndex === comments.length) {
+        break;
+      }
+      if (i > formatted.length) {
+        console.log('unable to match up all comments all');
+        break;
+      }
+      if (!/\s/.test(formatted[i++])) {
+        nonWhitespaceCharCount++;
+      }
+    }
+    return formatted;
   }
 
   function basicToggle(parent) {
@@ -1722,6 +1753,15 @@ HandlebarsRendering = (function () {
         initLimit(traceHeader.auxBreakdown);
       }
 
+      traceHeader.flameGraphLink = 'transaction/trace-thread-flame-graph?';
+      if (agentId) {
+        traceHeader.flameGraphLink += 'agent-id=' + encodeURIComponent(agentId) + '&';
+      }
+      traceHeader.flameGraphLink += 'trace-id=' + traceId;
+      if (checkLiveTraces) {
+        traceHeader.flameGraphLink += '&check-live-traces=true';
+      }
+
       var html = JST.trace(traceHeader);
       $selector.html(html);
       $selector.addClass('gt-trace-parent');
@@ -1755,6 +1795,7 @@ HandlebarsRendering = (function () {
     formatBytes: formatBytes,
     formatMillis: formatMillis,
     formatCount: formatCount,
-    profileToggle: profileToggle
+    profileToggle: profileToggle,
+    sqlPrettyPrint: sqlPrettyPrint
   };
 })();

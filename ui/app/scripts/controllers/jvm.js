@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2018 the original author or authors.
+ * Copyright 2013-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,36 +63,47 @@ glowroot.controller('JvmCtrl', [
           // need to refresh selectpicker in order to update hrefs of the items
           $timeout(function () {
             // timeout is needed so this runs after dom is updated
-            $('#agentRollupDropdown').selectpicker('refresh');
+            $('#topLevelAgentRollupDropdown').selectpicker('refresh');
+            $('#childAgentRollupDropdown').selectpicker('refresh');
           });
         }
       }, true);
-
-      var refreshAgentRollups = function () {
-        var from;
-        var to;
-        var path = $location.path().substring(1);
-        var message;
-        if (path === 'jvm/gauges' && $scope.agentRollupId) {
-          from = $scope.range.chartFrom;
-          to = $scope.range.chartTo;
-          message = '当前无活跃的代理';
+      var getRefreshArgs = function () {
+        if ($location.path().substring(1) === 'jvm/gauges' && $scope.agentRollupId) {
+          return {
+            from: $scope.range.chartFrom,
+            to: $scope.range.chartTo,
+            message: '当前无活跃的代理'
+          };
         } else {
           var now = new Date().getTime();
-          from = now - 7 * 24 * 60 * 60 * 1000;
-          // looking to the future just to be safe
-          to = now + 7 * 24 * 60 * 60 * 1000;
-          message = '过去的7天无活跃的代理';
+          return {
+            from: now - 7 * 24 * 60 * 60 * 1000,
+            // looking to the future just to be safe
+            to: now + 7 * 24 * 60 * 60 * 1000,
+            message: '过去的7天无活跃的代理'
+          };
         }
-        $scope.refreshAgentRollups(from, to, $scope, message);
       };
 
-      $('#agentRollupDropdown').on('show.bs.select', refreshAgentRollups);
+      var refreshTopLevelAgentRollups = function () {
+        var args = getRefreshArgs();
+        $scope.refreshTopLevelAgentRollups(args.from, args.to, args.message);
+      };
 
-      if ($scope.agentRollups === undefined) {
+      var refreshChildAgentRollups = function () {
+        var args = getRefreshArgs();
+        $scope.refreshChildAgentRollups(args.from, args.to, args.message);
+      };
+
+      $('#topLevelAgentRollupDropdown').on('show.bs.select', refreshTopLevelAgentRollups);
+      $('#childAgentRollupDropdown').on('show.bs.select', refreshChildAgentRollups);
+
+      if ($scope.topLevelAgentRollups === undefined) {
         // timeout is needed to give gauge controller a chance to set chartFrom/chartTo
         $timeout(function () {
-          refreshAgentRollups();
+          refreshTopLevelAgentRollups();
+          refreshChildAgentRollups();
         });
       }
     }

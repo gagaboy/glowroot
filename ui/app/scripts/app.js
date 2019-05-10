@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2018 the original author or authors.
+ * Copyright 2012-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,25 +64,38 @@ glowroot.config([
               $injector.get('$http').get('backend/agent-rollup-layout?agent-rollup-id=' + encodeURIComponent(agentRollupId))
                   .then(function (response) {
                     if ($rootScope.agentRollup && $rootScope.agentRollup.id === agentRollupId) {
-                      var oldAgentRollupDisplay = $rootScope.agentRollup.display;
-                      $rootScope.agentRollup = response.data;
-                      var newAgentRollupDisplay = $rootScope.agentRollup.display;
-                      if (newAgentRollupDisplay !== oldAgentRollupDisplay) {
+                      var oldAgentRollup = $rootScope.agentRollup;
+                      var newAgentRollup = response.data;
+                      if (newAgentRollup.topLevelDisplay !== oldAgentRollup.topLevelDisplay) {
                         // hack to update agent dropdown title when display is changed
-                        var agentRollups = angular.copy($rootScope.agentRollups);
-                        angular.forEach(agentRollups, function (agentRollup) {
-                          if (agentRollup.id === agentRollupId) {
-                            agentRollup.display = response.data.display;
+                        var topLevelAgentRollups = angular.copy($rootScope.topLevelAgentRollups);
+                        angular.forEach(topLevelAgentRollups, function (topLevelAgentRollup) {
+                          if (topLevelAgentRollup.id === newAgentRollup.topLevelId) {
+                            topLevelAgentRollup.display = newAgentRollup.topLevelDisplay;
                           }
                         });
-                        // call setAgentRollups() in order to recalculate indentedDisplay
-                        $rootScope.setAgentRollups(agentRollups);
-                        $('#agentRollupDropdown > option.bs-title-option').text($rootScope.agentRollup.display);
+                        $rootScope.setTopLevelAgentRollups(topLevelAgentRollups);
                         $timeout(function () {
                           // timeout is needed so this runs after dom is updated
-                          $('#agentRollupDropdown').selectpicker('refresh');
+                          $('#topLevelAgentRollupDropdown').selectpicker('refresh');
                         }, 100);
                       }
+                      if (newAgentRollup.childDisplay !== oldAgentRollup.childDisplay) {
+                        // hack to update agent dropdown title when display is changed
+                        var childAgentRollups = angular.copy($rootScope.childAgentRollups);
+                        angular.forEach(childAgentRollups, function (childAgentRollup) {
+                          if (childAgentRollup.id === newAgentRollup.id) {
+                            childAgentRollup.display = newAgentRollup.childDisplay;
+                            childAgentRollup.lastDisplayPart = newAgentRollup.lastDisplayPart;
+                          }
+                        });
+                        $rootScope.setChildAgentRollups(childAgentRollups);
+                        $timeout(function () {
+                          // timeout is needed so this runs after dom is updated
+                          $('#childAgentRollupDropdown').selectpicker('refresh');
+                        }, 100);
+                      }
+                      $rootScope.agentRollup = response.data;
                     }
                   }, function (response) {
                     $rootScope.navbarErrorMessage = 'An error occurred getting agent rollup layout';
@@ -170,7 +183,8 @@ glowroot.run([
     };
 
     $rootScope.isRollup = function (agentRollupId) {
-      return agentRollupId.length > 2 && agentRollupId.lastIndexOf('::') === agentRollupId.length - 2;
+      return agentRollupId.length > 2 && agentRollupId.charAt(agentRollupId.length - 2) === ':'
+          && agentRollupId.charAt(agentRollupId.length - 1) === ':';
     };
 
     $rootScope.agentRollupQuery = function (agentRollupId) {
@@ -194,6 +208,10 @@ glowroot.run([
 
     $rootScope.isViewingAgent = function () {
       return $location.search()['agent-id'];
+    };
+
+    $rootScope.showChildAgentRollupDropdown = function () {
+      return $rootScope.agentRollup && $rootScope.agentRollup.id.indexOf('::') !== -1;
     };
 
     $rootScope.transactionTypes = function () {
@@ -328,63 +346,134 @@ glowroot.run([
       glowrootVersion = $rootScope.layout.glowrootVersion;
     };
 
-    $rootScope.setAgentRollups = function (agentRollups) {
-      if ($rootScope.agentRollups === undefined) {
-        $rootScope.agentRollups = [];
+    $rootScope.setTopLevelAgentRollups = function (topLevelAgentRollups) {
+      if ($rootScope.topLevelAgentRollups === undefined) {
+        $rootScope.topLevelAgentRollups = [];
       }
-      $rootScope.agentRollups.length = 0;
-      angular.forEach(agentRollups, function (agentRollup) {
-        var indent = '';
-        for (var i = 0; i < agentRollup.depth; i++) {
-          indent += '\u00a0\u00a0\u00a0\u00a0';
-        }
-        agentRollup.indentedDisplay = indent + agentRollup.lastDisplayPart;
-        $rootScope.agentRollups.push(agentRollup);
+      $rootScope.topLevelAgentRollups.length = 0;
+      angular.forEach(topLevelAgentRollups, function (topLevelAgentRollup) {
+        $rootScope.topLevelAgentRollups.push(topLevelAgentRollup);
       });
     };
 
-    $rootScope.showRefreshAgentRollupSpinner = 0;
-    var refreshAgentRollupSpinner;
-
-    $rootScope.refreshAgentRollups = function (from, to, $scope, message) {
-      $rootScope.showRefreshAgentRollupSpinner++;
-      var $selector = $('a.gt-agent-rollup-dropdown-spinner');
-      if ($rootScope.showRefreshAgentRollupSpinner && !refreshAgentRollupSpinner && $selector.length) {
-        refreshAgentRollupSpinner = Glowroot.showSpinner($selector, null, 0.4);
-        $('a.gt-agent-rollup-dropdown-message').addClass('d-none');
+    $rootScope.setChildAgentRollups = function (childAgentRollups) {
+      if ($rootScope.childAgentRollups === undefined) {
+        $rootScope.childAgentRollups = [];
       }
-      $http.get('backend/agent-rollups?from=' + from + '&to=' + to)
+      $rootScope.childAgentRollups.length = 0;
+      angular.forEach(childAgentRollups, function (childAgentRollup) {
+        var indent = '';
+        for (var i = 0; i < childAgentRollup.depth; i++) {
+          indent += '\u00a0\u00a0\u00a0\u00a0';
+        }
+        childAgentRollup.indentedDisplay = indent + childAgentRollup.lastDisplayPart;
+        $rootScope.childAgentRollups.push(childAgentRollup);
+      });
+    };
+
+    $rootScope.showRefreshTopLevelAgentRollupSpinner = 0;
+    var refreshTopLevelAgentRollupSpinner;
+
+    var mostRecentRefreshFrom;
+    var mostRecentRefreshTo;
+    var mostRecentRefreshMessage;
+
+    $rootScope.refreshTopLevelAgentRollups = function (from, to, message) {
+      $rootScope.showRefreshTopLevelAgentRollupSpinner++;
+      var $selector = $('a.gt-top-level-agent-rollup-dropdown-spinner');
+      if ($rootScope.showRefreshTopLevelAgentRollupSpinner && !refreshTopLevelAgentRollupSpinner && $selector.length) {
+        refreshTopLevelAgentRollupSpinner = Glowroot.showSpinner($selector, null, 0.4, 300);
+        $('a.gt-top-level-agent-rollup-dropdown-message').addClass('d-none');
+      }
+      $http.get('backend/top-level-agent-rollups?from=' + from + '&to=' + to)
           .then(function (response) {
-            $rootScope.showRefreshAgentRollupSpinner--;
-            if (!$rootScope.showRefreshAgentRollupSpinner && refreshAgentRollupSpinner) {
-              refreshAgentRollupSpinner.stop();
-              refreshAgentRollupSpinner = undefined;
+            $rootScope.showRefreshTopLevelAgentRollupSpinner--;
+            if (!$rootScope.showRefreshTopLevelAgentRollupSpinner && refreshTopLevelAgentRollupSpinner) {
+              refreshTopLevelAgentRollupSpinner.stop();
+              refreshTopLevelAgentRollupSpinner = undefined;
             }
-            $rootScope.setAgentRollups(response.data);
+            $rootScope.setTopLevelAgentRollups(response.data);
+
+            mostRecentRefreshFrom = from;
+            mostRecentRefreshTo = to;
+            mostRecentRefreshMessage = message;
 
             $timeout(function () {
               // timeout is needed so this runs after dom is updated
-              $('#agentRollupDropdown').selectpicker('refresh');
-              if ($rootScope.showRefreshAgentRollupSpinner) {
-                if (refreshAgentRollupSpinner) {
-                  refreshAgentRollupSpinner.stop();
+              $('#topLevelAgentRollupDropdown').selectpicker('refresh');
+              if ($rootScope.showRefreshTopLevelAgentRollupSpinner) {
+                if (refreshTopLevelAgentRollupSpinner) {
+                  refreshTopLevelAgentRollupSpinner.stop();
                 }
-                var $selector = $('a.gt-agent-rollup-dropdown-spinner');
-                refreshAgentRollupSpinner = Glowroot.showSpinner($selector, null, 0.4, true);
+                var $selector = $('a.gt-top-level-agent-rollup-dropdown-spinner');
+                refreshTopLevelAgentRollupSpinner = Glowroot.showSpinner($selector, null, 0.4, 0);
               } else {
-                $('a.gt-agent-rollup-dropdown-message').removeClass('d-none');
+                $('a.gt-top-level-agent-rollup-dropdown-message').removeClass('d-none');
                 if (message) {
-                  $('a.gt-agent-rollup-dropdown-message').text(message);
+                  $('a.gt-top-level-agent-rollup-dropdown-message').text(message);
                 }
               }
             });
           }, function (response) {
-            $rootScope.showRefreshAgentRollupSpinner--;
-            if (!$rootScope.showRefreshAgentRollupSpinner && refreshAgentRollupSpinner) {
-              refreshAgentRollupSpinner.stop();
-              refreshAgentRollupSpinner = undefined;
+            $rootScope.showRefreshTopLevelAgentRollupSpinner--;
+            if (!$rootScope.showRefreshTopLevelAgentRollupSpinner && refreshTopLevelAgentRollupSpinner) {
+              refreshTopLevelAgentRollupSpinner.stop();
+              refreshTopLevelAgentRollupSpinner = undefined;
             }
-            httpErrors.handle(response, $scope);
+            httpErrors.handle(response);
+          });
+    };
+
+    $rootScope.showRefreshChildAgentRollupSpinner = 0;
+    var refreshChildAgentRollupSpinner;
+
+    $rootScope.refreshChildAgentRollups = function (from, to, message) {
+      if (!$rootScope.showChildAgentRollupDropdown()) {
+        return;
+      }
+      if (from === undefined && to === undefined) {
+        from = mostRecentRefreshFrom;
+        to = mostRecentRefreshTo;
+        message = mostRecentRefreshMessage;
+      }
+      $rootScope.showRefreshChildAgentRollupSpinner++;
+      var $selector = $('a.gt-child-agent-rollup-dropdown-spinner');
+      if ($rootScope.showRefreshChildAgentRollupSpinner && !refreshChildAgentRollupSpinner && $selector.length) {
+        refreshChildAgentRollupSpinner = Glowroot.showSpinner($selector, null, 0.4, 300);
+        $('a.gt-child-agent-rollup-dropdown-message').addClass('d-none');
+      }
+      $http.get('backend/child-agent-rollups?top-level-id=' + encodeURIComponent($rootScope.agentRollup.topLevelId) + '&from=' + from + '&to=' + to)
+          .then(function (response) {
+            $rootScope.showRefreshChildAgentRollupSpinner--;
+            if (!$rootScope.showRefreshChildAgentRollupSpinner && refreshChildAgentRollupSpinner) {
+              refreshChildAgentRollupSpinner.stop();
+              refreshChildAgentRollupSpinner = undefined;
+            }
+            $rootScope.setChildAgentRollups(response.data);
+
+            $timeout(function () {
+              // timeout is needed so this runs after dom is updated
+              $('#childAgentRollupDropdown').selectpicker('refresh');
+              if ($rootScope.showRefreshChildAgentRollupSpinner) {
+                if (refreshChildAgentRollupSpinner) {
+                  refreshChildAgentRollupSpinner.stop();
+                }
+                var $selector = $('a.gt-child-agent-rollup-dropdown-spinner');
+                refreshChildAgentRollupSpinner = Glowroot.showSpinner($selector, null, 0.4, 0);
+              } else {
+                $('a.gt-child-agent-rollup-dropdown-message').removeClass('d-none');
+                if (message) {
+                  $('a.gt-child-agent-rollup-dropdown-message').text(message);
+                }
+              }
+            });
+          }, function (response) {
+            $rootScope.showRefreshChildAgentRollupSpinner--;
+            if (!$rootScope.showRefreshChildAgentRollupSpinner && refreshChildAgentRollupSpinner) {
+              refreshChildAgentRollupSpinner.stop();
+              refreshChildAgentRollupSpinner = undefined;
+            }
+            httpErrors.handle(response);
           });
     };
 
@@ -552,7 +641,7 @@ Glowroot = (function () {
     });
   }
 
-  function showSpinner(selector, callbackOnStart, scale, noDelay) {
+  function showSpinner(selector, callbackOnStart, scale, delay) {
     var element = $(selector)[0];
     var options = {
       lines: 9,
@@ -565,7 +654,7 @@ Glowroot = (function () {
     }
     var spinner = new Spinner(options);
 
-    if (noDelay) {
+    if (delay === 0) {
       $(element).removeClass('d-none');
       spinner.spin(element);
       if (callbackOnStart) {
@@ -579,7 +668,7 @@ Glowroot = (function () {
         if (callbackOnStart) {
           callbackOnStart();
         }
-      }, 100);
+      }, delay === undefined ? 100 : delay);
     }
 
     return {

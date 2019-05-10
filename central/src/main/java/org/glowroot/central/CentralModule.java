@@ -22,15 +22,22 @@ import java.io.Writer;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.security.CodeSource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.regex.Pattern;
 
+import javax.servlet.ServletContext;
+
+import ch.qos.logback.classic.LoggerContext;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.HostDistance;
@@ -60,6 +67,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.immutables.value.Value;
+import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -72,11 +80,13 @@ import org.glowroot.central.repo.SchemaUpgrade;
 import org.glowroot.central.repo.Tools;
 import org.glowroot.central.util.ClusterManager;
 import org.glowroot.central.util.MoreExecutors2;
+import org.glowroot.central.util.MoreFutures;
 import org.glowroot.central.util.Session;
 import org.glowroot.common.live.LiveAggregateRepository.LiveAggregateRepositoryNop;
 import org.glowroot.common.util.Clock;
 import org.glowroot.common.util.PropertiesFiles;
 import org.glowroot.common.util.Version;
+import org.glowroot.common2.repo.PasswordHash;
 import org.glowroot.common2.repo.util.AlertingService;
 import org.glowroot.common2.repo.util.AlertingService.IncidentKey;
 import org.glowroot.common2.repo.util.Encryption;
@@ -86,7 +96,6 @@ import org.glowroot.common2.repo.util.LockSet;
 import org.glowroot.common2.repo.util.MailService;
 import org.glowroot.ui.CommonHandler;
 import org.glowroot.ui.CreateUiModuleBuilder;
-import org.glowroot.ui.PasswordHash;
 import org.glowroot.ui.SessionMapFactory;
 import org.glowroot.ui.UiModule;
 
@@ -105,6 +114,7 @@ public class CentralModule {
     // need to wait to init logger until after establishing centralDir
     private static volatile @MonotonicNonNull Logger startupLogger;
 
+    private final boolean servlet;
     private final ClusterManager clusterManager;
     private final Cluster cluster;
     private final Session session;
@@ -124,14 +134,17 @@ public class CentralModule {
 
     @VisibleForTesting
     public static CentralModule create(File centralDir) throws Exception {
-        return new CentralModule(centralDir, false);
+        return new CentralModule(centralDir, null);
     }
 
-    static CentralModule createForServletContainer(File centralDir) throws Exception {
-        return new CentralModule(centralDir, true);
+    static CentralModule createForServletContainer(File centralDir, ServletContext servletContext)
+            throws Exception {
+        return new CentralModule(centralDir, servletContext);
     }
 
-    private CentralModule(File centralDir, boolean servlet) throws Exception {
+    private CentralModule(File centralDir, @Nullable ServletContext servletContext)
+            throws Exception {
+        servlet = servletContext != null;
         ClusterManager clusterManager = null;
         Cluster cluster = null;
         Session session = null;
@@ -150,7 +163,12 @@ public class CentralModule {
             initLogging(directories.getConfDir(), directories.getLogDir());
             Clock clock = Clock.systemClock();
             Ticker ticker = Ticker.systemTicker();
-            String version = Version.getVersion(CentralModule.class);
+            String version;
+            if (servletContext == null) {
+                version = Version.getVersion(CentralModule.class);
+            } else {
+                version = Version.getVersion(servletContext.getResource("/META-INF/MANIFEST.MF"));
+            }
             startupLogger.info("Glowroot version: {}", version);
             startupLogger.info("Java version: {}", StandardSystemProperty.JAVA_VERSION.value());
             if (servlet) {
@@ -198,8 +216,8 @@ public class CentralModule {
                     clusterManager.createReplicatedLockSet("resolvingIncidentLockSet", 60, SECONDS);
             alertingService = new AlertingService(repos.getConfigRepository(),
                     repos.getIncidentDao(), repos.getAggregateDao(), repos.getGaugeValueDao(),
-                    repos.getRollupLevelService(), new MailService(), httpClient,
-                    openingIncidentLockSet, resolvingIncidentLockSet, clock);
+                    repos.getTraceDao(), repos.getRollupLevelService(), new MailService(),
+                    httpClient, openingIncidentLockSet, resolvingIncidentLockSet, clock);
             HeartbeatAlertingService heartbeatAlertingService = new HeartbeatAlertingService(
                     repos.getHeartbeatDao(), repos.getIncidentDao(), alertingService,
                     repos.getConfigRepository());
@@ -288,7 +306,7 @@ public class CentralModule {
             // try to shut down cleanly, otherwise apache commons daemon (via Procrun) doesn't
             // know service failed to start up
             if (uiModule != null) {
-                uiModule.close();
+                uiModule.close(false);
             }
             if (syntheticMonitorService != null) {
                 syntheticMonitorService.close();
@@ -300,7 +318,7 @@ public class CentralModule {
                 updateAgentConfigIfNeededService.close();
             }
             if (grpcServer != null) {
-                grpcServer.close();
+                grpcServer.close(false);
             }
             if (centralAlertingService != null) {
                 centralAlertingService.close();
@@ -343,36 +361,54 @@ public class CentralModule {
         return uiModule.getCommonHandler();
     }
 
-    public void shutdown() {
+    public void shutdown(boolean jvmTermination) {
         if (startupLogger != null) {
             startupLogger.info("shutting down...");
         }
         try {
-            // close down external inputs first (ui and grpc)
-            uiModule.close();
-            syntheticMonitorService.close();
-            rollupService.close();
+            ExecutorService executor = Executors.newCachedThreadPool();
+            List<Future<?>> futures = new ArrayList<>();
+            // gracefully close down external inputs first (ui and grpc)
+            futures.add(submit(executor, () -> uiModule.close(jvmTermination)));
             // updateAgentConfigIfNeededService depends on grpc downstream, so must be shutdown
             // before grpc
-            updateAgentConfigIfNeededService.close();
-            grpcServer.close();
-            centralAlertingService.close();
-            alertingService.close();
-            repos.close();
+            futures.add(submit(executor, updateAgentConfigIfNeededService::close));
+            futures.add(submit(executor, () -> grpcServer.close(jvmTermination)));
+
+            if (jvmTermination) {
+                // nothing else needs orderly shutdown when JVM is being terminated
+                MoreFutures.waitForAll(futures);
+                if (startupLogger != null) {
+                    startupLogger.info("shutdown complete");
+                }
+                return;
+            }
+
+            // forcefully close down background tasks
+            submit(executor, syntheticMonitorService::close);
+            submit(executor, rollupService::close);
+            submit(executor, centralAlertingService::close);
+            submit(executor, alertingService::close);
+            submit(executor, repos::close);
+
+            MoreFutures.waitForAll(futures);
+
             repoAsyncExecutor.shutdown();
             session.close();
             cluster.close();
             clusterManager.close();
             if (startupLogger != null) {
                 startupLogger.info("shutdown complete");
-                for (Map.Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces()
-                        .entrySet()) {
-                    Thread thread = entry.getKey();
-                    StackTraceElement[] stackTrace = entry.getValue();
-                    if (!thread.isDaemon() && thread != Thread.currentThread()
-                            && stackTrace.length != 0) {
-                        startupLogger.info("Found non-daemon thread after shutdown: {}\n    {}",
-                                thread.getName(), Joiner.on("\n    ").join(stackTrace));
+                if (!servlet) {
+                    for (Map.Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces()
+                            .entrySet()) {
+                        Thread thread = entry.getKey();
+                        StackTraceElement[] stackTrace = entry.getValue();
+                        if (!thread.isDaemon() && thread != Thread.currentThread()
+                                && stackTrace.length != 0) {
+                            startupLogger.info("Found non-daemon thread after shutdown: {}\n    {}",
+                                    thread.getName(), Joiner.on("\n    ").join(stackTrace));
+                        }
                     }
                 }
             }
@@ -381,6 +417,16 @@ public class CentralModule {
                 t.printStackTrace();
             } else {
                 startupLogger.error("error during shutdown: {}", t.getMessage(), t);
+            }
+        } finally {
+            // need to explicitly stop because disabling normal registration in
+            // LogbackServletContainerInitializer via web.xml context-param
+            //
+            // there is some precedent to stopping even if jvmTermination, see
+            // org.springframework.boot.logging.logback.LogbackLoggingSystem.ShutdownHandler
+            ILoggerFactory loggerFactory = LoggerFactory.getILoggerFactory();
+            if (loggerFactory instanceof LoggerContext) {
+                ((LoggerContext) loggerFactory).stop();
             }
         }
     }
@@ -936,6 +982,20 @@ public class CentralModule {
         // install jul-to-slf4j bridge for guava/grpc/protobuf which log to jul
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
+    }
+
+    private static Future<?> submit(ExecutorService executor, ShutdownFunction fn) {
+        return executor.submit(new Callable</*@Nullable*/ Void>() {
+            @Override
+            public @Nullable Void call() throws Exception {
+                fn.run();
+                return null;
+            }
+        });
+    }
+
+    private interface ShutdownFunction {
+        void run() throws Exception;
     }
 
     @Value.Immutable

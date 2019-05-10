@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2018 the original author or authors.
+ * Copyright 2012-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1018,7 +1018,7 @@ public class WeaverTest {
         Supplier<List<Advice>> advisorsSupplier =
                 Suppliers.<List<Advice>>ofInstance(ImmutableList.copyOf(advisors));
         AnalyzedWorld analyzedWorld = new AnalyzedWorld(advisorsSupplier,
-                ImmutableList.<ShimType>of(), ImmutableList.<MixinType>of());
+                ImmutableList.<ShimType>of(), ImmutableList.<MixinType>of(), null);
         TransactionRegistry transactionRegistry = mock(TransactionRegistry.class);
         when(transactionRegistry.getCurrentThreadContextHolder())
                 .thenReturn(new ThreadContextThreadLocal().getHolder());
@@ -1347,11 +1347,8 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(1);
     }
 
-    // this is just a test to show the (undesirable) behavior of constructor advice not being nested
-    //
-    // see comment on above test and same comment in AdviceMatcher
     @Test
-    public void shouldVerifyConstructorPointcutsAreNotNested() throws Exception {
+    public void shouldVerifyConstructorPointcutsAreNested() throws Exception {
         // given
         Misc test = newWovenObject(BasicMisc.class, Misc.class,
                 enhanceConstructorAdviceClass(BasicMiscAllConstructorAdvice.class));
@@ -1366,7 +1363,7 @@ public class WeaverTest {
         assertThat(SomeAspectThreadLocals.onThrowCount.get()).isEqualTo(0);
         assertThat(SomeAspectThreadLocals.onAfterCount.get()).isEqualTo(2);
         assertThat(SomeAspectThreadLocals.orderedEvents.get()).containsExactly("isEnabled",
-                "isEnabled", "onBefore", "onReturn", "onAfter", "onBefore", "onReturn", "onAfter");
+                "onBefore", "isEnabled", "onBefore", "onReturn", "onAfter", "onReturn", "onAfter");
     }
 
     @Test
@@ -1845,7 +1842,8 @@ public class WeaverTest {
         }
         Supplier<List<Advice>> advisorsSupplier =
                 Suppliers.<List<Advice>>ofInstance(ImmutableList.copyOf(advisors));
-        AnalyzedWorld analyzedWorld = new AnalyzedWorld(advisorsSupplier, shimTypes, mixinTypes);
+        AnalyzedWorld analyzedWorld =
+                new AnalyzedWorld(advisorsSupplier, shimTypes, mixinTypes, null);
         TransactionRegistry transactionRegistry = mock(TransactionRegistry.class);
         when(transactionRegistry.getCurrentThreadContextHolder())
                 .thenReturn(new ThreadContextThreadLocal().getHolder());
@@ -1885,7 +1883,7 @@ public class WeaverTest {
         Supplier<List<Advice>> advisorsSupplier =
                 Suppliers.<List<Advice>>ofInstance(ImmutableList.copyOf(advisors));
         AnalyzedWorld analyzedWorld =
-                new AnalyzedWorld(advisorsSupplier, shimTypes, mixinTypes);
+                new AnalyzedWorld(advisorsSupplier, shimTypes, mixinTypes, null);
         TransactionRegistry transactionRegistry = mock(TransactionRegistry.class);
         when(transactionRegistry.getCurrentThreadContextHolder())
                 .thenReturn(new ThreadContextThreadLocal().getHolder());

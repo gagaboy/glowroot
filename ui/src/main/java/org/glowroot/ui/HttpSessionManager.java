@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2018 the original author or authors.
+ * Copyright 2013-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,9 +42,11 @@ import org.slf4j.LoggerFactory;
 import org.glowroot.common.util.Clock;
 import org.glowroot.common2.config.LdapConfig;
 import org.glowroot.common2.config.RoleConfig;
+import org.glowroot.common2.config.RoleConfig.HasAnyPermission;
 import org.glowroot.common2.config.RoleConfig.SimplePermission;
 import org.glowroot.common2.config.UserConfig;
 import org.glowroot.common2.repo.ConfigRepository;
+import org.glowroot.common2.repo.PasswordHash;
 import org.glowroot.ui.CommonHandler.CommonRequest;
 import org.glowroot.ui.CommonHandler.CommonResponse;
 import org.glowroot.ui.LdapAuthentication.AuthenticationException;
@@ -379,6 +381,26 @@ class HttpSessionManager {
                 }
             }
             return false;
+        }
+
+        HasAnyPermission hasAnyPermissionForAgentRollup(String agentRollupId) throws Exception {
+            if (offlineViewer()) {
+                return HasAnyPermission.YES;
+            }
+            boolean onlyInChild = false;
+            for (RoleConfig roleConfig : configRepository().getRoleConfigs()) {
+                if (!roles().contains(roleConfig.name())) {
+                    continue;
+                }
+                HasAnyPermission hasAnyPermission =
+                        roleConfig.hasAnyPermissionForAgentRollup(agentRollupId);
+                if (hasAnyPermission == HasAnyPermission.YES) {
+                    return HasAnyPermission.YES;
+                } else if (hasAnyPermission == HasAnyPermission.ONLY_IN_CHILD) {
+                    onlyInChild = true;
+                }
+            }
+            return onlyInChild ? HasAnyPermission.ONLY_IN_CHILD : HasAnyPermission.NO;
         }
 
         private boolean isPermitted(SimplePermission permission) throws Exception {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2018 the original author or authors.
+ * Copyright 2012-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,11 @@ glowroot.controller('ConfigInstrumentationListCtrl', [
     if ($scope.hideMainContent()) {
       return;
     }
+
+    // these are needed for handling opening a direct link to import/export modal
+    var firstLocation = true;
+    var firstLocationImport;
+    var firstLocationExport;
 
     $scope.display = function (config) {
       return config.className + '::' + config.methodName;
@@ -87,7 +92,7 @@ glowroot.controller('ConfigInstrumentationListCtrl', [
               $http.get('backend/config/preload-classpath-cache?agent-id=' + encodeURIComponent($scope.agentId));
             }
           }, function (response) {
-            httpErrors.handle(response, $scope, deferred);
+            httpErrors.handle(response, deferred);
           });
     }
 
@@ -126,7 +131,7 @@ glowroot.controller('ConfigInstrumentationListCtrl', [
             refresh(deferred);
           }, function (response) {
             $scope.deletingAll = false;
-            httpErrors.handle(response, $scope);
+            httpErrors.handle(response);
           });
     };
 
@@ -200,7 +205,7 @@ glowroot.controller('ConfigInstrumentationListCtrl', [
             refresh(deferred);
           }, function (response) {
             $scope.importing = false;
-            httpErrors.handle(response, $scope);
+            httpErrors.handle(response);
           });
     };
 
@@ -216,7 +221,7 @@ glowroot.controller('ConfigInstrumentationListCtrl', [
               deferred.resolve('成功（没有类需要重新转换）');
             }
           }, function (response) {
-            httpErrors.handle(response, $scope, deferred);
+            httpErrors.handle(response, deferred);
           });
     };
 
@@ -244,6 +249,29 @@ glowroot.controller('ConfigInstrumentationListCtrl', [
     }
 
     locationChanges.on($scope, function () {
+      if (firstLocation) {
+        firstLocation = false;
+        if ($location.search().import) {
+          $location.search('import', null);
+          $location.replace();
+          firstLocationImport = true;
+          return;
+        }
+        if ($location.search().export) {
+          $location.search('export', null);
+          $location.replace();
+          firstLocationExport = true;
+          return;
+        }
+      } else if (firstLocationImport) {
+        $location.search('import');
+        firstLocationImport = undefined;
+        return;
+      } else if (firstLocationExport) {
+        $location.search('export');
+        firstLocationExport = undefined;
+        return;
+      }
       if (!$scope.loaded) {
         refresh();
         return;

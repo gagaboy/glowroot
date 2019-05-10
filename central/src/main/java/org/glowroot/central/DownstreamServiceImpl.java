@@ -44,7 +44,7 @@ import org.glowroot.common.live.ImmutableQueries;
 import org.glowroot.common.live.LiveJvmService.AgentNotConnectedException;
 import org.glowroot.common.live.LiveJvmService.AgentUnsupportedOperationException;
 import org.glowroot.common.live.LiveJvmService.DirectoryDoesNotExistException;
-import org.glowroot.common.live.LiveJvmService.UnavailableDueToRunningInIbmJvmException;
+import org.glowroot.common.live.LiveJvmService.UnavailableDueToRunningInJ9JvmException;
 import org.glowroot.common.live.LiveJvmService.UnavailableDueToRunningInJreException;
 import org.glowroot.common.live.LiveTraceRepository.Entries;
 import org.glowroot.common.live.LiveTraceRepository.Queries;
@@ -137,11 +137,12 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
     // returns true if agent was updated
     boolean updateAgentConfigIfConnected(String agentId, AgentConfig agentConfig) throws Exception {
         // no need to retry on shutting-down response
-        return connectedAgents.execute(agentId, new SendDownstreamFunction(
+        return connectedAgents.execute(agentId, 60, new SendDownstreamFunction(
                 CentralRequest.newBuilder()
                         .setAgentConfigUpdateRequest(AgentConfigUpdateRequest.newBuilder()
                                 .setAgentConfig(agentConfig))
-                        .build()))
+                        .build(),
+                60))
                 .isPresent();
     }
 
@@ -151,7 +152,7 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
         Stopwatch stopwatch = Stopwatch.createStarted();
         while (stopwatch.elapsed(SECONDS) < 5) {
             java.util.Optional<AgentResult> optional =
-                    connectedAgents.execute(agentId, new IsAvailableFunction());
+                    connectedAgents.execute(agentId, 30, new IsAvailableFunction());
             if (!optional.isPresent()) {
                 return false;
             }
@@ -180,8 +181,9 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
         if (response.getUnavailableDueToRunningInJre()) {
             throw new UnavailableDueToRunningInJreException();
         }
-        if (response.getUnavailableDueToRunningInIbmJvm()) {
-            throw new UnavailableDueToRunningInIbmJvmException();
+        if (response.getUnavailableDueToRunningInJ9Jvm()) {
+            // Eclipse OpenJ9 VM or IBM J9 VM
+            throw new UnavailableDueToRunningInJ9JvmException();
         }
         return response.getJstack();
     }
@@ -218,8 +220,9 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
         if (response.getUnavailableDueToRunningInJre()) {
             throw new UnavailableDueToRunningInJreException();
         }
-        if (response.getUnavailableDueToRunningInIbmJvm()) {
-            throw new UnavailableDueToRunningInIbmJvmException();
+        if (response.getUnavailableDueToRunningInJ9Jvm()) {
+            // Eclipse OpenJ9 VM or IBM J9 VM
+            throw new UnavailableDueToRunningInJ9JvmException();
         }
         return response.getHeapHistogram();
     }
@@ -431,12 +434,27 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
 
     private AgentResponse runOnCluster(String agentId, CentralRequest centralRequest)
             throws Exception {
+        int timeoutSeconds;
+        switch (centralRequest.getMessageCase()) {
+            case HEADER_REQUEST:
+            case ENTRIES_REQUEST:
+            case MAIN_THREAD_PROFILE_REQUEST:
+            case AUX_THREAD_PROFILE_REQUEST:
+            case FULL_TRACE_REQUEST:
+                timeoutSeconds = 5;
+                break;
+            case HEAP_DUMP_REQUEST:
+                timeoutSeconds = 300;
+                break;
+            default:
+                timeoutSeconds = 60;
+        }
         // retry up to 5 seconds on shutting-down response to give agent time to reconnect to
         // another cluster node
         Stopwatch stopwatch = Stopwatch.createStarted();
         while (stopwatch.elapsed(SECONDS) < 5) {
-            java.util.Optional<AgentResult> optional =
-                    connectedAgents.execute(agentId, new SendDownstreamFunction(centralRequest));
+            java.util.Optional<AgentResult> optional = connectedAgents.execute(agentId,
+                    timeoutSeconds, new SendDownstreamFunction(centralRequest, timeoutSeconds));
             if (!optional.isPresent()) {
                 throw new AgentNotConnectedException();
             }
@@ -572,7 +590,8 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
             }
         }
 
-        private AgentResult sendDownstream(CentralRequest requestWithoutRequestId) {
+        private AgentResult sendDownstream(CentralRequest requestWithoutRequestId,
+                int timeoutSeconds) {
             Lock readLock = shuttingDownLock.readLock();
             if (!readLock.tryLock()) {
                 return ImmutableAgentResult.builder()
@@ -588,21 +607,6 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
                 // synchronization required since individual StreamObservers are not thread-safe
                 synchronized (requestObserver) {
                     requestObserver.onNext(request);
-                }
-                int timeoutSeconds;
-                switch (request.getMessageCase()) {
-                    case HEADER_REQUEST:
-                    case ENTRIES_REQUEST:
-                    case MAIN_THREAD_PROFILE_REQUEST:
-                    case AUX_THREAD_PROFILE_REQUEST:
-                    case FULL_TRACE_REQUEST:
-                        timeoutSeconds = 5;
-                        break;
-                    case HEAP_DUMP_REQUEST:
-                        timeoutSeconds = 180;
-                        break;
-                    default:
-                        timeoutSeconds = 60;
                 }
                 // timeout is in case agent never responds
                 // passing AgentResponse.getDefaultInstance() is just dummy (non-null) value
@@ -682,14 +686,16 @@ class DownstreamServiceImpl extends DownstreamServiceImplBase {
         private static final long serialVersionUID = 0L;
 
         private final CentralRequest centralRequest;
+        private final int timeoutSeconds;
 
-        private SendDownstreamFunction(CentralRequest centralRequest) {
+        private SendDownstreamFunction(CentralRequest centralRequest, int timeoutSeconds) {
             this.centralRequest = centralRequest;
+            this.timeoutSeconds = timeoutSeconds;
         }
 
         @Override
         public AgentResult apply(ConnectedAgent connectedAgent) {
-            return connectedAgent.sendDownstream(centralRequest);
+            return connectedAgent.sendDownstream(centralRequest, timeoutSeconds);
         }
     }
 }

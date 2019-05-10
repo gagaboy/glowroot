@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 the original author or authors.
+ * Copyright 2017-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,8 @@ import org.glowroot.ui.CommonHandler.CommonResponse;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-@WebServlet("/*")
+// loadOnStartup is needed so that gRPC listener starts right away
+@WebServlet(value = "/*", loadOnStartup = 0)
 @SuppressWarnings("serial")
 public class GlowrootServlet extends HttpServlet {
 
@@ -69,7 +70,8 @@ public class GlowrootServlet extends HttpServlet {
                 Files.copy(config.getServletContext().getResourceAsStream(
                         "/META-INF/glowroot-central.properties"), propFile.toPath());
             }
-            centralModule = CentralModule.createForServletContainer(centralDir);
+            centralModule =
+                    CentralModule.createForServletContainer(centralDir, config.getServletContext());
             commonHandler = centralModule.getCommonHandler();
         } catch (Exception e) {
             throw new ServletException(e);
@@ -79,7 +81,7 @@ public class GlowrootServlet extends HttpServlet {
     @Override
     public void destroy() {
         if (centralModule != null) {
-            centralModule.shutdown();
+            centralModule.shutdown(false);
         }
     }
 
@@ -99,7 +101,10 @@ public class GlowrootServlet extends HttpServlet {
             response.addHeader(entry.getKey(), entry.getValue());
         }
         Object content = commonResponse.getContent();
-        if (content instanceof ByteBuf) {
+        if (content instanceof String) {
+            response.getWriter().write((String) content);
+            response.flushBuffer();
+        } else if (content instanceof ByteBuf) {
             ByteBuf buf = (ByteBuf) content;
             byte[] bytes = new byte[buf.readableBytes()];
             buf.readBytes(bytes);

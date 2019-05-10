@@ -43,7 +43,7 @@
             用户密码可以通过添加"password"属性（使用普通密码）或添加一个"hashedPassword"属性（采用哈希值密码）来进行设置。
             <span ng-if="layout.central">
               如果有必要, 用户密码可以手动哈希，命令行执行 
-              <code class="px-1" style="background-color: #eee;">java -jar glowroot-central.jar hash-password
+              <code>java -jar glowroot-central.jar hash-password
                 &lt;plain password&gt;</code>。
             </span>
           </div>
@@ -51,7 +51,7 @@
             SMTP, HTTP代理和LDAP密码可以通过添加"password"属性（使用普通密码）或添加一个"encryptedPassword"属性（采用加密的密码）来设置。
             <span ng-if="layout.central">
                 如果有必要, SMTP, HTTP 代理 and LDAP 密码可以手动加密，命令行执行  
-              <code class="px-1" style="background-color: #eee;">java -jar glowroot-central.jar encrypt-password
+              <code>java -jar glowroot-central.jar encrypt-password
                 &lt;plain password&gt;</code>。
             </span>
           </div>

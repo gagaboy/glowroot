@@ -46,6 +46,7 @@ import org.glowroot.agent.impl.GlowrootServiceHolder;
 import org.glowroot.agent.impl.GlowrootServiceImpl;
 import org.glowroot.agent.impl.PluginServiceImpl;
 import org.glowroot.agent.impl.PluginServiceImpl.ConfigServiceFactory;
+import org.glowroot.agent.impl.PreloadSomeSuperTypesCache;
 import org.glowroot.agent.impl.StackTraceCollector;
 import org.glowroot.agent.impl.TimerNameCache;
 import org.glowroot.agent.impl.TraceCollector;
@@ -97,6 +98,7 @@ public class AgentModule {
     private final ConfigService configService;
     private final TransactionRegistry transactionRegistry;
     private final AdviceCache adviceCache;
+    private final PreloadSomeSuperTypesCache preloadSomeSuperTypesCache;
     private final AnalyzedWorld analyzedWorld;
     private final Weaver weaver;
     private final Random random;
@@ -146,8 +148,11 @@ public class AgentModule {
         if (pointcutClassFileTransformer != null) {
             checkNotNull(instrumentation).removeTransformer(pointcutClassFileTransformer);
         }
-        analyzedWorld = new AnalyzedWorld(adviceCache.getAdvisorsSupplier(),
-                adviceCache.getShimTypes(), adviceCache.getMixinTypes());
+        preloadSomeSuperTypesCache = new PreloadSomeSuperTypesCache(
+                new File(tmpDir, "preload-some-super-types-cache"), 50000, clock);
+        analyzedWorld =
+                new AnalyzedWorld(adviceCache.getAdvisorsSupplier(), adviceCache.getShimTypes(),
+                        adviceCache.getMixinTypes(), preloadSomeSuperTypesCache);
         TimerNameCache timerNameCache = new TimerNameCache();
 
         weaver = new Weaver(adviceCache.getAdvisorsSupplier(), adviceCache.getShimTypes(),
@@ -169,7 +174,8 @@ public class AgentModule {
         random = new Random();
         transactionService = TransactionService.create(transactionRegistry, configService,
                 timerNameCache, ticker, clock);
-        bytecodeService = new BytecodeServiceImpl(transactionRegistry, transactionService);
+        bytecodeService = new BytecodeServiceImpl(transactionRegistry, transactionService,
+                preloadSomeSuperTypesCache);
         BytecodeServiceHolder.set(bytecodeService);
 
         if (instrumentation == null) {
@@ -202,6 +208,7 @@ public class AgentModule {
             adviceCache.initialReweave(initialLoadedClasses);
             logAnyImportantClassLoadedPriorToWeavingInit(initialLoadedClasses, glowrootJarFile,
                     false);
+            instrumentation.retransformClasses(ClassLoader.class);
         }
 
         ManagementFactory.getThreadMXBean().setThreadCpuTimeEnabled(true);
@@ -280,7 +287,8 @@ public class AgentModule {
         immedateTraceStoreWatcher = new ImmediateTraceStoreWatcher(backgroundExecutor,
                 transactionRegistry, traceCollector, configService, ticker);
         immedateTraceStoreWatcher.scheduleWithFixedDelay(backgroundExecutor,
-                ImmediateTraceStoreWatcher.PERIOD_MILLIS, MILLISECONDS);
+                ImmediateTraceStoreWatcher.PERIOD_MILLIS, ImmediateTraceStoreWatcher.PERIOD_MILLIS,
+                MILLISECONDS);
 
         liveTraceRepository = new LiveTraceRepositoryImpl(transactionRegistry, traceCollector,
                 clock, ticker);
@@ -290,6 +298,8 @@ public class AgentModule {
         liveJvmService = new LiveJvmServiceImpl(lazyPlatformMBeanServer, transactionRegistry,
                 traceCollector, threadAllocatedBytes.getAvailability(), configService,
                 glowrootJarFile, clock);
+
+        preloadSomeSuperTypesCache.scheduleWithFixedDelay(backgroundExecutor, 5, 5, SECONDS);
     }
 
     public ConfigService getConfigService() {
@@ -400,15 +410,15 @@ public class AgentModule {
             if (jvmArg.startsWith("-javaagent:") && jvmArg.endsWith(glowrootJarFile.getName())) {
                 break;
             }
-            if (jvmArg.startsWith("-javaagent:") || isIbmHealthcenterArg(jvmArg)) {
+            if (jvmArg.startsWith("-javaagent:") || isIbmJ9HealthcenterArg(jvmArg)) {
                 javaAgentArgsBeforeGlowroot.add(jvmArg);
             }
         }
         return javaAgentArgsBeforeGlowroot;
     }
 
-    private static boolean isIbmHealthcenterArg(String jvmArg) {
-        return JavaVersion.isIbmJvm()
+    private static boolean isIbmJ9HealthcenterArg(String jvmArg) {
+        return JavaVersion.isJ9Jvm()
                 && (jvmArg.equals("-Xhealthcenter") || jvmArg.startsWith("-Xhealthcenter:"));
     }
 

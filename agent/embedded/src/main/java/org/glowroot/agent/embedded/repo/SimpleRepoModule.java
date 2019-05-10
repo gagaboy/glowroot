@@ -126,15 +126,15 @@ public class SimpleRepoModule {
         httpClient = new HttpClient(configRepository);
 
         alertingService = new AlertingService(configRepository, incidentDao, aggregateDao,
-                gaugeValueDao, rollupLevelService, new MailService(), httpClient, newLockSet(),
-                newLockSet(), clock);
+                gaugeValueDao, traceDao, rollupLevelService, new MailService(), httpClient,
+                newLockSet(), newLockSet(), clock);
         if (backgroundExecutor == null) {
             reaperRunnable = null;
         } else {
             reaperRunnable = new ReaperRunnable(configRepository, aggregateDao, traceDao,
                     gaugeIdDao, gaugeNameDao, gaugeValueDao, transactionTypeDao, fullQueryTextDao,
                     incidentDao, clock);
-            reaperRunnable.scheduleWithFixedDelay(backgroundExecutor,
+            reaperRunnable.scheduleWithFixedDelay(backgroundExecutor, 0,
                     SNAPSHOT_REAPER_PERIOD_MINUTES, MINUTES);
         }
     }

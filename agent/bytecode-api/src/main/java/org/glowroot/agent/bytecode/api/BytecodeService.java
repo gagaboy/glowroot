@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2018-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,13 @@ import org.glowroot.agent.plugin.api.TraceEntry;
 
 public interface BytecodeService {
 
-    void enteringMain(String mainClass, @Nullable String /*@Nullable*/ [] mainArgs);
+    void enteringMainMethod(String mainClass, @Nullable String /*@Nullable*/ [] mainArgs);
 
-    void enteringApacheCommonsDaemonLoad(String mainClass,
+    void enteringApacheCommonsDaemonLoadMethod(String mainClass,
             @Nullable String /*@Nullable*/ [] mainArgs);
+
+    void enteringPossibleProcrunStartMethod(String className, String methodName,
+            @Nullable String /*@Nullable*/ [] methodArgs);
 
     void exitingGetPlatformMBeanServer();
 
@@ -51,4 +54,6 @@ public interface BytecodeService {
     void updateWithReturnValue(TraceEntry traceEntry, @Nullable Object returnValue);
 
     void logThrowable(Throwable throwable);
+
+    void preloadSomeSuperTypes(ClassLoader loader, @Nullable String className);
 }

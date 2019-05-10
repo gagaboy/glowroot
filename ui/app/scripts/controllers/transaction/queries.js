@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2018 the original author or authors.
+ * Copyright 2015-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* global glowroot, HandlebarsRendering, SqlPrettyPrinter, angular, $, gtClipboard, console */
+/* global glowroot, HandlebarsRendering, angular, $, gtClipboard, console */
 
 glowroot.controller('TransactionQueriesCtrl', [
   '$scope',
@@ -40,6 +40,13 @@ glowroot.controller('TransactionQueriesCtrl', [
     $scope.showQueries = false;
     $scope.showSpinner = 0;
     $scope.showModalSpinner = 0;
+
+    // these are needed for handling opening a direct link to a modal query
+    var firstLocation = true;
+    var firstLocationModalQueryType;
+    var firstLocationModalQueryText;
+    var firstLocationModalQueryTextSha1;
+
 
     $scope.$watchGroup(['range.chartFrom', 'range.chartTo', 'range.chartRefresh'], function () {
       refreshData();
@@ -119,16 +126,34 @@ glowroot.controller('TransactionQueriesCtrl', [
       var modalQueryType = $location.search()['modal-query-type'];
       var modalQueryText = $location.search()['modal-query-text'];
       var modalQueryTextSha1 = $location.search()['modal-query-text-sha1'];
-      if (modalQueryText || modalQueryTextSha1) {
-        $('#queryModal').data('location-query', [
-          'modal-query-type',
-          'modal-query-text',
-          'modal-query-text-sha1'
-        ]);
-        displayModal(modalQueryType, modalQueryText, modalQueryTextSha1);
+      if (firstLocationModalQueryText || firstLocationModalQueryTextSha1) {
+        $location.search('modal-query-type', firstLocationModalQueryType);
+        $location.search('modal-query-text', firstLocationModalQueryText);
+        $location.search('modal-query-text-sha1', firstLocationModalQueryTextSha1);
+        firstLocationModalQueryType = undefined;
+        firstLocationModalQueryText = undefined;
+        firstLocationModalQueryTextSha1 = undefined;
+      } else if (modalQueryText || modalQueryTextSha1) {
+        if (firstLocation) {
+          $location.search('modal-query-type', null);
+          $location.search('modal-query-text', null);
+          $location.search('modal-query-text-sha1', null);
+          $location.replace();
+          firstLocationModalQueryType = modalQueryType;
+          firstLocationModalQueryText = modalQueryText;
+          firstLocationModalQueryTextSha1 = modalQueryTextSha1;
+        } else {
+          $('#queryModal').data('location-query', [
+            'modal-query-type',
+            'modal-query-text',
+            'modal-query-text-sha1'
+          ]);
+          displayModal(modalQueryType, modalQueryText, modalQueryTextSha1);
+        }
       } else {
         $('#queryModal').modal('hide');
       }
+      firstLocation = false;
     });
 
     $scope.showQueryModal = function (query) {
@@ -200,32 +225,14 @@ glowroot.controller('TransactionQueriesCtrl', [
           return;
         }
 
-        var comment = '';
-        if (fullText.lastIndexOf('/*', 0) === 0) {
-          var endOfComment = fullText.indexOf('*/') + 2;
-          comment = fullText.substring(0, endOfComment) + '\n';
-          fullText = fullText.substring(endOfComment).trim();
-        }
-        var formatted = SqlPrettyPrinter.format(fullText);
+        var formatted = HandlebarsRendering.sqlPrettyPrint(fullText);
         if (typeof formatted === 'object') {
           console.log(formatted.message);
           console.log(fullText);
           applyCss();
           return;
         }
-        if (comment.length) {
-          var spaces = '';
-          for (var i = 0; i < formatted.length; i++) {
-            if (formatted[i] === ' ') {
-              spaces += ' ';
-            } else {
-              break;
-            }
-          }
-          $scope.formattedQuery = spaces + comment + formatted;
-        } else {
-          $scope.formattedQuery = formatted;
-        }
+        $scope.formattedQuery = formatted;
         $scope.showFormatted = true;
         $formattedQuery.html($scope.formattedQuery);
         $unformattedQuery.hide();
@@ -341,7 +348,7 @@ glowroot.controller('TransactionQueriesCtrl', [
             }
           }, function (response) {
             $scope.showSpinner--;
-            httpErrors.handle(response, $scope);
+            httpErrors.handle(response);
           });
     }
   }

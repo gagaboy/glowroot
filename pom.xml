@@ -5,7 +5,7 @@
 
   <groupId>org.glowroot</groupId>
   <artifactId>glowroot-parent</artifactId>
-  <version>0.13.1-SNAPSHOT</version>
+  <version>0.13.5-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Glowroot Parent Project</name>
@@ -32,7 +32,6 @@
 
   <modules>
     <module>build/license-bundle</module>
-    <module>build/immutables-jdk6</module>
     <module>build/checker-jdk6</module>
     <module>build/error-prone-jdk6</module>
     <module>build/multi-lib-tests</module>
@@ -50,9 +49,12 @@
     <module>agent/shaded/core</module>
     <module>agent/shaded/it-harness</module>
     <module>agent/shaded/central-https-linux</module>
+    <module>agent/shaded/central-https-linux-alpine</module>
     <module>agent/shaded/central-https-windows</module>
     <module>agent/shaded/central-https-osx</module>
+    <module>agent/shaded/logging-logstash</module>
     <module>agent/integration-tests</module>
+    <module>agent/plugins/camel-plugin</module>
     <module>agent/plugins/cassandra-plugin</module>
     <module>agent/plugins/ejb-plugin</module>
     <module>agent/plugins/elasticsearch-plugin</module>
@@ -128,6 +130,11 @@
         <groupId>org.immutables</groupId>
         <artifactId>android-stub</artifactId>
         <version>${immutables.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.trask</groupId>
+        <artifactId>immutables-jdk6-shim</artifactId>
+        <version>1.0.0</version>
       </dependency>
       <dependency>
         <groupId>com.google.protobuf</groupId>
@@ -603,12 +610,7 @@
       </build>
     </profile>
     <profile>
-      <id>include-central-https-linux-alpine</id>
-      <modules>
-        <module>agent/shaded/central-https-linux-alpine</module>
-      </modules>
-    </profile>
-    <profile>
+      <id>auto-activated-java-8</id>
       <activation>
         <jdk>[1.8,)</jdk>
       </activation>

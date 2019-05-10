@@ -29,13 +29,19 @@ public class Bytecode {
 
     public static void enteringMainMethod(String mainClass,
             @Nullable String /*@Nullable*/ [] mainArgs) {
-        service.enteringMain(mainClass, mainArgs);
+        service.enteringMainMethod(mainClass, mainArgs);
     }
 
     // this can bypass "main" method
     public static void enteringApacheCommonsDaemonLoadMethod(String mainClass,
             @Nullable String /*@Nullable*/ [] mainArgs) {
-        service.enteringApacheCommonsDaemonLoad(mainClass, mainArgs);
+        service.enteringApacheCommonsDaemonLoadMethod(mainClass, mainArgs);
+    }
+
+    // this can bypass "main" method
+    public static void enteringPossibleProcrunStartMethod(String className, String methodName,
+            @Nullable String /*@Nullable*/ [] methodArgs) {
+        service.enteringPossibleProcrunStartMethod(className, methodName, methodArgs);
     }
 
     public static ThreadContextThreadLocal.Holder getCurrentThreadContextHolder() {
@@ -77,5 +83,9 @@ public class Bytecode {
 
     public static void logThrowable(Throwable throwable) {
         service.logThrowable(throwable);
+    }
+
+    public static void preloadSomeSuperTypes(ClassLoader loader, @Nullable String className) {
+        service.preloadSomeSuperTypes(loader, className);
     }
 }

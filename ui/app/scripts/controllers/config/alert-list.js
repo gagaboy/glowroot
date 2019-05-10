@@ -94,7 +94,7 @@ glowroot.controller('ConfigAlertListCtrl', [
         disableForNextMillis = $scope.page.disableForNext * 60 * 1000 * 60 * 24;
       }
       var postData = {
-        disableForNextMillis: disableForNextMillis,
+        disableForNextMillis: disableForNextMillis
       };
       $scope.disablingAlerting = true;
       var url = 'backend/config/disable-alerting?agent-rollup-id=' + encodeURIComponent($scope.agentRollupId);
@@ -105,7 +105,7 @@ glowroot.controller('ConfigAlertListCtrl', [
             $('#disableAlertingModal').modal('hide');
           }, function (response) {
             $scope.disablingAlerting = false;
-            httpErrors.handle(response, $scope);
+            httpErrors.handle(response);
           });
     };
 
@@ -119,7 +119,7 @@ glowroot.controller('ConfigAlertListCtrl', [
             onNewData(response.data);
             deferred.resolve('开启通知');
           }, function (response) {
-            httpErrors.handle(response, $scope, deferred);
+            httpErrors.handle(response, deferred);
           });
     };
 
@@ -135,7 +135,7 @@ glowroot.controller('ConfigAlertListCtrl', [
           $scope.loaded = true;
           onNewData(response.data);
         }, function (response) {
-          httpErrors.handle(response, $scope);
+          httpErrors.handle(response);
         });
 
     var promise = $interval(function () {

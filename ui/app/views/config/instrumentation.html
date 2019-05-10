@@ -1,5 +1,5 @@
 <!--
-  Copyright 2012-2018 the original author or authors.
+  Copyright 2012-2019 the original author or authors.
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -105,8 +105,8 @@
               配置的方法。所有的重写方法也将被检测(如果上面的类是接口，则包括该方法的所有实现)。
             </div>
             <div class="help-block">
-              通配符&nbsp;<code style="font-size: 120%;">*</code>&nbsp;可用于方法名的任何地方。
-              多个方法名(包括带有通配符&nbsp;<code style="font-size: 120%;">*</code>&nbsp;的多个方法名)使用&nbsp;<code style="font-size: 120%;">|</code>&nbsp;来进行分割。
+              通配符&nbsp;<code>*</code>&nbsp;可用于方法名的任何地方。
+              多个方法名(包括带有通配符&nbsp;<code style="font-size: 120%;">*</code>&nbsp;的多个方法名)使用&nbsp;<code>|</code>&nbsp;来进行分割。
             </div>
           </div>
         </div>
@@ -259,14 +259,20 @@
               </li>
               <li>
                 {{methodName}} 解析为方法名称，这可能很有用
-                如果&nbsp;<code style="font-size: 120%;">*</code>&nbsp;或者&nbsp;<code
-                  style="font-size: 120%;">|</code>&nbsp;用于定义上面的方法名称
+                如果&nbsp;<code>*</code>&nbsp;或者&nbsp;<code>|</code>&nbsp;用于定义上面的方法名称
               </li>
             </ul>
           </div>
           <div class="help-block"
                ng-non-bindable>
-            嵌套路径也被解析，例如，{{0.size}}和{{this.class.name}}。如果路径在任何时候解析为<code>null</code>，那么整个路径将解析为<code>null</code>。最后，使用<code>String.valueOf()</code>将解析后的值呈现到模板中。
+            嵌套路径也被解析，例如，{{0.size}}和{{this.class.name}}。如果路径在任何时候解析为<code>null</code>，那么整个路径将解析为<code>null</code>。
+            The final resolved value is rendered into the template using
+            <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#valueOf-java.lang.Object-">
+              String.valueOf()
+            </a>.
+            If the final resolved value is a byte array, it will be rendered as hex, or you can specify a charset to
+            decode it, e.g. <code>{{0.someBytes|charset:UTF-8}}</code> or <code>{{0.someBytes|charset:default}}</code>
+            to use the default (platform) charset.
           </div>
         </div>
         <div gt-form-group
@@ -399,7 +405,14 @@
           </div>
           <div ng-non-bindable
                class="help-block">
-            嵌套路径也被解析，例如， {{0.size}}和{{this.class.name}}。如果路径在任何时候解析为<code>null</code>，那么整个路径将解析为<code>null</code> 最后，使用<code>String.valueOf()</code>将解析后的值呈现到模板中。
+            嵌套路径也被解析，例如， {{0.size}}和{{this.class.name}}。如果路径在任何时候解析为<code>null</code>，那么整个路径将解析为<code>null</code>
+            The final resolved value is rendered into the template using
+            <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#valueOf-java.lang.Object-">
+              String.valueOf()
+            </a>.
+            If the final resolved value is a byte array, it will be rendered as hex, or you can specify a charset to
+            decode it, e.g. <code>{{0.someBytes|charset:UTF-8}}</code> or <code>{{0.someBytes|charset:default}}</code>
+            to use the default (platform) charset.
           </div>
         </div>
         <div gt-form-group

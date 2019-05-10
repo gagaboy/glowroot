@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.glowroot</groupId>
     <artifactId>glowroot-parent</artifactId>
-    <version>0.13.1-SNAPSHOT</version>
+    <version>0.13.5-SNAPSHOT</version>
     <relativePath>../..</relativePath>
   </parent>
 
@@ -56,9 +56,8 @@
     </dependency>
     <dependency>
       <!-- this dependency is needed for generating Java 6 compatible classes -->
-      <groupId>org.glowroot.build</groupId>
-      <artifactId>glowroot-build-immutables-jdk6</artifactId>
-      <version>${project.version}</version>
+      <groupId>com.github.trask</groupId>
+      <artifactId>immutables-jdk6-shim</artifactId>
       <!-- immutables is only needed at compile time -->
       <scope>provided</scope>
     </dependency>
@@ -238,6 +237,7 @@
       </dependencies>
     </profile>
     <profile>
+      <id>auto-activated-java-8</id>
       <activation>
         <jdk>[1.8,)</jdk>
       </activation>

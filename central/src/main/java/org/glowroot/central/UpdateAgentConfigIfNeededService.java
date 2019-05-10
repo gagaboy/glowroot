@@ -24,8 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import org.glowroot.agent.api.Instrumentation;
 import org.glowroot.central.repo.ActiveAgentDao;
-import org.glowroot.central.repo.ActiveAgentDao.AgentConfigAndUpdateToken;
 import org.glowroot.central.repo.AgentConfigDao;
+import org.glowroot.central.repo.AgentConfigDao.AgentConfigAndUpdateToken;
 import org.glowroot.central.util.MoreExecutors2;
 import org.glowroot.common.util.Clock;
 import org.glowroot.common2.repo.ActiveAgentRepository.AgentRollup;
@@ -84,7 +84,7 @@ class UpdateAgentConfigIfNeededService implements Runnable {
             throw new IllegalStateException(
                     "Timed out waiting for update agent config main loop thread to terminate");
         }
-        // shutdownNow() is needed here to send interrupt to thread
+        // shutdownNow() is needed here to send interrupt to threads
         workerExecutor.shutdownNow();
         if (!workerExecutor.awaitTermination(10, SECONDS)) {
             throw new IllegalStateException(

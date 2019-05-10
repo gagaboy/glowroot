@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2018 the original author or authors.
+ * Copyright 2012-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,21 +62,9 @@ public class AnalyzedClassPlanBeeIT {
         // container close will validate that there were no unexpected warnings or errors
     }
 
-    @Test
-    public void shouldLogWarningInAnalyzedWorldPlanB() throws Exception {
-        // given
-        updateInstrumentationConfigs();
-        container.addExpectedLogMessage("org.glowroot.agent.weaving.AnalyzedWorld",
-                Y.class.getName() + " was not woven with requested advice");
-        // when
-        container.executeNoExpectedTrace(ShouldLogWarningInAnalyzedWorldPlanB.class);
-        // then
-        // container close will validate that there were no unexpected warnings or errors
-    }
-
     private static void updateInstrumentationConfigs() throws Exception {
         InstrumentationConfig config = InstrumentationConfig.newBuilder()
-                .setClassName("org.glowroot.agent.tests.javaagent.AnalyzedClassPlanBeeIT$Y")
+                .setClassName(AnalyzedClassPlanBeeIT.class.getName() + "$Y")
                 .setMethodName("y")
                 .setMethodReturnType("")
                 .setCaptureKind(CaptureKind.TIMER)
@@ -88,14 +76,8 @@ public class AnalyzedClassPlanBeeIT {
     public static class ShouldNotLogWarningInAnalyzedWorldPlanB implements AppUnderTest {
         @Override
         public void executeApp() throws Exception {
-            Class.forName(Z.class.getName(), true, new DelegatingClassLoader());
-        }
-    }
-
-    public static class ShouldLogWarningInAnalyzedWorldPlanB implements AppUnderTest {
-        @Override
-        public void executeApp() throws Exception {
-            Class.forName(Z.class.getName(), true, new DelegatingClassLoader2());
+            Class.forName(AnalyzedClassPlanBeeIT.class.getName() + "$Z", true,
+                    new DelegatingClassLoader());
         }
     }
 
@@ -103,7 +85,6 @@ public class AnalyzedClassPlanBeeIT {
         @Override
         protected synchronized Class<?> loadClass(String name, boolean resolve)
                 throws ClassNotFoundException {
-
             if (name.equals(Z.class.getName())) {
                 try {
                     return load(name);
@@ -128,23 +109,6 @@ public class AnalyzedClassPlanBeeIT {
         public Enumeration<URL> getResources(String name) throws IOException {
             // don't load .class files as resources
             return Collections.enumeration(Collections.<URL>emptyList());
-        }
-    }
-
-    public static class DelegatingClassLoader2 extends DelegatingClassLoader {
-        @Override
-        protected synchronized Class<?> loadClass(String name, boolean resolve)
-                throws ClassNotFoundException {
-
-            if (name.equals(Y.class.getName()) || name.equals(Z.class.getName())) {
-                try {
-                    return load(name);
-                } catch (IOException e) {
-                    throw new ClassNotFoundException("Error loading class", e);
-                }
-            } else {
-                return Class.forName(name, resolve, DelegatingClassLoader.class.getClassLoader());
-            }
         }
     }
 

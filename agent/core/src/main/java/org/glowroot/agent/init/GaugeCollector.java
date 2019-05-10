@@ -128,8 +128,8 @@ class GaugeCollector extends ScheduledRunnable {
                             .getDeclaredMethod("registerInternalMBeans", MBeanServer.class);
                     registerInternalMBeansMethod.setAccessible(true);
                     registerInternalMBeansMethod.invoke(null, mbeanServer);
-                } catch (Exception e) {
-                    logger.debug(e.getMessage(), e);
+                } catch (Throwable t) {
+                    logger.debug(t.getMessage(), t);
                 }
             }
         });
@@ -154,7 +154,7 @@ class GaugeCollector extends ScheduledRunnable {
     }
 
     void scheduleWithFixedDelay(long period, TimeUnit unit) {
-        scheduleWithFixedDelay(collectionExecutor, period, unit);
+        scheduleWithFixedDelay(collectionExecutor, 0, period, unit);
     }
 
     void close() throws InterruptedException {

@@ -31,6 +31,7 @@ glowroot.config([
       });
       return deferred.promise;
     }
+
     var waitForLayoutOnly = function () {
       return ['$q', '$rootScope', function ($q, $rootScope) {
         return waitForLayout($q, $rootScope);
@@ -75,7 +76,14 @@ glowroot.config([
               .then(function (response) {
                 $rootScope.agentId = agentId;
                 $rootScope.agentRollupId = agentRollupId;
+                var oldAgentRollup = $rootScope.agentRollup;
                 $rootScope.agentRollup = response.data;
+                if (!oldAgentRollup || $rootScope.agentRollup.topLevelId !== oldAgentRollup.topLevelId) {
+                  if ($rootScope.topLevelAgentRollups !== undefined) {
+                    $rootScope.setChildAgentRollups([]);
+                    $rootScope.refreshChildAgentRollups();
+                  }
+                }
                 addTransactionType();
               }, function (response) {
                 $rootScope.navbarErrorMessage = 'An error occurred getting agent rollup: ' + agentRollupId;
@@ -283,6 +291,15 @@ glowroot.config([
       resolve: {
         waitForD3: waitForD3,
         waitForAgentRollup: onTransitionWithAgentRollup(true)
+      }
+    });
+    $stateProvider.state('transaction-trace-thread-flame-graph', {
+      url: '/transaction/trace-thread-flame-graph',
+      templateUrl: 'views/transaction/flame-graph.html',
+      controller: 'TransactionTraceFlameGraphCtrl',
+      resolve: {
+        waitForD3: waitForD3,
+        waitForAgentRollup: onTransitionWithAgentRollup()
       }
     });
     $stateProvider.state('error', {

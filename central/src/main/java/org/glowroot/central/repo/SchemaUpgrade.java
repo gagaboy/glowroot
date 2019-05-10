@@ -39,6 +39,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.core.exceptions.InvalidConfigurationInQueryException;
+import com.datastax.driver.core.exceptions.InvalidQueryException;
 import com.datastax.driver.core.utils.UUIDs;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -106,7 +107,7 @@ public class SchemaUpgrade {
 
     private static final ObjectMapper mapper = ObjectMappers.create();
 
-    private static final int CURR_SCHEMA_VERSION = 85;
+    private static final int CURR_SCHEMA_VERSION = 90;
 
     private final Session session;
     private final Clock clock;
@@ -512,6 +513,27 @@ public class SchemaUpgrade {
         if (initialSchemaVersion < 85) {
             populateAgentDisplayTable();
             updateSchemaVersion(85);
+        }
+        // 0.13.0 to 0.13.1
+        if (initialSchemaVersion < 86) {
+            updateTraceSlowCountAndPointPartialTables();
+            updateSchemaVersion(86);
+        }
+        if (initialSchemaVersion < 87) {
+            splitActiveAgentRollupTables(0);
+            updateSchemaVersion(87);
+        }
+        if (initialSchemaVersion < 88) {
+            splitActiveAgentRollupTables(1);
+            updateSchemaVersion(88);
+        }
+        if (initialSchemaVersion < 89) {
+            splitActiveAgentRollupTables(2);
+            updateSchemaVersion(89);
+        }
+        if (initialSchemaVersion < 90) {
+            splitActiveAgentRollupTables(3);
+            updateSchemaVersion(90);
         }
 
         // when adding new schema upgrade, make sure to update CURR_SCHEMA_VERSION above
@@ -2481,15 +2503,14 @@ public class SchemaUpgrade {
     private void populateActiveAgentTable(int rollupLevel) throws Exception {
         logger.info("populating active_agent_rollup_{} table - this could take"
                 + " several minutes on large data sets...", rollupLevel);
-        CentralStorageConfig storageConfig = getCentralStorageConfig(session);
         dropTableIfExists("active_agent_rollup_" + rollupLevel);
-        session.createTableWithTWCS("create table if not exists active_agent_rollup_" + rollupLevel
-                + " (one int, capture_time timestamp, agent_id varchar, primary key (one,"
-                + " capture_time, agent_id))", storageConfig.getMaxRollupHours());
-        PreparedStatement insertPS = session.prepare("insert into active_agent_rollup_"
-                + rollupLevel + " (one, capture_time, agent_id) values (1, ?, ?) using ttl ?");
         int expirationHours =
                 getCentralStorageConfig(session).rollupExpirationHours().get(rollupLevel);
+        session.createTableWithTWCS("create table if not exists active_agent_rollup_" + rollupLevel
+                + " (one int, capture_time timestamp, agent_id varchar, primary key (one,"
+                + " capture_time, agent_id))", expirationHours);
+        PreparedStatement insertPS = session.prepare("insert into active_agent_rollup_"
+                + rollupLevel + " (one, capture_time, agent_id) values (1, ?, ?) using ttl ?");
         int ttl = Ints.saturatedCast(HOURS.toSeconds(expirationHours));
         long rollupIntervalMillis;
         if (rollupLevel < 3) {
@@ -2753,17 +2774,106 @@ public class SchemaUpgrade {
         MoreFutures.waitForAll(futures);
     }
 
+    private void updateTraceSlowCountAndPointPartialTables() throws Exception {
+        addColumnIfNotExists("trace_tt_slow_count_partial", "real_capture_time", "timestamp");
+        addColumnIfNotExists("trace_tn_slow_count_partial", "real_capture_time", "timestamp");
+        addColumnIfNotExists("trace_tt_slow_point_partial", "real_capture_time", "timestamp");
+        addColumnIfNotExists("trace_tn_slow_point_partial", "real_capture_time", "timestamp");
+    }
+
+    private void splitActiveAgentRollupTables(int rollupLevel) throws Exception {
+        logger.info("populating active_top_level_rollup_{} and active_child_rollup_{} tables - this"
+                + " could take several minutes on large data sets...", rollupLevel);
+        dropTableIfExists("active_top_level_rollup_" + rollupLevel);
+        dropTableIfExists("active_child_rollup_" + rollupLevel);
+        Integer expirationHours =
+                getCentralStorageConfig(session).rollupExpirationHours().get(rollupLevel);
+        session.createTableWithTWCS("create table if not exists active_top_level_rollup_"
+                + rollupLevel + " (one int, capture_time timestamp, top_level_id varchar, primary"
+                + " key (one, capture_time, top_level_id))", expirationHours);
+        session.createTableWithTWCS("create table if not exists active_child_rollup_" + rollupLevel
+                + " (top_level_id varchar, capture_time timestamp, child_agent_id varchar, primary"
+                + " key (top_level_id, capture_time, child_agent_id))", expirationHours);
+
+        PreparedStatement insertTopLevelPS = session.prepare("insert into active_top_level_rollup_"
+                + rollupLevel + " (one, capture_time, top_level_id) values (1, ?, ?) using ttl ?");
+        PreparedStatement insertChildPS = session.prepare("insert into active_child_rollup_"
+                + rollupLevel + " (top_level_id, capture_time, child_agent_id) values (?, ?, ?)"
+                + " using ttl ?");
+
+        int ttl = Ints.saturatedCast(HOURS.toSeconds(expirationHours));
+        PreparedStatement readPS = session.prepare("select capture_time, agent_id from"
+                + " active_agent_rollup_" + rollupLevel + " where one = 1 and capture_time > ?");
+        BoundStatement boundStatement = readPS.bind();
+        boundStatement.setTimestamp(0,
+                new Date(clock.currentTimeMillis() - HOURS.toMillis(expirationHours)));
+        ResultSet results = session.read(boundStatement);
+        Queue<ListenableFuture<?>> futures = new ArrayDeque<>();
+        for (Row row : results) {
+            Date captureDate = checkNotNull(row.getTimestamp(0));
+            String agentId = checkNotNull(row.getString(1));
+            int index = agentId.indexOf("::");
+            String topLevelId;
+            String childAgentId;
+            if (index == -1) {
+                topLevelId = agentId;
+                childAgentId = null;
+            } else {
+                topLevelId = agentId.substring(0, index + 2);
+                childAgentId = agentId.substring(index + 2);
+            }
+
+            int adjustedTTL = Common.getAdjustedTTL(ttl, captureDate.getTime(), clock);
+            boundStatement = insertTopLevelPS.bind();
+            boundStatement.setTimestamp(0, captureDate);
+            boundStatement.setString(1, topLevelId);
+            boundStatement.setInt(2, adjustedTTL);
+            futures.add(session.writeAsync(boundStatement));
+            if (childAgentId != null) {
+                boundStatement = insertChildPS.bind();
+                boundStatement.setString(0, topLevelId);
+                boundStatement.setTimestamp(1, captureDate);
+                boundStatement.setString(2, childAgentId);
+                boundStatement.setInt(3, adjustedTTL);
+                futures.add(session.writeAsync(boundStatement));
+            }
+            waitForSome(futures);
+        }
+        MoreFutures.waitForAll(futures);
+        dropTableIfExists("active_agent_rollup_" + rollupLevel);
+        logger.info("populating active_top_level_rollup_{} and active_child_rollup_{} tables"
+                + " - complete", rollupLevel);
+    }
+
     private void addColumnIfNotExists(String tableName, String columnName, String cqlType)
             throws Exception {
-        if (tableExists(tableName) && !columnExists(tableName, columnName)) {
-            session.updateSchemaWithRetry(
-                    "alter table " + tableName + " add " + columnName + " " + cqlType);
+        try {
+            if (tableExists(tableName) && !columnExists(tableName, columnName)) {
+                session.updateSchemaWithRetry(
+                        "alter table " + tableName + " add " + columnName + " " + cqlType);
+            }
+        } catch (InvalidQueryException e) {
+            // since there is not a real "if not exists" variant, if updateSchemaWithRetry times
+            // out, then it will retry and fail (eventually) with "InvalidQueryException: Invalid
+            // column name .. because it conflicts with an existing column"
+            if (!columnExists(tableName, columnName)) {
+                throw e;
+            }
         }
     }
 
     private void dropColumnIfExists(String tableName, String columnName) throws Exception {
-        if (columnExists(tableName, columnName)) {
-            session.updateSchemaWithRetry("alter table " + tableName + " drop " + columnName);
+        try {
+            if (columnExists(tableName, columnName)) {
+                session.updateSchemaWithRetry("alter table " + tableName + " drop " + columnName);
+            }
+        } catch (InvalidQueryException e) {
+            // since there is not a real "if exists" variant, if updateSchemaWithRetry times out,
+            // then it will retry and fail (eventually) with "InvalidQueryException: Column .. was
+            // not found in table"
+            if (columnExists(tableName, columnName)) {
+                throw e;
+            }
         }
     }
 

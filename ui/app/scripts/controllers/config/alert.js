@@ -21,8 +21,9 @@ glowroot.controller('ConfigAlertCtrl', [
   '$location',
   '$http',
   'confirmIfHasChanges',
+  'queryStrings',
   'httpErrors',
-  function ($scope, $location, $http, confirmIfHasChanges, httpErrors) {
+  function ($scope, $location, $http, confirmIfHasChanges, queryStrings, httpErrors) {
 
     // initialize page binding object
     $scope.page = {};
@@ -98,6 +99,13 @@ glowroot.controller('ConfigAlertCtrl', [
       if (newValue !== 'transaction:x-percentile') {
         delete $scope.config.condition.percentile;
       }
+      if (newValue === 'error:count') {
+        if ($scope.config.condition.errorMessageFilter === undefined) {
+          $scope.config.condition.errorMessageFilter = '';
+        }
+      } else {
+        delete $scope.config.condition.errorMessageFilter;
+      }
       // update unit
       if (newValue === 'transaction:average' || newValue === 'transaction:x-percentile') {
         $scope.unit = 'milliseconds';
@@ -143,6 +151,19 @@ glowroot.controller('ConfigAlertCtrl', [
         // unexpected metric
         return 'value';
       }
+    };
+
+    $scope.errorMessagesLinkQueryString = function () {
+      var query = {};
+      if ($scope.layout.central) {
+        if ($scope.isRollup($scope.agentRollupId)) {
+          query['agent-rollup-id'] = $scope.agentRollupId;
+        } else {
+          query['agent-id'] = $scope.agentRollupId;
+        }
+      }
+      query['transaction-type'] = $scope.config.condition.transactionType;
+      return queryStrings.encodeObject(query);
     };
 
     function onNewData(data) {
@@ -239,7 +260,7 @@ glowroot.controller('ConfigAlertCtrl', [
             onNewData(response.data);
             $scope.loaded = true;
           }, function (response) {
-            httpErrors.handle(response, $scope);
+            httpErrors.handle(response);
           });
     } else {
       var url = 'backend/config/alert-dropdowns?agent-rollup-id=' + encodeURIComponent($scope.agentRollupId)
@@ -260,7 +281,7 @@ glowroot.controller('ConfigAlertCtrl', [
             });
             $scope.loaded = true;
           }, function (response) {
-            httpErrors.handle(response, $scope);
+            httpErrors.handle(response);
           });
     }
 
@@ -403,7 +424,7 @@ glowroot.controller('ConfigAlertCtrl', [
               $location.search({v: version}).replace();
             }
           }, function (response) {
-            httpErrors.handle(response, $scope, deferred);
+            httpErrors.handle(response, deferred);
           });
     };
 
@@ -424,7 +445,7 @@ glowroot.controller('ConfigAlertCtrl', [
               $location.url('config/alert-list').replace();
             }
           }, function (response) {
-            httpErrors.handle(response, $scope, deferred);
+            httpErrors.handle(response, deferred);
           });
     };
   }

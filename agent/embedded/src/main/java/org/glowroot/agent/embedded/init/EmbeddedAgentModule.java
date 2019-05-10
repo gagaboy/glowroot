@@ -63,6 +63,7 @@ import org.glowroot.common2.config.RoleConfig;
 import org.glowroot.common2.config.RoleConfig.SimplePermission;
 import org.glowroot.common2.repo.ActiveAgentRepository;
 import org.glowroot.common2.repo.ImmutableAgentRollup;
+import org.glowroot.common2.repo.ImmutableTopLevelAgentRollup;
 import org.glowroot.ui.CreateUiModuleBuilder;
 import org.glowroot.ui.SessionMapFactory;
 import org.glowroot.ui.UiModule;
@@ -128,7 +129,6 @@ class EmbeddedAgentModule {
             agentModule = new AgentModule(clock, null, pluginCache, configService, instrumentation,
                     glowrootJarFile, tmpDir, preCheckClassFileTransformer);
             offlineViewerAgentModule = null;
-            PreInitializeStorageShutdownClasses.preInitializeClasses();
         }
         this.confDirs = confDirs;
         this.logDir = logDir;
@@ -146,6 +146,7 @@ class EmbeddedAgentModule {
             final @Nullable Class<? extends Collector> collectorProxyClass,
             final String glowrootVersion, @Nullable String mainClass) throws Exception {
 
+        PreInitializeStorageShutdownClasses.preInitializeClasses();
         // mem db is only used for testing (by glowroot-agent-it-harness)
         final boolean h2MemDb = Boolean.parseBoolean(properties.get("glowroot.internal.h2.memdb"));
         if (agentModule == null) {
@@ -186,7 +187,8 @@ class EmbeddedAgentModule {
                                 simpleRepoModule.getAggregateDao(), simpleRepoModule.getTraceDao(),
                                 simpleRepoModule.getGaugeValueDao(), configRepository,
                                 simpleRepoModule.getAlertingService(),
-                                simpleRepoModule.getHttpClient());
+                                simpleRepoModule.getAlertingDisabledDao(),
+                                simpleRepoModule.getHttpClient(), clock);
                         if (collectorProxyClass != null) {
                             startupLogger.info("using collector proxy: {}",
                                     collectorProxyClass.getName());
@@ -341,7 +343,7 @@ class EmbeddedAgentModule {
     @OnlyUsedByTests
     public void close() throws Exception {
         if (uiModule != null) {
-            uiModule.close();
+            uiModule.close(false);
         }
         if (agentModule != null) {
             agentModule.close();
@@ -408,6 +410,24 @@ class EmbeddedAgentModule {
     }
 
     private static class ActiveAgentRepositoryImpl implements ActiveAgentRepository {
+
+        @Override
+        public List<TopLevelAgentRollup> readActiveTopLevelAgentRollups(long from, long to) {
+            return ImmutableList.<TopLevelAgentRollup>of(ImmutableTopLevelAgentRollup.builder()
+                    .id("")
+                    .display("")
+                    .build());
+        }
+
+        @Override
+        public List<AgentRollup> readActiveChildAgentRollups(String topLevelId, long from,
+                long to) {
+            return ImmutableList.<AgentRollup>of(ImmutableAgentRollup.builder()
+                    .id("")
+                    .display("")
+                    .lastDisplayPart("")
+                    .build());
+        }
 
         @Override
         public List<AgentRollup> readRecentlyActiveAgentRollups(long lastXMillis) {

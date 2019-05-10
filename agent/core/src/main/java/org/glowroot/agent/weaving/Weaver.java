@@ -61,7 +61,6 @@ import org.glowroot.common.util.ScheduledRunnable.TerminateSubsequentExecutionsE
 
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static org.objectweb.asm.Opcodes.ASM7;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.V1_6;
 
 public class Weaver {
@@ -183,68 +182,39 @@ public class Weaver {
         ThinClassVisitor accv = new ThinClassVisitor();
         new ClassReader(classBytes).accept(accv, ClassReader.SKIP_FRAMES + ClassReader.SKIP_CODE);
         boolean frames = accv.getMajorVersion() >= V1_6;
-        int expandFrames = frames ? ClassReader.EXPAND_FRAMES : 0;
+        int parsingOptions = frames ? ClassReader.EXPAND_FRAMES : ClassReader.SKIP_FRAMES;
         byte[] maybeProcessedBytes = null;
         if (accv.isConstructorPointcut()) {
             ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
             ClassVisitor cv = new PointcutClassVisitor(cw);
             ClassReader cr = new ClassReader(classBytes);
-            cr.accept(new JSRInlinerClassVisitor(cv), expandFrames);
-            maybeProcessedBytes = cw.toByteArray();
-        } else if (className.equals(ImportantClassNames.JBOSS_WELD_HACK_CLASS_NAME)) {
-            ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-            ClassVisitor cv = new JBossWeldHackClassVisitor(cw);
-            ClassReader cr = new ClassReader(classBytes);
-            cr.accept(new JSRInlinerClassVisitor(cv), expandFrames);
-            maybeProcessedBytes = cw.toByteArray();
-        } else if (className.equals(ImportantClassNames.JBOSS_MODULES_HACK_CLASS_NAME)) {
-            ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-            ClassVisitor cv = new JBossModulesHackClassVisitor(cw);
-            ClassReader cr = new ClassReader(classBytes);
-            cr.accept(new JSRInlinerClassVisitor(cv), expandFrames);
+            cr.accept(new JSRInlinerClassVisitor(cv), parsingOptions);
             maybeProcessedBytes = cw.toByteArray();
         } else if (className.equals(ImportantClassNames.JBOSS_URL_HACK_CLASS_NAME)) {
             ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
             ClassVisitor cv = new JBossUrlHackClassVisitor(cw);
             ClassReader cr = new ClassReader(classBytes);
-            cr.accept(new JSRInlinerClassVisitor(cv), expandFrames);
+            cr.accept(new JSRInlinerClassVisitor(cv), parsingOptions);
             maybeProcessedBytes = cw.toByteArray();
-        } else if (className.equals(ImportantClassNames.FELIX_OSGI_HACK_CLASS_NAME)
-                || className.equals(ImportantClassNames.FELIX3_OSGI_HACK_CLASS_NAME)) {
+        } else if (className.equals("java/lang/ClassLoader")) {
             ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-            ClassVisitor cv = new OsgiHackClassVisitor(cw, className, "shouldBootDelegate");
+            ClassVisitor cv = new ClassLoaderHackClassVisitor(cw);
             ClassReader cr = new ClassReader(classBytes);
-            cr.accept(new JSRInlinerClassVisitor(cv), expandFrames);
-            maybeProcessedBytes = cw.toByteArray();
-        } else if (className.equals(ImportantClassNames.ECLIPSE_OSGI_HACK_CLASS_NAME)) {
-            ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-            ClassVisitor cv = new OsgiHackClassVisitor(cw, className, "isBootDelegationPackage");
-            ClassReader cr = new ClassReader(classBytes);
-            cr.accept(new JSRInlinerClassVisitor(cv), expandFrames);
-            maybeProcessedBytes = cw.toByteArray();
-        } else if (className.equals(ImportantClassNames.OPENEJB_HACK_CLASS_NAME)) {
-            ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-            ClassVisitor cv = new OpenEJBHackClassVisitor(cw);
-            ClassReader cr = new ClassReader(classBytes);
-            cr.accept(new JSRInlinerClassVisitor(cv), expandFrames);
-            maybeProcessedBytes = cw.toByteArray();
-        } else if (className.equals(ImportantClassNames.HIKARI_CP_PROXY_HACK_CLASS_NAME)) {
-            ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-            ClassVisitor cv = new HikariCpProxyHackClassVisitor(cw);
-            ClassReader cr = new ClassReader(classBytes);
-            cr.accept(new JSRInlinerClassVisitor(cv), expandFrames);
-            maybeProcessedBytes = cw.toByteArray();
-        } else if (className.equals(ImportantClassNames.BITRONIX_PROXY_HACK_CLASS_NAME)) {
-            ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-            ClassVisitor cv = new BitronixProxyHackClassVisitor(cw);
-            ClassReader cr = new ClassReader(classBytes);
-            cr.accept(new JSRInlinerClassVisitor(cv), expandFrames);
+            cr.accept(new JSRInlinerClassVisitor(cv), parsingOptions);
             maybeProcessedBytes = cw.toByteArray();
         }
         ClassAnalyzer classAnalyzer = new ClassAnalyzer(accv.getThinClass(), advisors, shimTypes,
                 mixinTypes, loader, analyzedWorld, codeSource, classBytes, classBeingRedefined,
                 noLongerNeedToWeaveMainMethods);
-        classAnalyzer.analyzeMethods();
+        try {
+            classAnalyzer.analyzeMethods();
+        } catch (ClassNotFoundException e) {
+            logger.error("error analyzing {}: {}", className, e.getMessage(), e);
+            return null;
+        } catch (IOException e) {
+            logger.error("error analyzing {}: {}", className, e.getMessage(), e);
+            return null;
+        }
         if (!classAnalyzer.isWeavingRequired()) {
             analyzedWorld.add(classAnalyzer.getAnalyzedClass(), loader);
             return maybeProcessedBytes;
@@ -283,13 +253,14 @@ public class Weaver {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         WeavingClassVisitor cv = new WeavingClassVisitor(cw, loader, frames,
                 noLongerNeedToWeaveMainMethods, classAnalyzer.getAnalyzedClass(),
-                classAnalyzer.getMethodsThatOnlyNowFulfillAdvice(), matchedShimTypes,
-                reweavableMatchedMixinTypes, classAnalyzer.getMethodAdvisors(), analyzedWorld);
+                classAnalyzer.isClassLoader(), classAnalyzer.getMethodsThatOnlyNowFulfillAdvice(),
+                matchedShimTypes, reweavableMatchedMixinTypes, classAnalyzer.getMethodAdvisors(),
+                analyzedWorld);
         ClassReader cr =
                 new ClassReader(maybeProcessedBytes == null ? classBytes : maybeProcessedBytes);
         byte[] transformedBytes;
         try {
-            cr.accept(new JSRInlinerClassVisitor(cv), expandFrames);
+            cr.accept(new JSRInlinerClassVisitor(cv), parsingOptions);
             // ClassWriter.toByteArray() can throw exception also, see issue #370
             transformedBytes = cw.toByteArray();
         } catch (RuntimeException e) {
@@ -431,83 +402,6 @@ public class Weaver {
         }
     }
 
-    private static class JBossWeldHackClassVisitor extends ClassVisitor {
-
-        private final ClassWriter cw;
-
-        private JBossWeldHackClassVisitor(ClassWriter cw) {
-            super(ASM7, cw);
-            this.cw = cw;
-        }
-
-        @Override
-        public @Nullable MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
-            MethodVisitor mv = cw.visitMethod(access, name, descriptor, signature, exceptions);
-            if (name.equals("checkDelegateType")
-                    && descriptor.equals("(Ljavax/enterprise/inject/spi/Decorator;)V")) {
-                return new JBossWeldHackMethodVisitor(mv);
-            } else {
-                return mv;
-            }
-        }
-    }
-
-    private static class JBossWeldHackMethodVisitor extends MethodVisitor {
-
-        private JBossWeldHackMethodVisitor(MethodVisitor mv) {
-            super(ASM7, mv);
-        }
-
-        @Override
-        public void visitMethodInsn(int opcode, String owner, String name, String descriptor,
-                boolean itf) {
-            super.visitMethodInsn(opcode, owner, name, descriptor, itf);
-            if (name.equals("getDecoratedTypes") && descriptor.equals("()Ljava/util/Set;")) {
-                super.visitMethodInsn(INVOKESTATIC, "org/glowroot/agent/bytecode/api/Util",
-                        "stripGlowrootTypes", "(Ljava/util/Set;)Ljava/util/Set;", false);
-            }
-        }
-    }
-
-    private static class JBossModulesHackClassVisitor extends ClassVisitor {
-
-        private final ClassWriter cw;
-
-        private JBossModulesHackClassVisitor(ClassWriter cw) {
-            super(ASM7, cw);
-            this.cw = cw;
-        }
-
-        @Override
-        public MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
-            MethodVisitor mv = cw.visitMethod(access, name, descriptor, signature, exceptions);
-            if (name.equals("<clinit>")) {
-                return new JBossModulesHackMethodVisitor(mv);
-            } else {
-                return mv;
-            }
-        }
-    }
-
-    private static class JBossModulesHackMethodVisitor extends MethodVisitor {
-
-        private JBossModulesHackMethodVisitor(MethodVisitor mv) {
-            super(ASM7, mv);
-        }
-
-        @Override
-        public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
-            if (name.equals("systemPackages") && descriptor.equals("[Ljava/lang/String;")) {
-                visitMethodInsn(INVOKESTATIC, "org/glowroot/agent/bytecode/api/Util",
-                        "appendToJBossModulesSystemPkgs",
-                        "([Ljava/lang/String;)[Ljava/lang/String;", false);
-            }
-            super.visitFieldInsn(opcode, owner, name, descriptor);
-        }
-    }
-
     private static class JBossUrlHackClassVisitor extends ClassVisitor {
 
         private final ClassWriter cw;
@@ -575,66 +469,11 @@ public class Weaver {
         }
     }
 
-    private static class OsgiHackClassVisitor extends ClassVisitor {
-
-        private final ClassWriter cw;
-        // this hack is used for
-        // org.apache.felix.framework.BundleWiringImpl.shouldBootDelegate() (felix 4.0.0+)
-        // org.apache.felix.framework.ModuleImpl.shouldBootDelegate() (prior to felix 4.0.0)
-        // org.eclipse.osgi.internal.framework.EquinoxContainer.isBootDelegationPackage()
-        private final String className;
-        private final String methodName;
-
-        private OsgiHackClassVisitor(ClassWriter cw, String className, String methodName) {
-            super(ASM7, cw);
-            this.cw = cw;
-            this.className = className;
-            this.methodName = methodName;
-        }
-
-        @Override
-        public MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
-            MethodVisitor mv = cw.visitMethod(access, name, descriptor, signature, exceptions);
-            if (name.equals(methodName) && descriptor.equals("(Ljava/lang/String;)Z")) {
-                return new OsgiHackMethodVisitor(className, mv, access, name, descriptor);
-            } else {
-                return mv;
-            }
-        }
-    }
-
-    private static class OsgiHackMethodVisitor extends AdviceAdapter {
-
-        private final String ownerName;
-
-        private OsgiHackMethodVisitor(String ownerName, MethodVisitor mv, int access,
-                String name, String descriptor) {
-            super(ASM7, mv, access, name, descriptor);
-            this.ownerName = ownerName;
-        }
-
-        @Override
-        protected void onMethodEnter() {
-            visitVarInsn(ALOAD, 1);
-            visitLdcInsn("org.glowroot.");
-            visitMethodInsn(INVOKEVIRTUAL, "java/lang/String", "startsWith",
-                    "(Ljava/lang/String;)Z", false);
-            Label label = new Label();
-            visitJumpInsn(IFEQ, label);
-            visitInsn(ICONST_1);
-            visitInsn(IRETURN);
-            visitLabel(label);
-            Object[] locals = new Object[] {ownerName, "java/lang/String"};
-            visitFrame(F_NEW, locals.length, locals, 0, new Object[0]);
-        }
-    }
-
-    private static class OpenEJBHackClassVisitor extends ClassVisitor {
+    private static class ClassLoaderHackClassVisitor extends ClassVisitor {
 
         private final ClassWriter cw;
 
-        private OpenEJBHackClassVisitor(ClassWriter cw) {
+        private ClassLoaderHackClassVisitor(ClassWriter cw) {
             super(ASM7, cw);
             this.cw = cw;
         }
@@ -643,111 +482,28 @@ public class Weaver {
         public MethodVisitor visitMethod(int access, String name, String descriptor,
                 @Nullable String signature, String /*@Nullable*/ [] exceptions) {
             MethodVisitor mv = cw.visitMethod(access, name, descriptor, signature, exceptions);
-            if (name.equals("reloadConfig") && descriptor.equals("()V")) {
-                return new OpenEJBHackMethodVisitor(mv, access, name, descriptor);
+            if (name.equals("defineClass") && descriptor.equals("(Ljava/lang/String;[BII"
+                    + "Ljava/security/ProtectionDomain;)Ljava/lang/Class;")) {
+                return new ClassLoaderHackMethodVisitor(mv, access, name, descriptor);
             } else {
                 return mv;
             }
         }
     }
 
-    private static class OpenEJBHackMethodVisitor extends AdviceAdapter {
+    private static class ClassLoaderHackMethodVisitor extends AdviceAdapter {
 
-        private OpenEJBHackMethodVisitor(MethodVisitor mv, int access, String name,
+        private ClassLoaderHackMethodVisitor(MethodVisitor mv, int access, String name,
                 String descriptor) {
             super(ASM7, mv, access, name, descriptor);
         }
 
         @Override
-        protected void onMethodExit(int opcode) {
-            if (opcode == RETURN) {
-                visitFieldInsn(GETSTATIC, ImportantClassNames.OPENEJB_HACK_CLASS_NAME,
-                        "FORCED_SKIP", "Ljava/util/Collection;");
-                visitLdcInsn("org.glowroot.");
-                visitMethodInsn(INVOKEINTERFACE, "java/util/Collection", "add",
-                        "(Ljava/lang/Object;)Z", true);
-                pop();
-            }
-        }
-    }
-
-    private static class HikariCpProxyHackClassVisitor extends ClassVisitor {
-
-        private final ClassWriter cw;
-
-        private HikariCpProxyHackClassVisitor(ClassWriter cw) {
-            super(ASM7, cw);
-            this.cw = cw;
-        }
-
-        @Override
-        public MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
-            MethodVisitor mv = cw.visitMethod(access, name, descriptor, signature, exceptions);
-            if (name.equals("generateProxyClass")) {
-                return new HikariCpProxyHackMethodVisitor(mv);
-            } else {
-                return mv;
-            }
-        }
-    }
-
-    private static class HikariCpProxyHackMethodVisitor extends MethodVisitor {
-
-        private HikariCpProxyHackMethodVisitor(MethodVisitor mv) {
-            super(ASM7, mv);
-        }
-
-        @Override
-        public void visitMethodInsn(int opcode, String owner, String name, String descriptor,
-                boolean itf) {
-            super.visitMethodInsn(opcode, owner, name, descriptor, itf);
-            if (owner.equals("com/zaxxer/hikari/util/ClassLoaderUtils")
-                    && name.equals("getAllInterfaces")
-                    && descriptor.equals("(Ljava/lang/Class;)Ljava/util/Set;")) {
-                super.visitMethodInsn(INVOKESTATIC, "org/glowroot/agent/bytecode/api/Util",
-                        "stripGlowrootClasses", "(Ljava/util/Set;)Ljava/util/Set;", false);
-            }
-        }
-    }
-
-    private static class BitronixProxyHackClassVisitor extends ClassVisitor {
-
-        private final ClassWriter cw;
-
-        private BitronixProxyHackClassVisitor(ClassWriter cw) {
-            super(ASM7, cw);
-            this.cw = cw;
-        }
-
-        @Override
-        public MethodVisitor visitMethod(int access, String name, String descriptor,
-                @Nullable String signature, String /*@Nullable*/ [] exceptions) {
-            MethodVisitor mv = cw.visitMethod(access, name, descriptor, signature, exceptions);
-            if (name.equals("generateProxyClass")) {
-                return new BitronixProxyHackMethodVisitor(mv);
-            } else {
-                return mv;
-            }
-        }
-    }
-
-    private static class BitronixProxyHackMethodVisitor extends MethodVisitor {
-
-        private BitronixProxyHackMethodVisitor(MethodVisitor mv) {
-            super(ASM7, mv);
-        }
-
-        @Override
-        public void visitMethodInsn(int opcode, String owner, String name, String descriptor,
-                boolean itf) {
-            super.visitMethodInsn(opcode, owner, name, descriptor, itf);
-            if (owner.equals("bitronix/tm/utils/ClassLoaderUtils")
-                    && name.equals("getAllInterfaces")
-                    && descriptor.equals("(Ljava/lang/Class;)Ljava/util/Set;")) {
-                super.visitMethodInsn(INVOKESTATIC, "org/glowroot/agent/bytecode/api/Util",
-                        "stripGlowrootClasses", "(Ljava/util/Set;)Ljava/util/Set;", false);
-            }
+        protected void onMethodEnter() {
+            visitVarInsn(ALOAD, 0);
+            visitVarInsn(ALOAD, 1);
+            visitMethodInsn(INVOKESTATIC, "org/glowroot/agent/bytecode/api/Bytecode",
+                    "preloadSomeSuperTypes", "(Ljava/lang/ClassLoader;Ljava/lang/String;)V", false);
         }
     }
 
